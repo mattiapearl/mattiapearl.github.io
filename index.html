@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Graffe Counter</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+</head>
+
+<body>
+    <div x-data="{ 
+        search: '',
+        newProp: '',
+        newItem: '',
+        deletingItems:false,
+        propId:$persist(0),
+        itemId:$persist(0),
+
+        items :  $persist([]),
+
+        currentProperties:$persist([['Amount', 0]]),
+
+
+
+        addProp(){
+            this.propId++;
+            this.currentProperties.push([this.newProp,this.propId]);
+
+        },
+        remProp(propId){
+            const idx =this.currentProperties.findIndex(i=>i[1]==propId);
+            if(idx>=0){
+                this.currentProperties.splice(idx,1);
+            }
+        },
+        
+        addItem(){
+            console.log(this.items);
+                    this.itemId++;
+                    const templ={
+                        name:this.newItem,
+                        properties: [],
+                        id:this.itemId,
+                    }
+                    this.currentProperties.forEach(prop=>
+                    {
+                        templ.properties.push([prop[0],0]);
+                    })
+                    this.items.push(templ);
+                },
+
+        remItem(itemId){
+            console.log(this.items);
+            const idx =this.items.findIndex(i=>i.id==itemId);
+             if(idx>=0){
+                this.items.splice(idx,1);
+            }
+        },
+
+        get filteredItems() {
+            return this.items.filter(
+                i => i.name.toLowerCase().search(this.search.toLowerCase())>-1
+                    
+                
+            )
+        }
+    }">
+        <h1 class="title is-1">Easy Counter</h1>
+        <h2 class="title">Active properties</h2>
+
+        <div>
+            <template x-for="prop in currentProperties">
+                <div style="display: flex; flex-direction: row; gap: 10px; margin: 10px 0;">
+
+                    <span x-text="prop[0]" style="max-width: 70%;"></span>
+                    <button style="height: 15px; max-width:25%;background: red; color: white; display: flex; align-items: center;"
+                        x-on:click="remProp(prop[1])">x</button>
+                </div>
+            </template>
+            <div style="display: flex; flex-direction: row;">
+
+                <input x-model=" newProp" placeholder="New property...">
+                <button class="btn" x-on:click="addProp" x-bind:disabled="newProp.trim().length==0">+</button>
+            </div>
+
+        </div>
+        <hr>
+        <h2 class="title">Items</h2>
+        <form @submit.prevent style="display: flex; flex-direction: row;">
+            <input placeholder="New Item..." x-model="newItem">
+            <button class="btn" x-on:click="addItem" x-bind:disabled="newItem.trim().length==0">+</button>
+        </form>
+        <input class="block" type="search" x-model="search" placeholder="Search...">
+        <div style="display: flex; flex-direction: row; align-items: center; justify-content: end; margin: 10px 0;">
+            <strong>Deleting</strong>
+            <input type="checkbox" x-model="deletingItems">
+        </div>
+            
+        <template x-for="item in filteredItems">
+            <div
+                style="padding: 15px; margin: 15px 0; border-radius: 13px;box-shadow:  rgba(9, 10, 12, 0.1) 0px 8px 16px -2px, rgba(9, 10, 12, 0.02) 0px 0px 0px 1px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+
+                    <h3 x-text="item.name"></h3> <button style="background: red; color: white;" x-show="deletingItems" x-on:click="remItem(item.id)">Delete </button>
+                </div>
+                <template x-for="prop in item.properties">
+                    <div style="display: flex; flex-direction: row;justify-content: space-between;">
+                        <span x-text="prop[0]" style="max-width: 45%; margin-right: 5%;"></span>
+                        <div>
+
+                            <button class="btn" x-on:click="prop[1]--">-</button>
+                            <span x-text="prop[1]" style="font-weight: 600;"></span>
+                            <button class="btn" x-on:click="prop[1]++">+</button>
+                        </div>
+                    </div>
+                </template>
+
+            </div>
+        </template>
+        
+    </div>
+
+</body>
+
+</body>
+
+</html>
