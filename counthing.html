@@ -29,7 +29,7 @@
         addProp(){
             this.propId++;
             this.currentProperties.push([this.newProp,this.propId]);
-
+            this.newProp = '';
         },
         remProp(propId){
             const idx =this.currentProperties.findIndex(i=>i[1]==propId);
@@ -39,7 +39,7 @@
         },
         
         addItem(){
-            console.log(this.items);
+            
                     this.itemId++;
                     const templ={
                         name:this.newItem,
@@ -51,10 +51,11 @@
                         templ.properties.push([prop[0],0]);
                     })
                     this.items.push(templ);
+                    this.newItem = '';
                 },
 
         remItem(itemId){
-            console.log(this.items);
+            
             const idx =this.items.findIndex(i=>i.id==itemId);
              if(idx>=0){
                 this.items.splice(idx,1);
@@ -78,18 +79,18 @@
 
         <div>
             <template x-for="prop in currentProperties">
-                <div style="display: flex; flex-direction: row; gap: 10px; margin: 10px 0;">
+                <div style="display: flex; flex-direction: row; justify-content: space-between ; margin: 10px 0;">
 
                     <span x-text="prop[0]" style="max-width: 70%;"></span>
                     <button style="height: 15px; max-width:25%;background: red; color: white; display: flex; align-items: center;"
                         x-on:click="remProp(prop[1])">x</button>
                 </div>
             </template>
-            <div style="display: flex; flex-direction: row;">
+            <form @submit.prevent style="display: flex; flex-direction: row;">
 
                 <input x-model=" newProp" placeholder="New property...">
                 <button class="btn" x-on:click="addProp" x-bind:disabled="newProp.trim().length==0">+</button>
-            </div>
+            </form>
 
         </div>
         <hr>
