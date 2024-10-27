@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    </head>
+    <body>
+        <div style="flex-direction: row; padding: 0;">
+            <a href="/">Home</a>/Matcher
+        </div>
+        <h1>Tau team match availability</h1>
+        <main>
+            
+            <ul></ul>
+            <div id="logger"></div>
+        </main>
+        <!-- <script src="script.js" async defer></script> -->
+    </body>
+    <style>
+        main{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        div {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        div p{
+            padding: 5px;
+            display: block;
+        }
+
+        ul{
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            
+        }
+        ul li{
+            background: whitesmoke ;
+            border: 1px solid black;
+            padding: 5px;
+            display: inline;
+        }
+        ul li.active{
+            background: gray;
+        }
+    </style>
+    <script>
+const dictionary = [
+    "L 9-10","L 10-11","L 11-12","L 12-13", "L 13-14", "L 14-15",
+    "Ma 9-10","Ma 10-11","Ma 11-12","Ma 12-13", "Ma 13-14", "Ma 14-15", "Ma 15-16", "Ma 16-17", "Ma 17-18", "Ma 18-19",
+    "Me 9-10","Me 10-11","Me 11-12","Me 12-13", "Me 13-14", "Me 14-15",
+    "G 9-10","G 10-11","G 11-12","G 12-13", "G 13-14", "G 14-15", "G 15-16", "G 16-17", "G 17-18", "G 18-19",
+    "V 9-10","V 10-11","V 11-12","V 12-13", "V 13-14", "V 14-15"
+];
+const totali = 50;
+const gironi = 10;
+
+const and = function (vec1, vec2, trans = false, filter = false) {
+    let res = [
+        0, 0, 0,0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0,0, 0, 0,
+        0, 0, 0,0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0,0, 0, 0,
+        0, 0, 0,0, 0, 0,
+    ]        
+    const l = dictionary.length;
+
+    for (let i = 0; i < l; i++) {
+        res[i] = vec1[i] == vec2[i] && vec1[i] ==1 ? 1 : 0;
+    }
+
+    if (trans) {
+        for (let i = 0; i < res.length; i++) {        
+            res[i] = res[i] == 1 ? dictionary[i] : 0 
+        }
+    }
+    if (filter) {
+        res = res.filter(el => el!=0)
+    }
+
+    return res
+}
+
+const sum = function (vec) {
+    return vec.reduce((a,b) => a+b, 0)
+}
+
+const worstest = function (squadList) {
+    const list = [];
+    squadList.forEach(squad => {
+        list.push([squad[0], sum(squad[1])])
+    });
+    console.log(list);
+    list.sort((a, b) => a[1] - b[1])
+    return list
+}
+
+
+const bestMatch = function (squadTime, squadList) {
+    const res = [];
+
+    squadList.forEach(squad => {
+        res.push([
+            sum(and(squad[1], squadTime)),
+            squad[0],
+            sum(squad[1])
+        ])
+    })
+
+
+    res.sort((a, b) => a[2] - b[2]).sort((a,b) => a[0] - b[0]);
+    return res
+}
+
+const worstByDay = function (squadList, once = false) {
+    
+    const days = [];
+    const l = dictionary.length;
+    
+    for (let i = 0; i < l; i++) {
+        
+        days.push([]);
+
+        squadList.forEach(squad => {
+            if (squad[1][i] == 1) {
+                days[i].push([squad[0], sum(squad[1])])        
+            }            
+        })    
+        if (days[i].length != 0) { 
+            days[i].sort((a, b) => a[1] - b[1])
+
+        }
+    };
+
+
+    return days;
+}
+
+const usa = function (nome) {
+    if (nl.has(nome)) {
+        squadre = squadre.filter(squadra => squadra[0] != nome);
+    } else {
+        console.log("Questa squadra non esiste")
+    }
+}
+const rimetti = function (nome) {
+    if (nl.has(nome)) {
+        squadre.push(nl.get(nome))
+    }
+}
+
+let squadre = [
+
+    ["Aliseo Gastaldi",
+        [
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1,
+            
+        ]
+    ],
+       ["Architettura 3",
+        [
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 1,
+            0, 0, 0, 0, 0, 0, 0,
+            1, 1, 1,
+            
+        ]
+    ],
+          ["Biologia 3",
+        [
+            0, 0, 0,
+            0, 0, 1, 1, 1, 1, 1,
+            0, 0, 0,
+            0, 0, 1, 1, 1, 1, 1,
+            0, 0, 1,
+            
+        ]
+    ],
+       ["Biologia Marina 1",
+        [
+            0, 0, 0,
+            0, 0, 0, 1, 1, 1, 1,
+            0, 0, 0,
+            0, 0, 0, 1, 1, 1, 1,
+            0, 0, 0,
+            
+        ]
+    ],
+          ["Biologia Marina 2",
+        [
+            0, 0, 0,
+            0, 0, 1, 1, 1, 1, 1,
+            0, 0, 0,
+            0, 0, 1, 1, 1, 1, 1,
+            0, 0, 0,
+            
+        ]
+    ],
+             ["Design 1",
+        [
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1,
+            
+        ]
+    ],
+        ["Design 2",
+        [
+            1, 0, 0,
+            1, 0, 0, 0, 0, 0, 1,
+            1, 1, 1,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            
+        ]
+    ],
+        ["Economia Aziendale 1",
+        [
+            0, 0, 0,
+            0, 0, 1, 1, 1, 1, 1,
+            0, 0, 0,
+            0, 0, 1, 1, 1, 1, 1,
+            1, 1, 1,
+            
+        ]
+    ],
+        ["Economia Aziendale 2A",
+        [
+            0, 0, 1,
+            0, 0, 1, 1, 1, 1, 1,
+            1, 1, 1,
+            1, 1, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["Economia Aziendale 2B",
+        [
+            0, 0, 1,
+            0, 0, 1, 1, 1, 1, 1,
+            1, 1, 1,
+            1, 1, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["Economia Aziendale 3",
+        [
+            0, 0, 0,
+            0, 0, 1, 1, 1, 1, 1,
+            0, 0, 0,
+            0, 0, 1, 1, 1, 1, 1,
+            0, 0, 1,
+            
+        ]
+    ],
+    ["Economia Marittima 3",
+        [
+            0, 1, 1,
+            0, 0, 1, 1, 1, 1, 1,
+            1, 1, 1,
+            0, 0, 0, 1, 0, 0, 0,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["Farmacia 1",
+        [
+            0, 0, 0,
+            0, 0, 0, 0, 0, 1, 1,
+            0, 0, 0,
+            0, 0, 0, 0, 0, 1, 1,
+            1, 1, 1,
+            
+        ]
+    ],
+    ["Filosofia 3",
+        [
+            0, 0, 0,
+            0, 0, 1, 1, 1, 1, 1,
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["Fisica 3",
+        [
+            0, 0, 0,
+            0, 1, 1, 1, 0, 0, 0,
+            0, 1, 1,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["Fisica 4",
+        [
+            0, 1, 1,
+            0, 1, 1, 1, 1, 0, 0,
+            0, 0, 0,
+            0, 1, 1, 1, 1, 0, 0,
+            0, 1, 1,
+            
+        ]
+    ],
+    ["Fisioterapia 1",
+        [
+            1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1,
+            1, 1, 1, 1, 1, 1,1,
+            1, 1, 1,
+            
+        ]
+    ],
+    ["Geologia 2",
+        [
+            0, 0, 0,
+            1, 1, 1, 1, 1, 1, 1,
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["Informatica 2",
+        [
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            1, 1, 1,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["Informatica 3",
+        [
+            0, 0, 0,
+            0, 0, 0, 0, 1, 1, 1,
+            0, 0, 0,
+            0, 0, 0, 0, 1, 1, 1,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["Ingegneria Biomedica 3",
+        [
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            1, 1, 1,
+            0, 0, 0, 1, 1, 1, 1,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["Ingegneria Civile 1",
+        [
+            1, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            0, 0, 1, 1, 1, 1, 1,
+            1, 1, 0,
+            
+        ]
+    ],
+    ["Ingegneria Civile 3",
+        [
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 1,
+            1, 1, 1
+            
+        ]
+    ],
+    ["Ingegneria Elettronica 1",
+        [
+            1, 1, 1,
+            0, 0, 0, 0, 1, 1, 0,
+            1, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["IETI 3",
+        [
+            0, 0, 0,
+            0, 0, 1, 1, 1, 1, 1,
+            1, 1, 1,
+            0, 0, 1, 1, 1, 1, 1,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["Ingegneria Gestionale 3",
+        [
+            0, 0, 1,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            0, 0, 1, 1, 1, 1, 1,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["Ingegneria Gestionale 5",
+        [
+            1, 1, 0,
+            1, 0, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            1, 1, 0, 0, 0, 0, 0,
+            1, 1, 1,
+            
+        ]
+    ],
+    ["Ingegneria Informatica 2A",
+        [
+            1, 0, 0,
+            1, 0, 0, 0, 0, 0, 0,
+            1, 0, 0,
+            1, 0, 0, 0, 0, 0, 0,
+            1, 0, 0,
+            
+        ]
+    ],
+    ["Ingegneria Informatica 2B",
+        [
+            1, 1, 1,
+            0, 0, 0, 0, 0, 0, 0,
+            1, 1, 1,
+            0, 0, 0, 0, 0, 0, 0,
+            1, 1, 1,
+            
+        ]
+    ],
+    ["Ingegneria Meccanica 5",
+        [
+            0, 0, 0,
+            0, 0, 0, 0, 0, 1, 1,
+            0, 0, 0,
+            0, 0, 0, 0, 0, 1, 1,
+            0, 0, 1,
+            
+        ]
+    ],
+    ["Ingegneria Navale 1",
+        [
+            1, 0, 0,
+            0, 0, 1, 1, 1, 1, 1,
+            1, 0, 0,
+            1, 0, 0, 0, 0, 0, 0,
+            1, 0, 0,
+            
+        ]
+    ],
+    ["Ingegneria Navale 3",
+        [
+            1, 1, 0,
+            0, 1, 1, 1, 0, 0, 0,
+            0, 1, 1,
+            0, 1, 0, 0, 1, 1, 1,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["Ingegneria Navale 4",
+        [
+            0, 0, 1,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 1,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 1,
+            
+        ]
+    ],
+    ["Matematica 1A",
+        [
+            0, 0, 1,
+            0, 0, 0, 0, 1, 1, 1,
+            0, 0, 1,
+            0, 0, 0, 0, 1, 1, 1,
+            0, 0, 1,
+            
+        ]
+    ],
+    ["Matematica 1B",
+        [
+            0, 0, 1,
+            0, 0, 0, 0, 1, 1, 1,
+            0, 0, 1,
+            0, 0, 0, 0, 1, 1, 1,
+            0, 0, 1,
+            
+        ]
+    ],
+    ["Matematica 2",
+        [
+            0, 1, 1,
+            0, 0, 0, 0, 1, 1, 1,
+            0, 1, 1,
+            0, 0, 0, 0, 1, 1, 1,
+            0, 1, 1,
+            
+        ]
+    ],
+    ["Matematica 3",
+        [
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 1,
+            0, 0, 0,
+            0, 0, 0, 0, 1, 1, 1,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["Matematica 5",
+        [
+            1, 1, 0,
+            1, 1, 0, 0, 1, 1, 1,
+            1, 1, 0,
+            0, 1, 1, 1, 1, 1, 1,
+            1, 1, 0,
+            
+        ]
+    ],
+    ["Medicina 2",
+        [
+            0, 0, 1,
+            0, 0, 0, 1, 1, 0, 0,
+            0, 0, 1,
+            0, 0, 1, 1, 1, 1, 1,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["Medicina 3",
+        [
+            0, 1, 1,
+            0, 1, 1, 0, 0, 0, 0,
+            0, 1, 1,
+            0, 1, 1, 0, 0, 0, 0,
+            0, 1, 1,
+            
+        ]
+    ],
+    ["Medicina 4",
+        [
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 1,
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 1,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["Medicina 5",
+        [
+            0, 1, 1,
+            0, 1, 1, 0, 0, 0, 1,
+            0, 1, 1,
+            0, 1, 1, 0, 0, 0, 1,
+            0, 1, 1,
+            
+        ]
+    ],
+    ["POGIS 1A",
+        [
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            1, 1, 1,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            
+        ]
+    ],
+    ["POGIS 1B",
+        [
+            0, 1, 1,
+            0, 1, 1, 1, 1, 1, 0,
+            0, 1, 1,
+            0, 1, 1, 1, 1, 1, 0,
+            0, 1, 1,
+            
+        ]
+    ],
+    ["POGIS 1C",
+        [
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            1, 1, 1,
+            0, 0, 0, 0, 0, 0, 0,
+            1, 1, 1,
+            
+        ]
+    ],
+    ["Psicologia 1",
+        [
+            0, 0, 0,
+            1, 1, 1, 1, 1, 1, 1,
+            0, 0, 0,
+            1, 1, 1, 0, 0, 0, 0,
+            1, 1, 1,
+            
+        ]
+    ],
+    ["Scienze Ambientali e Naturali 3",
+        [
+            1, 1, 1,
+            0, 0, 0, 0, 0, 0, 0,
+            1, 1, 1,
+            0, 0, 0, 0, 0, 0, 0,
+            1, 1, 1,
+            
+        ]
+    ],
+    ["Scienze dei Materiali 2",
+        [
+            0, 0, 0,
+            0, 0, 1, 1, 1, 1, 1,
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 1,
+            
+        ]
+    ],
+    ["Scienze dei Materiali 4",
+        [
+            0, 1, 1,
+            1, 1, 1, 1, 1, 1, 1,
+            0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0,
+            
+        ]
+    ],
+
+]
+
+let groups = [
+    
+
+    ["Medicina 4","Matematica 3","Ingegneria Meccanica 5","Informatica 3","Farmacia 1"],
+    ["Informatica 2", "POGIS 1A", "POGIS 1B", "Medicina 3", "Fisica 3"],
+    ["Ingegneria Navale 4", "Architettura 3", "Ingegneria Civile 3", "POGIS 1C", "Ingegneria Informatica 2B"],
+    ["Filosofia 3", "Scienze dei Materiali 4","Scienze dei Materiali 2", "Geologia 2", "Ingegneria Navale 1"],
+    ["Ingegneria Informatica 2A", "Design 2", "Ingegneria Elettrica 1", "Ingegneria Gestionale 5", "Matematica 5"],
+    ["Ingegneria Gestionale 3", "Medicina 2", "Ingegneria Civile 1", "Biologia Marina 1", "Ingegneria Biomedica 3"],
+    ["Medicina 5", "Scienze Ambientali e Naturali 3", "Economia Aziendale 2A", "Ingegneria Navale 3", "Economia Marittima 3"],
+    ["Aliseo Gastaldi", "Psicologia 1", "Design 1", "Economia Aziendale 1", "Matematica 1A"],
+    ["Matematica 1B", "Matematica 2", "Biologia 3", "IETI 3", "Economia Aziendale 3"],
+    ["Fisioterapia 1", "Biologia Marina 2", "Economia Aziendale 2B", "Fisica 4"]
+]
+const nl = new Map()
+
+let btnMapper = [];
+
+let logger = document.getElementById("logger");
+
+
+squadre.forEach(squadra => {
+    nl.set(squadra[0], squadra[1])
+    const sn = squadra[0]
+    
+    const btn = document.createElement("li");
+    btn.innerHTML = squadra[0];
+    document.querySelector("ul").append(btn);
+
+    btn.addEventListener("click", function () {
+        if (btnMapper.filter(el => el == sn).length != 0) {
+            btnMapper = btnMapper.filter(el => el != sn);
+            btn.classList.remove("active");
+            
+        } else {
+            if (btnMapper.length >1) {
+                return
+            }
+            btn.classList.add("active");
+            btnMapper.push(sn);
+            if (btnMapper.length == 2) {
+                const a = document.createElement("p");
+                a.innerHTML = btnMapper[0] + "<br>" + btnMapper[1] + "<br>" + JSON.stringify(and(nl.get(btnMapper[0]), nl.get(btnMapper[1]), true, true))
+                logger.prepend(a);
+            }
+        }
+    })
+
+}
+    )
+
+
+    </script>
+</html>
