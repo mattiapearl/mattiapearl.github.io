@@ -1,254 +1,2173 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>TAU Matcher</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
-    </head>
-    <body>
-        <div style="flex-direction: row; padding: 0;">
-            <a href="/">Home</a>/Matcher
-        </div>
-        <h1>Tau team match availability</h1>
-        <main>
-            
-            <ul></ul>
-            <div id="logger"></div>
-        </main>
-        <!-- <script src="script.js" async defer></script> -->
-    </body>
-    <style>
-        main{
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-        }
-        div {
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-        }
-        div p{
-            padding: 5px;
-            display: block;
-        }
 
-        ul{
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            
-        }
-        ul li{
-            background: whitesmoke ;
-            border: 1px solid black;
-            padding: 5px;
-            display: inline;
-        }
-        ul li.active{
-            background: gray;
-        }
-    </style>
-    <script>
-const dictionary = [
-    "L 9-10","L 10-11","L 11-12","L 12-13", "L 13-14", "L 14-15",
-    "Ma 9-10","Ma 10-11","Ma 11-12","Ma 12-13", "Ma 13-14", "Ma 14-15", "Ma 15-16", "Ma 16-17", "Ma 17-18", "Ma 18-19",
-    "Me 9-10","Me 10-11","Me 11-12","Me 12-13", "Me 13-14", "Me 14-15",
-    "G 9-10","G 10-11","G 11-12","G 12-13", "G 13-14", "G 14-15", "G 15-16", "G 16-17", "G 17-18", "G 18-19",
-    "V 9-10","V 10-11","V 11-12","V 12-13", "V 13-14", "V 14-15"
-];
-const totali = 50;
-const gironi = 10;
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TAU Matcher</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 
-const and = function (vec1, vec2, trans = false, filter = false) {
-    let res = [
-        0, 0, 0,0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0,0, 0, 0,
-        0, 0, 0,0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0,0, 0, 0,
-        0, 0, 0,0, 0, 0,
-    ]        
-    const l = dictionary.length;
+<body>
+    <div style="flex-direction: row; padding: 0;">
+        <a href="/">Home</a>/Matcher
+    </div>
+    <h1>Tau team match availability</h1>
+    <main>
 
-    for (let i = 0; i < l; i++) {
-        res[i] = vec1[i] == vec2[i] && vec1[i] ==1 ? 1 : 0;
+        <ul></ul>
+        <div id="logger"></div>
+    </main>
+    <!-- <script src="script.js" async defer></script> -->
+</body>
+<style>
+    :root {
+        color-scheme: light;
+        --surface: #ffffff;
+        --surface-alt: #f5f7fb;
+        --surface-elev: #eef1f7;
+        --text: #1f2933;
+        --muted: #61748f;
+        --border: #d8dee6;
+        --accent: #3d7ff5;
+        --danger: #c2272d;
+        --radius: 8px;
+        --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+        --font-body: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+        --font-mono: "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
     }
 
-    if (trans) {
-        for (let i = 0; i < res.length; i++) {        
-            res[i] = res[i] == 1 ? dictionary[i] : 0 
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0 auto;
+        max-width: 1200px;
+        padding: 32px 24px 64px 24px;
+        background: var(--surface-alt);
+        color: var(--text);
+        font-family: var(--font-body);
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    a {
+        color: var(--accent);
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        line-height: 1.2;
+        margin: 0 0 16px 0;
+        font-weight: 650;
+        color: var(--text);
+    }
+
+    p {
+        margin: 0 0 12px 0;
+        color: var(--muted);
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 8px;
+    }
+
+    ul li {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: 8px 14px;
+        color: var(--text);
+        font-weight: 550;
+        transition: background 0.18s ease, transform 0.18s ease;
+        cursor: pointer;
+    }
+
+    ul li:hover {
+        background: var(--surface-elev);
+        transform: translateY(-1px);
+    }
+
+    ul li.active {
+        background: var(--accent);
+        color: #fff;
+        border-color: transparent;
+        box-shadow: var(--shadow);
+    }
+
+    main {
+        display: grid;
+        gap: 24px;
+    }
+
+    @media (min-width: 960px) {
+        main {
+            grid-template-columns: 320px 1fr;
         }
     }
-    if (filter) {
-        res = res.filter(el => el!=0)
+
+    #logger {
+        display: grid;
+        gap: 12px;
     }
 
-    return res
-}
+    #logger p {
+        padding: 12px 16px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--muted);
+        font-size: 0.9rem;
+    }
 
-const sum = function (vec) {
-    return vec.reduce((a,b) => a+b, 0)
-}
+    #insights {
+        grid-column: 1 / -1;
+        display: grid;
+        gap: 24px;
+    }
 
-const worstest = function (squadList) {
-    const list = [];
-    squadList.forEach(squad => {
-        list.push([squad[0], sum(squad[1])])
-    });
-    console.log(list);
-    list.sort((a, b) => a[1] - b[1])
-    return list
-}
+    section {
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        padding: 24px;
+        box-shadow: var(--shadow);
+    }
+
+    section>h2 {
+        margin-top: 0;
+    }
+
+    #controls {
+        display: grid;
+        gap: 16px;
+    }
+
+    #controls label {
+        display: grid;
+        gap: 6px;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    #controls input,
+    #controls textarea,
+    #controls select {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: 10px 12px;
+        color: var(--text);
+        font-family: var(--font-body);
+        font-size: 1rem;
+        transition: border 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    #controls input:focus,
+    #controls textarea:focus,
+    #controls select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(61, 127, 245, 0.2);
+    }
+
+    button {
+        align-self: flex-start;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius);
+        padding: 10px 18px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    button:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow);
+    }
+
+    #warnings {
+        color: var(--danger);
+        font-weight: 600;
+    }
+
+    .panel {
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        padding: 24px;
+        box-shadow: var(--shadow);
+        display: grid;
+        gap: 16px;
+    }
+
+    .group-card,
+    .week-block,
+    .calendar-week {
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        padding: 20px;
+        box-shadow: var(--shadow);
+    }
+
+    .group-card h3,
+    .week-block h3,
+    .calendar-week h3 {
+        margin: 0 0 12px 0;
+    }
+
+    .group-card p,
+    .week-block p {
+        margin: 6px 0;
+        color: var(--muted);
+    }
+
+    .day-block {
+        margin-bottom: 16px;
+        padding: 12px 14px;
+        border-radius: var(--radius);
+        background: var(--surface-alt);
+        border: 1px dashed var(--border);
+    }
+
+    .day-block:last-child {
+        margin-bottom: 0;
+    }
+
+    .day-block h4 {
+        margin: 0 0 8px 0;
+        color: var(--text);
+    }
+
+    .match-entry {
+        margin: 4px 0 0 0;
+        padding-left: 8px;
+        color: var(--muted);
+    }
+
+    .unscheduled {
+        color: var(--danger);
+        font-weight: 600;
+    }
+
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: 120px repeat(5, minmax(140px, 1fr));
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        background: var(--surface);
+    }
+
+    .calendar-grid .calendar-header {
+        padding: 10px 12px;
+        background: var(--surface-elev);
+        border-bottom: 1px solid var(--border);
+        border-left: 1px solid var(--border);
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+    }
+
+    .calendar-grid .calendar-header:first-child {
+        border-left: none;
+    }
+
+    .calendar-grid .calendar-hour {
+        padding: 12px;
+        background: var(--surface-elev);
+        border-bottom: 1px solid var(--border);
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--muted);
+    }
+
+    .calendar-grid .calendar-slot {
+        min-height: 64px;
+        padding: 12px;
+        border-left: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        display: grid;
+        gap: 4px;
+        align-content: flex-start;
+        background: var(--surface);
+        transition: background 0.18s ease;
+    }
+
+    .calendar-grid .calendar-slot strong {
+        font-weight: 650;
+    }
+
+    .calendar-grid .calendar-slot.empty {
+        background: var(--surface-alt);
+        color: var(--muted);
+        opacity: 0.6;
+    }
+
+    .summary-table {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+    }
+
+    .summary-row {
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        padding: 16px;
+        box-shadow: var(--shadow);
+    }
+
+    .summary-row strong {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--text);
+    }
+
+    .summary-row.invalid {
+        border-color: rgba(194, 39, 45, 0.28);
+        background: #fff5f5;
+    }
+
+    .summary-row.invalid .unscheduled {
+        color: var(--danger);
+    }
+
+    .summary-row ul {
+        padding-left: 18px;
+        margin: 8px 0 0 0;
+        color: var(--muted);
+    }
+
+    .summary-row ul li {
+        list-style: disc;
+        margin-bottom: 4px;
+    }
+
+    code,
+    pre {
+        font-family: var(--font-mono);
+        background: var(--surface-elev);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        padding: 4px 6px;
+        font-size: 0.85rem;
+    }
+</style>
+<script>
+    const dictionary = [
+        "L 9-10", "L 10-11", "L 11-12", "L 12-13", "L 13-14", "L 14-15",
+        "Ma 9-10", "Ma 10-11", "Ma 11-12", "Ma 12-13", "Ma 13-14", "Ma 14-15", "Ma 15-16", "Ma 16-17", "Ma 17-18", "Ma 18-19",
+        "Me 9-10", "Me 10-11", "Me 11-12", "Me 12-13", "Me 13-14", "Me 14-15",
+        "G 9-10", "G 10-11", "G 11-12", "G 12-13", "G 13-14", "G 14-15", "G 15-16", "G 16-17", "G 17-18", "G 18-19",
+        "V 9-10", "V 10-11", "V 11-12", "V 12-13", "V 13-14", "V 14-15"
+    ];
+    const totali = 50;
+    const gironi = 10;
+
+    const and = function (vec1, vec2, trans = false, filter = false) {
+        let res = [
+            0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0,
+        ]
+        const l = dictionary.length;
+
+        for (let i = 0; i < l; i++) {
+            res[i] = vec1[i] == vec2[i] && vec1[i] == 1 ? 1 : 0;
+        }
+
+        if (trans) {
+            for (let i = 0; i < res.length; i++) {
+                res[i] = res[i] == 1 ? dictionary[i] : 0
+            }
+        }
+        if (filter) {
+            res = res.filter(el => el != 0)
+        }
+
+        return res
+    }
+
+    const sum = function (vec) {
+        return vec.reduce((a, b) => a + b, 0)
+    }
+
+    const worstest = function (squadList) {
+        const list = [];
+        squadList.forEach(squad => {
+            list.push([squad[0], sum(squad[1])])
+        });
+        console.log(list);
+        list.sort((a, b) => a[1] - b[1])
+        return list
+    }
 
 
-const bestMatch = function (squadTime, squadList) {
-    const res = [];
-
-    squadList.forEach(squad => {
-        res.push([
-            sum(and(squad[1], squadTime)),
-            squad[0],
-            sum(squad[1])
-        ])
-    })
-
-
-    res.sort((a, b) => a[2] - b[2]).sort((a,b) => a[0] - b[0]);
-    return res
-}
-
-const worstByDay = function (squadList, once = false) {
-    
-    const days = [];
-    const l = dictionary.length;
-    
-    for (let i = 0; i < l; i++) {
-        
-        days.push([]);
+    const bestMatch = function (squadTime, squadList) {
+        const res = [];
 
         squadList.forEach(squad => {
-            if (squad[1][i] == 1) {
-                days[i].push([squad[0], sum(squad[1])])        
-            }            
-        })    
-        if (days[i].length != 0) { 
-            days[i].sort((a, b) => a[1] - b[1])
+            res.push([
+                sum(and(squad[1], squadTime)),
+                squad[0],
+                sum(squad[1])
+            ])
+        })
 
+
+        res.sort((a, b) => a[2] - b[2]).sort((a, b) => a[0] - b[0]);
+        return res
+    }
+
+    const worstByDay = function (squadList, once = false) {
+
+        const days = [];
+        const l = dictionary.length;
+
+        for (let i = 0; i < l; i++) {
+
+            days.push([]);
+
+            squadList.forEach(squad => {
+                if (squad[1][i] == 1) {
+                    days[i].push([squad[0], sum(squad[1])])
+                }
+            })
+            if (days[i].length != 0) {
+                days[i].sort((a, b) => a[1] - b[1])
+
+            }
+        };
+
+
+        return days;
+    }
+
+    const usa = function (nome) {
+        if (nl.has(nome)) {
+            squadre = squadre.filter(squadra => squadra[0] != nome);
+            refreshPlanning();
+        } else {
+            console.log("Questa squadra non esiste")
         }
+    }
+    const rimetti = function (nome) {
+        if (nl.has(nome)) {
+            if (squadre.some(squadra => squadra[0] === nome)) {
+                return;
+            }
+            squadre.push(nl.get(nome));
+            squadre.sort((a, b) => a[0].localeCompare(b[0]));
+            refreshPlanning();
+        }
+    }
+
+    let squadre = [
+['Aliseo San Nicola',[0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]],['Biologia Marina PM ',[0,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1]],['Chimica 3',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,1]],['Civile 3',[0,0,0,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0]],['Economia aziendale 2',[0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,0,0,0,1,1]],['economia aziendale 2b',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['Fisica 2',[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0]],['Fisica 4',[0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0]],['Fisica 5',[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1]],['Fisioterapia 2',[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0]],['Fisioterapia 3',[0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,0,0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,0,0,0,0,0,1,1]],['Giuri 3',[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0]],['Giuri 4',[0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0]],['Giurisprudenza 2',[0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['Giurisprudenza 5',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1]],['INFORMATICA 2',[0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0]],['Ingegneria Elettrica 2',[0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0]],['INGEGNERIA GESTIONALE 1',[1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['Ingegneria Gestionale 3',[1,0,1,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1]],['Ingegneria informatica 2 ',[1,1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,0,0,1,0,0,1,1,1,0,0,0]],['Ingegneria informatica 4',[0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,1]],['Ingegneria meccanica 1',[0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0]],['INGEGNERIA MECCANICA 3',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1]],['Ingegneria Meccanica 4a',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]],['Ingegneria meccanica 4b',[0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]],['Ingegneria Meccanica 5',[0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1]],['Ingegneria Navale 1',[1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1]],['Ingegneria Navale 4',[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0]],['Ingegneria Robotica 2',[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]],['Matematica 3',[0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]],['Matematica 4',[0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1]],['MATEMATICA 5',[0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0]],['Medicina 2',[0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0]],['Medicina 3',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]],['Medicina 4',[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['MEDICINA 5',[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0]],['Medicina 6',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]],['ODONTOIATRIA 5',[0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1]],['POGIS 2',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1]],['Pogis 3A',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0]],['POGIS 3B',[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['POGIS 3C',[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,0,0,1,1,0,0,0,0,0,0,0,1,1,1,0,0,1,1,0,0]],['psicologia 2',[0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['PSICOLOGIA 3',[1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0]],['SCIENZA DEI MATERIALI 4',[0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]],['Scienze Biologiche 3',[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0]],['Scienze Internazionali e Diplomatiche 1',[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['Storia 3',[0,0,1,1,1,0,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1,1,1,1,1,0,0,0,0,1,0,0,0,1,1,1]]            
+];
+
+/*     let squadre = [
+
+        ['Scienze Biologiche 2', [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+        ['Ingegneria Meccanica 4', [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1]],
+        ['Design 2', [0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+        ['Economia Aziendale 3a', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]],
+        ['Gestionale 2', [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0]],
+        ['Medicina 6', [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+        ['Medicina 2', [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1]],
+        ['Ingegneria Navale 3', [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
+        ['Scienze Motorie 3', [0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+        ['Chimica 3', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1]],
+        ['Storia 2', [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0]],
+        ['Ingegneria Navale 4A', [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0]],
+        ['Ingegneria Meccanica 3', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0]],
+        ['Ingegneria Navale 2', [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]],
+        ['POGIS 1', [0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+        ['Economia Aziendale 3B', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1]],
+        ['Scienze N.A. 1', [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0]],
+        ['Odontoiatria 4', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+        ['Giurisprudenza 5b', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1]],
+        ['Medicina 5', [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0]],
+        ['Fisica 5', [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1]],
+        ['Ingengeria Chimica 5', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1]],
+        ['Architettura 2', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1]],
+        ['Biologia Marina PM', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0]],
+        ['Ingegneria Civile 4', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1]],
+        ['Fisica 3', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]],
+        ['Ingegneria meccanica 2', [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0]],
+        ['Geologia 3', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0]],
+        ['Biologia Marina 2', [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+        ['Ingegneria Navale 4B', [0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1]],
+        ['Medicina 4', [0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]],
+        ['Ingegneria Navale 1', [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]],
+        ['Medicina 3', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]],
+        ['Architettura 4', [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]],
+        ['Ingegneria Informatica 3', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1]],
+        ['Matematica 5', [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0]],
+        ['Fisioterapia 2', [0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0]],
+        ['IETI2', [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]],
+        ['Gestionale 1', [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1]],
+        ['Pogis 2', [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0]],
+        ['Ingegneria Elettrica 1', [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]],
+        ['Psicologia 2', [0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0]],
+        ['Giurisprudenza 5A', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0]],
+        ['Matematica 3', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1]],
+        ['Economia Marittima 4', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0]],
+        ['Informatica 3', [0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
+        ['Matematica 4', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1]],
+        ['Aliseo San Nicola', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0]],
+        ['Scienze Dei Materiali 3', [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1]],
+        ['Matematica 2', [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1]]
+
+    ]
+ */
+    const nl = new Map()
+
+    let btnMapper = [];
+
+    let logger = document.getElementById("logger");
+
+    const slotInfo = dictionary.map((label, index) => {
+        const [dayCode, ...rest] = label.split(" ");
+        return {
+            index,
+            label,
+            dayCode,
+            hours: rest.join(" ")
+        };
+    });
+
+    const dayOrder = ["L", "Ma", "Me", "G", "V"];
+    const dayNames = {
+        L: "Lunedì",
+        Ma: "Martedì",
+        Me: "Mercoledì",
+        G: "Giovedì",
+        V: "Venerdì"
     };
 
-
-    return days;
-}
-
-const usa = function (nome) {
-    if (nl.has(nome)) {
-        squadre = squadre.filter(squadra => squadra[0] != nome);
-    } else {
-        console.log("Questa squadra non esiste")
-    }
-}
-const rimetti = function (nome) {
-    if (nl.has(nome)) {
-        squadre.push(nl.get(nome))
-    }
-}
-
-let squadre = [
-
-   ['Scienze Biologiche 2',[0,0,0,0,1,1,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0]],
-   ['Ingegneria Meccanica 4',[0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1]],
-   ['Design 2',[0,0,1,1,1,1,0,0,0,1,1,0,0,0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
-   ['Economia Aziendale 3a',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1]],
-   ['Gestionale 2',[1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0]],
-   ['Medicina 6',[0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0]],
-   ['Medicina 2',[0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1]],
-   ['Ingegneria Navale 3',[1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0]],
-   ['Scienze Motorie 3',[0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
-   ['Chimica 3',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,0,1,1,0,0,1,1]],
-   ['Storia 2',[0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0]],
-   ['Ingegneria Navale 4A',[0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0]],
-   ['Ingegneria Meccanica 3',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0]],
-   ['Ingegneria Navale 2',[0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1]],
-   ['POGIS 1',[0,0,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
-   ['Economia Aziendale 3B',[0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1]],
-   ['Scienze N.A. 1',[0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0]],
-   ['Odontoiatria 4',[0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
-   ['Giurisprudenza 5b',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1]],
-   ['Medicina 5',[0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]],
-   ['Fisica 5',[0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1]],
-   ['Ingengeria Chimica 5',[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1]],
-   ['Architettura 2',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1]],
-   ['Biologia Marina PM',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]],
-   ['Ingegneria Civile 4',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1]],
-   ['Fisica 3',[0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]],
-   ['Ingegneria meccanica 2',[0,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,1,0,0]],
-   ['Geologia 3',[0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,1,1,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0]],
-   ['Biologia Marina 2',[1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
-   ['Ingegneria Navale 4B',[0,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1]],
-   ['Medicina 4',[0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,1,1,1]],
-   ['Ingegneria Navale 1',[0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1]],
-   ['Medicina 3',[0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0]],
-   ['Architettura 4',[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1]],
-   ['Ingegneria Informatica 3',[0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1]],
-   ['Matematica 5',[0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0]],
-   ['Fisioterapia 2',[0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1,0,0,0,1,1,0]],
-   ['IETI2',[1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]],
-   ['Gestionale 1',[0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,1]],
-   ['Pogis 2',[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0]],
-   ['Ingegneria Elettrica 1',[0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]],
-   ['Psicologia 2',[0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0]],
-   ['Giurisprudenza 5A',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0]],
-   ['Matematica 3',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,1]],
-   ['Economia Marittima 4',[0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]],
-   ['Informatica 3',[0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],
-   ['Matematica 4',[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1]],
-   ['Aliseo San Nicola',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]],
-   ['Scienze Dei Materiali 3',[0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,1]],
-   ['Matematica 2',[0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1]]
-
-]
-
-const nl = new Map()
-
-let btnMapper = [];
-
-let logger = document.getElementById("logger");
-
-squadre.sort();
-
-squadre.forEach(squadra => {
-    nl.set(squadra[0], squadra[1])
-    const sn = squadra[0]
-    
-    const btn = document.createElement("li");
-    btn.innerHTML = squadra[0];
-    document.querySelector("ul").append(btn);
-
-    btn.addEventListener("click", function () {
-        if (btnMapper.filter(el => el == sn).length != 0) {
-            btnMapper = btnMapper.filter(el => el != sn);
-            btn.classList.remove("active");
-            
-        } else {
-            if (btnMapper.length >1) {
-                return
-            }
-            btn.classList.add("active");
-            btnMapper.push(sn);
-            if (btnMapper.length == 2) {
-                const a = document.createElement("p");
-                a.innerHTML = btnMapper[0] + "<br>" + btnMapper[1] + "<br>" + JSON.stringify(and(nl.get(btnMapper[0]), nl.get(btnMapper[1]), true, true))
-                logger.prepend(a);
-            }
+    const hoursOrder = [];
+    const slotLookupByDayHour = new Map();
+    slotInfo.forEach(info => {
+        if (!hoursOrder.includes(info.hours)) {
+            hoursOrder.push(info.hours);
         }
-    })
+        if (!slotLookupByDayHour.has(info.dayCode)) {
+            slotLookupByDayHour.set(info.dayCode, new Map());
+        }
+        slotLookupByDayHour.get(info.dayCode).set(info.hours, info.index);
+    });
 
-}
+    function createRng(seed) {
+        let state = Math.floor(seed) % 2147483647;
+        if (state <= 0) {
+            state += 2147483646;
+        }
+        return function rng() {
+            state = (state * 16807) % 2147483647;
+            return (state - 1) / 2147483646;
+        };
+    }
+
+    function createSeedContext(seed, teamList) {
+        const normalizedSeed = Math.floor(seed) || 0;
+        const rng = createRng(normalizedSeed + 1);
+        const weights = new Map();
+        (teamList || []).forEach(team => {
+            const name = Array.isArray(team) ? team[0] : team.name;
+            if (!weights.has(name)) {
+                weights.set(name, rng());
+            }
+        });
+        return {
+            seed: normalizedSeed,
+            weights,
+            next() {
+                return rng();
+            }
+        };
+    }
+
+    function getSeedWeight(seedContext, name) {
+        if (!seedContext) {
+            return 0;
+        }
+        if (!seedContext.weights.has(name)) {
+            const value = seedContext.next();
+            seedContext.weights.set(name, value);
+            return value;
+        }
+        return seedContext.weights.get(name);
+    }
+
+    const mainElement = document.querySelector("main");
+    const insightsContainer = document.createElement("div");
+    insightsContainer.id = "insights";
+    mainElement.appendChild(insightsContainer);
+
+    const controlsContainer = document.createElement("div");
+    controlsContainer.id = "controls";
+    controlsContainer.className = "panel";
+    insightsContainer.appendChild(controlsContainer);
+
+    const warningsContainer = document.createElement("div");
+    warningsContainer.id = "warnings";
+    controlsContainer.appendChild(warningsContainer);
+
+    const groupsContainer = document.createElement("div");
+    groupsContainer.id = "groups";
+    groupsContainer.className = "panel";
+    insightsContainer.appendChild(groupsContainer);
+
+    const scheduleContainer = document.createElement("div");
+    scheduleContainer.id = "schedule";
+    scheduleContainer.className = "panel";
+    insightsContainer.appendChild(scheduleContainer);
+
+    const calendarContainer = document.createElement("div");
+    calendarContainer.id = "calendar";
+    calendarContainer.className = "panel";
+    insightsContainer.appendChild(calendarContainer);
+
+    const summaryContainer = document.createElement("div");
+    summaryContainer.id = "summary";
+    summaryContainer.className = "panel";
+    insightsContainer.appendChild(summaryContainer);
+
+    const defaultGroupSizes = Array(gironi).fill(5);
+    const groupColors = [
+        "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+        "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf",
+        "#ffd166", "#06d6a0", "#118ab2", "#ef476f", "#073b4c"
+    ];
+
+    let plannerConfig = {
+        teamLimit: Math.min(squadre.length, defaultGroupSizes.reduce((acc, val) => acc + val, 0)),
+        groupSizes: [...defaultGroupSizes],
+        seed: 0
+    };
+
+    let groupSizesInput;
+    let seedInput;
+
+    function getContrastColor(hexColor) {
+        if (!hexColor || typeof hexColor !== "string") {
+            return "#000";
+        }
+        const clean = hexColor.replace("#", "");
+        const bigint = parseInt(clean, 16);
+        if (Number.isNaN(bigint)) {
+            return "#000";
+        }
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        return luminance > 0.6 ? "#000" : "#fff";
+    }
+
+    const controlsTitle = document.createElement("h2");
+    controlsTitle.textContent = "Configurazione";
+    controlsContainer.appendChild(controlsTitle);
+
+    const teamLimitLabel = document.createElement("label");
+    teamLimitLabel.textContent = "Numero massimo di squadre considerate";
+    const teamLimitInput = document.createElement("input");
+    teamLimitInput.type = "number";
+    teamLimitInput.min = 1;
+    teamLimitInput.max = squadre.length;
+    teamLimitInput.value = plannerConfig.teamLimit;
+    teamLimitInput.addEventListener("change", () => {
+        const parsed = parseInt(teamLimitInput.value, 10);
+        if (Number.isNaN(parsed) || parsed < 1) {
+            teamLimitInput.value = plannerConfig.teamLimit;
+            return;
+        }
+        plannerConfig.teamLimit = Math.min(parsed, squadre.length);
+        teamLimitInput.value = plannerConfig.teamLimit;
+        refreshPlanning();
+    });
+    teamLimitLabel.appendChild(teamLimitInput);
+    controlsContainer.appendChild(teamLimitLabel);
+
+    const groupSizesLabel = document.createElement("label");
+    groupSizesLabel.textContent = "Dimensioni dei gironi (es. 5,5,5,5,5,5,5,5,4,4)";
+    groupSizesInput = document.createElement("input");
+    groupSizesInput.type = "text";
+    groupSizesInput.value = plannerConfig.groupSizes.join(", ");
+    groupSizesInput.addEventListener("change", () => {
+        const parsed = parseGroupSizes(groupSizesInput.value);
+        if (!parsed.length) {
+            groupSizesInput.value = plannerConfig.groupSizes.join(", ");
+            return;
+        }
+        plannerConfig.groupSizes = parsed;
+        groupSizesInput.value = plannerConfig.groupSizes.join(", ");
+        plannerConfig.teamLimit = Math.min(plannerConfig.teamLimit, plannerConfig.groupSizes.reduce((acc, val) => acc + val, 0));
+        teamLimitInput.value = plannerConfig.teamLimit;
+        refreshPlanning();
+    });
+    groupSizesLabel.appendChild(groupSizesInput);
+    controlsContainer.appendChild(groupSizesLabel);
+
+    const seedLabel = document.createElement("label");
+    seedLabel.textContent = "Seed (0 - numero squadre)";
+    seedInput = document.createElement("input");
+    seedInput.type = "number";
+    seedInput.min = 0;
+    seedInput.step = 1;
+    seedInput.value = plannerConfig.seed;
+    seedInput.addEventListener("change", () => {
+        if (seedInput.value.trim() === "") {
+            return;
+        }
+        const parsed = parseInt(seedInput.value, 10);
+        if (Number.isNaN(parsed) || parsed < 0) {
+            seedInput.value = plannerConfig.seed;
+            return;
+        }
+        plannerConfig.seed = parsed;
+        refreshPlanning();
+    });
+    seedLabel.appendChild(seedInput);
+    controlsContainer.appendChild(seedLabel);
+
+    controlsContainer.appendChild(warningsContainer);
+
+    squadre.sort((a, b) => a[0].localeCompare(b[0]));
+
+    squadre.forEach(squadra => {
+        nl.set(squadra[0], squadra[1])
+        const sn = squadra[0]
+
+        const btn = document.createElement("li");
+        btn.innerHTML = squadra[0];
+        document.querySelector("ul").append(btn);
+
+        btn.addEventListener("click", function () {
+            if (btnMapper.filter(el => el == sn).length != 0) {
+                btnMapper = btnMapper.filter(el => el != sn);
+                btn.classList.remove("active");
+
+            } else {
+                if (btnMapper.length > 1) {
+                    return
+                }
+                btn.classList.add("active");
+                btnMapper.push(sn);
+                if (btnMapper.length == 2) {
+                    const a = document.createElement("p");
+                    a.innerHTML = btnMapper[0] + "<br>" + btnMapper[1] + "<br>" + JSON.stringify(and(nl.get(btnMapper[0]), nl.get(btnMapper[1]), true, true))
+                    logger.prepend(a);
+                }
+            }
+        })
+
+    }
     )
 
+    function getActiveTeams(seedContext) {
+        const scored = squadre.map(([name, availability]) => ({
+            name,
+            availability,
+            totalAvailability: sum(availability)
+        }));
+        scored.sort((a, b) => {
+            if (a.totalAvailability === b.totalAvailability) {
+                const weightDiff = getSeedWeight(seedContext, a.name) - getSeedWeight(seedContext, b.name);
+                if (weightDiff !== 0) {
+                    return weightDiff;
+                }
+                return a.name.localeCompare(b.name);
+            }
+            return a.totalAvailability - b.totalAvailability;
+        });
+        const limit = Math.min(plannerConfig.teamLimit, scored.length);
+        return scored.slice(0, limit);
+    }
 
-    </script>
+    function computeSlotFlexibility(teams) {
+        return dictionary.map((_, idx) => {
+            let count = 0;
+            teams.forEach(team => {
+                count += team.availability[idx];
+            });
+            return count;
+        });
+    }
+
+    function getOverlapCount(vecA, vecB) {
+        let count = 0;
+        for (let i = 0; i < vecA.length; i++) {
+            if (vecA[i] === 1 && vecB[i] === 1) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    function getOverlapIndices(vecA, vecB) {
+        const indices = [];
+        for (let i = 0; i < vecA.length; i++) {
+            if (vecA[i] === 1 && vecB[i] === 1) {
+                indices.push(i);
+            }
+        }
+        return indices;
+    }
+
+    function parseGroupSizes(value) {
+        if (!value) {
+            return [];
+        }
+        const tokens = value.split(/[\s,;]+/).map(token => token.trim()).filter(Boolean);
+        const sizes = [];
+        tokens.forEach(token => {
+            const parsed = parseInt(token, 10);
+            if (!Number.isNaN(parsed) && parsed > 0) {
+                sizes.push(parsed);
+            }
+        });
+        return sizes;
+    }
+
+    function buildGroups(teams, slotFlexibility, config, seedContext) {
+        if (!teams.length) {
+            return { groups: [], leftovers: [] };
+        }
+
+        const groupSizes = [...config.groupSizes];
+        if (!groupSizes.length) {
+            return { groups: [], leftovers: [...teams], infeasible: true };
+        }
+
+        const compatibility = computeCompatibilityMatrix(teams, seedContext);
+        const strategies = [
+            () => iterativeGrouping(teams, slotFlexibility, compatibility, groupSizes, seedContext),
+            () => compatibilityDrivenGrouping(teams, slotFlexibility, compatibility, groupSizes, seedContext),
+            () => balancedGrouping(teams, slotFlexibility, compatibility, groupSizes, seedContext)
+        ];
+
+        let bestResult = null;
+        let bestScore = -Infinity;
+
+        for (const build of strategies) {
+            const attempt = build();
+            const evaluation = evaluateGroupsFeasibility(attempt.groups, groupSizes);
+
+            if (!attempt.leftovers.length && evaluation.feasible) {
+                return attempt;
+            }
+
+            const score = scoreGroupingAttempt(attempt, evaluation, groupSizes);
+            if (score > bestScore) {
+                bestScore = score;
+                bestResult = attempt;
+            }
+        }
+
+        if (bestResult) {
+            const exact = exactGroupingSearch(teams, compatibility, groupSizes, seedContext);
+            if (exact) {
+                return { groups: exact, leftovers: [] };
+            }
+            return {
+                groups: bestResult.groups,
+                leftovers: bestResult.leftovers,
+                infeasible: true
+            };
+        }
+
+        return { groups: [], leftovers: [...teams] };
+    }
+
+    function iterativeGrouping(teams, slotFlexibility, compatibility, groupSizes, seedContext) {
+        const baseOrder = [...teams].sort((a, b) => {
+            if (a.totalAvailability === b.totalAvailability) {
+                const compatDiff = (compatibility.get(a.name)?.length || 0) - (compatibility.get(b.name)?.length || 0);
+                if (compatDiff !== 0) {
+                    return compatDiff;
+                }
+                const weightDiff = getSeedWeight(seedContext, a.name) - getSeedWeight(seedContext, b.name);
+                if (weightDiff !== 0) {
+                    return weightDiff;
+                }
+                return a.name.localeCompare(b.name);
+            }
+            return a.totalAvailability - b.totalAvailability;
+        });
+
+        let order = [...baseOrder];
+        let bestResult = null;
+        let bestScore = -Infinity;
+
+        for (let attempt = 0; attempt < 20; attempt++) {
+            const result = buildGroupsSingle(order, slotFlexibility, compatibility, groupSizes, seedContext);
+            const evaluation = evaluateGroupsFeasibility(result.groups, groupSizes);
+
+            if (!result.leftovers.length && evaluation.feasible) {
+                return result;
+            }
+
+            const score = scoreGroupingAttempt(result, evaluation, groupSizes);
+            if (score > bestScore) {
+                bestScore = score;
+                bestResult = result;
+            }
+
+            order = reorderTeamsForRetry(order, evaluation.problematicTeams, result.leftovers, compatibility, seedContext);
+        }
+
+        return bestResult || { groups: [], leftovers: [...teams] };
+    }
+
+    function compatibilityDrivenGrouping(teams, slotFlexibility, compatibility, groupSizes, seedContext) {
+        const unassigned = new Set(teams.map(team => team.name));
+        const nameToTeam = new Map(teams.map(team => [team.name, team]));
+        const groups = [];
+        const sizesQueue = [...groupSizes];
+
+        for (const size of sizesQueue) {
+            if (unassigned.size < size) {
+                break;
+            }
+
+            const candidates = Array.from(unassigned).map(name => {
+                const team = nameToTeam.get(name);
+                const compatList = compatibility.get(name) || [];
+                const compatCount = compatList.filter(entry => unassigned.has(entry.name)).length;
+                return {
+                    name,
+                    totalAvailability: team.totalAvailability,
+                    compatCount
+                };
+            });
+
+            candidates.sort((a, b) => {
+                if (a.compatCount === b.compatCount) {
+                    const availabilityDiff = a.totalAvailability - b.totalAvailability;
+                    if (availabilityDiff !== 0) {
+                        return availabilityDiff;
+                    }
+                    const weightDiff = getSeedWeight(seedContext, a.name) - getSeedWeight(seedContext, b.name);
+                    if (weightDiff !== 0) {
+                        return weightDiff;
+                    }
+                    return a.name.localeCompare(b.name);
+                }
+                return a.compatCount - b.compatCount;
+            });
+
+            const anchorName = candidates[0]?.name;
+            if (!anchorName) {
+                break;
+            }
+
+            const group = [];
+            const usedNames = [];
+
+            const anchor = nameToTeam.get(anchorName);
+            group.push(anchor);
+            usedNames.push(anchorName);
+            unassigned.delete(anchorName);
+
+            const compatList = compatibility.get(anchorName) || [];
+            compatList.sort((a, b) => {
+                if (a.overlap === b.overlap) {
+                    const availabilityDiff = a.totalAvailability - b.totalAvailability;
+                    if (availabilityDiff !== 0) {
+                        return availabilityDiff;
+                    }
+                    const weightDiff = getSeedWeight(seedContext, a.name) - getSeedWeight(seedContext, b.name);
+                    if (weightDiff !== 0) {
+                        return weightDiff;
+                    }
+                    return a.name.localeCompare(b.name);
+                }
+                return b.overlap - a.overlap;
+            });
+            compatList.forEach(entry => {
+                if (group.length >= size) {
+                    return;
+                }
+                if (!unassigned.has(entry.name)) {
+                    return;
+                }
+                const candidate = nameToTeam.get(entry.name);
+                if (!candidate) {
+                    return;
+                }
+                const fits = group.every(member => getOverlapCount(member.availability, candidate.availability) > 0);
+                if (!fits) {
+                    return;
+                }
+                group.push(candidate);
+                usedNames.push(entry.name);
+                unassigned.delete(entry.name);
+            });
+
+            if (group.length < size) {
+                const remainingCandidates = Array.from(unassigned).map(name => nameToTeam.get(name));
+                remainingCandidates.sort((a, b) => {
+                    const flexDiff = slotFlexibilityScore(b.availability, slotFlexibility) - slotFlexibilityScore(a.availability, slotFlexibility);
+                    if (flexDiff !== 0) {
+                        return flexDiff;
+                    }
+                    const availabilityDiff = a.totalAvailability - b.totalAvailability;
+                    if (availabilityDiff !== 0) {
+                        return availabilityDiff;
+                    }
+                    const weightDiff = getSeedWeight(seedContext, a.name) - getSeedWeight(seedContext, b.name);
+                    if (weightDiff !== 0) {
+                        return weightDiff;
+                    }
+                    return a.name.localeCompare(b.name);
+                });
+
+                for (const candidate of remainingCandidates) {
+                    if (group.length >= size) {
+                        break;
+                    }
+                    const fits = group.every(member => getOverlapCount(member.availability, candidate.availability) > 0);
+                    if (fits) {
+                        group.push(candidate);
+                        usedNames.push(candidate.name);
+                        unassigned.delete(candidate.name);
+                    }
+                }
+            }
+
+            if (group.length === size) {
+                groups.push(group);
+            } else {
+                usedNames.forEach(name => unassigned.add(name));
+                break;
+            }
+        }
+
+        const leftovers = Array.from(unassigned).map(name => nameToTeam.get(name));
+
+        return { groups, leftovers };
+    }
+
+    function balancedGrouping(teams, slotFlexibility, compatibility, groupSizes, seedContext) {
+        const sorted = [...teams].sort((a, b) => {
+            const flexDiff = slotFlexibilityScore(a.availability, slotFlexibility) - slotFlexibilityScore(b.availability, slotFlexibility);
+            if (flexDiff !== 0) {
+                return flexDiff;
+            }
+            const availabilityDiff = a.totalAvailability - b.totalAvailability;
+            if (availabilityDiff !== 0) {
+                return availabilityDiff;
+            }
+            const weightDiff = getSeedWeight(seedContext, a.name) - getSeedWeight(seedContext, b.name);
+            if (weightDiff !== 0) {
+                return weightDiff;
+            }
+            return a.name.localeCompare(b.name);
+        });
+        const groups = [];
+        const used = new Set();
+        const nameToTeam = new Map(teams.map(team => [team.name, team]));
+        const sizesQueue = [...groupSizes];
+
+        for (const size of sizesQueue) {
+            const anchor = sorted.find(team => !used.has(team.name));
+            if (!anchor) {
+                break;
+            }
+            if (sorted.filter(team => !used.has(team.name)).length < size) {
+                break;
+            }
+
+            const group = [anchor];
+            used.add(anchor.name);
+
+            const compatList = compatibility.get(anchor.name) || [];
+            const candidates = compatList
+                .map(entry => nameToTeam.get(entry.name))
+                .filter(candidate => candidate && !used.has(candidate.name));
+
+            candidates.sort((a, b) => {
+                const overlapDiff = getOverlapCount(anchor.availability, b.availability) - getOverlapCount(anchor.availability, a.availability);
+                if (overlapDiff !== 0) {
+                    return overlapDiff;
+                }
+                const flexDiff = slotFlexibilityScore(a.availability, slotFlexibility) - slotFlexibilityScore(b.availability, slotFlexibility);
+                if (flexDiff !== 0) {
+                    return flexDiff;
+                }
+                const weightDiff = getSeedWeight(seedContext, a.name) - getSeedWeight(seedContext, b.name);
+                if (weightDiff !== 0) {
+                    return weightDiff;
+                }
+                return a.name.localeCompare(b.name);
+            });
+
+            for (const candidate of candidates) {
+                if (group.length >= size) {
+                    break;
+                }
+                const fits = group.every(member => getOverlapCount(member.availability, candidate.availability) > 0);
+                if (fits) {
+                    group.push(candidate);
+                    used.add(candidate.name);
+                }
+            }
+
+            if (group.length < size) {
+                const fillers = sorted.filter(team => !used.has(team.name) && team.name !== anchor.name);
+                for (const candidate of fillers) {
+                    if (group.length >= size) {
+                        break;
+                    }
+                    const fits = group.every(member => getOverlapCount(member.availability, candidate.availability) > 0);
+                    if (fits) {
+                        group.push(candidate);
+                        used.add(candidate.name);
+                    }
+                }
+            }
+
+            if (group.length === size) {
+                groups.push(group);
+            } else {
+                group.forEach(team => used.delete(team.name));
+                break;
+            }
+        }
+
+        const leftovers = teams.filter(team => !used.has(team.name));
+        return { groups, leftovers };
+    }
+
+    function buildGroupsSingle(order, slotFlexibility, compatibility, groupSizes, seedContext) {
+        const remaining = [...order];
+        const groups = [];
+        const leftovers = [];
+        const sizesQueue = [...groupSizes];
+
+        while (sizesQueue.length && remaining.length) {
+            const size = sizesQueue.shift();
+            if (remaining.length < size) {
+                break;
+            }
+
+            const anchor = remaining.shift();
+            const group = [anchor];
+            let success = true;
+
+            while (group.length < size) {
+                let bestIndex = -1;
+                let bestScore = -Infinity;
+
+                for (let i = 0; i < remaining.length; i++) {
+                    const candidate = remaining[i];
+                    if (group.some(member => member.name === candidate.name)) {
+                        continue;
+                    }
+
+                    if (!group.every(member => getOverlapCount(member.availability, candidate.availability) > 0)) {
+                        continue;
+                    }
+
+                    const overlaps = group.map(member => getOverlapCount(member.availability, candidate.availability));
+                    const minOverlap = Math.min(...overlaps);
+                    const avgOverlap = overlaps.reduce((acc, val) => acc + val, 0) / overlaps.length;
+                    const sharedSlots = new Set();
+                    group.forEach(member => {
+                        getOverlapIndices(member.availability, candidate.availability).forEach(idx => sharedSlots.add(idx));
+                    });
+                    let rarityScore = 0;
+                    if (sharedSlots.size > 0) {
+                        let minFlex = Infinity;
+                        sharedSlots.forEach(idx => {
+                            if (slotFlexibility[idx] < minFlex) {
+                                minFlex = slotFlexibility[idx];
+                            }
+                        });
+                        rarityScore = 20 - minFlex;
+                    }
+                    const remainingSlots = size - group.length;
+                    const availabilityPenalty = candidate.totalAvailability * (remainingSlots > 1 ? 1 : 0.4);
+                    const compatibilitySize = compatibility.get(candidate.name)?.length || 0;
+                    const candidateScore = (minOverlap * 500) + (avgOverlap * 20) + rarityScore - availabilityPenalty + compatibilitySize + getSeedWeight(seedContext, candidate.name) * 0.001;
+
+                    if (candidateScore > bestScore) {
+                        bestScore = candidateScore;
+                        bestIndex = i;
+                    }
+                }
+
+                if (bestIndex === -1) {
+                    success = false;
+                    break;
+                }
+
+                const [chosen] = remaining.splice(bestIndex, 1);
+                group.push(chosen);
+            }
+
+            if (success && group.length === size) {
+                groups.push(group);
+            } else {
+                leftovers.push(...group);
+            }
+        }
+
+        leftovers.push(...remaining);
+
+        return { groups, leftovers };
+    }
+
+    function evaluateGroupsFeasibility(groups, groupSizes) {
+        const problematicTeams = new Set();
+        let minOverlapScore = Infinity;
+        const sizeRequirements = new Map();
+        groupSizes.forEach(size => {
+            sizeRequirements.set(size, (sizeRequirements.get(size) || 0) + 1);
+        });
+        let sizeMismatch = false;
+
+        groups.forEach(group => {
+            const required = sizeRequirements.get(group.length) || 0;
+            if (required > 0) {
+                sizeRequirements.set(group.length, required - 1);
+            } else {
+                sizeMismatch = true;
+            }
+
+            for (let i = 0; i < group.length; i++) {
+                for (let j = i + 1; j < group.length; j++) {
+                    const overlap = getOverlapCount(group[i].availability, group[j].availability);
+                    if (overlap === 0) {
+                        problematicTeams.add(group[i].name);
+                        problematicTeams.add(group[j].name);
+                    } else {
+                        minOverlapScore = Math.min(minOverlapScore, overlap);
+                    }
+                }
+            }
+        });
+
+        const missingSize = Array.from(sizeRequirements.values()).some(val => val > 0);
+
+        return {
+            feasible: problematicTeams.size === 0 && !sizeMismatch && !missingSize,
+            problematicTeams,
+            minOverlapScore: minOverlapScore === Infinity ? 0 : minOverlapScore,
+            sizeMismatch,
+            missingSize
+        };
+    }
+
+    function reorderTeamsForRetry(order, problematicTeams, leftovers, compatibility, seedContext) {
+        const priorityNames = new Set(problematicTeams);
+        leftovers.forEach(team => priorityNames.add(team.name));
+
+        if (!priorityNames.size) {
+            const shuffled = [...order];
+            shuffled.sort((a, b) => {
+                const compatDiff = (compatibility.get(a.name)?.length || 0) - (compatibility.get(b.name)?.length || 0);
+                if (compatDiff !== 0) {
+                    return compatDiff;
+                }
+                const weightDiff = getSeedWeight(seedContext, a.name) - getSeedWeight(seedContext, b.name);
+                if (weightDiff !== 0) {
+                    return weightDiff;
+                }
+                return a.name.localeCompare(b.name);
+            });
+            return shuffled;
+        }
+
+        const priority = order.filter(team => priorityNames.has(team.name)).sort((a, b) => {
+            const compatDiff = (compatibility.get(a.name)?.length || 0) - (compatibility.get(b.name)?.length || 0);
+            if (compatDiff !== 0) {
+                return compatDiff;
+            }
+            const weightDiff = getSeedWeight(seedContext, a.name) - getSeedWeight(seedContext, b.name);
+            if (weightDiff !== 0) {
+                return weightDiff;
+            }
+            return a.name.localeCompare(b.name);
+        });
+        const others = order.filter(team => !priorityNames.has(team.name)).sort((a, b) => {
+            const availabilityDiff = a.totalAvailability - b.totalAvailability;
+            if (availabilityDiff !== 0) {
+                return availabilityDiff;
+            }
+            const weightDiff = getSeedWeight(seedContext, a.name) - getSeedWeight(seedContext, b.name);
+            if (weightDiff !== 0) {
+                return weightDiff;
+            }
+            return a.name.localeCompare(b.name);
+        });
+        const reservedHigh = others.slice(-Math.ceil(others.length * 0.3)).sort((a, b) => {
+            const availabilityDiff = b.totalAvailability - a.totalAvailability;
+            if (availabilityDiff !== 0) {
+                return availabilityDiff;
+            }
+            const weightDiff = getSeedWeight(seedContext, a.name) - getSeedWeight(seedContext, b.name);
+            if (weightDiff !== 0) {
+                return weightDiff;
+            }
+            return a.name.localeCompare(b.name);
+        });
+        const reservedHighSet = new Set(reservedHigh.map(team => team.name));
+        const rest = others.filter(team => !reservedHighSet.has(team.name));
+        const newOrder = [];
+        const highQueue = [...reservedHigh];
+
+        priority.forEach(team => {
+            newOrder.push(team);
+            if (highQueue.length) {
+                newOrder.push(highQueue.shift());
+            }
+        });
+
+        newOrder.push(...rest);
+        newOrder.push(...(highQueue));
+
+        const seen = new Set();
+        return newOrder.filter(team => {
+            if (seen.has(team.name)) {
+                return false;
+            }
+            seen.add(team.name);
+            return true;
+        });
+    }
+
+    function computeCompatibilityMatrix(teams, seedContext) {
+        const matrix = new Map();
+
+        teams.forEach(team => {
+            const compatList = [];
+            teams.forEach(other => {
+                if (team.name === other.name) {
+                    return;
+                }
+                const overlap = getOverlapCount(team.availability, other.availability);
+                if (overlap > 0) {
+                    compatList.push({
+                        name: other.name,
+                        overlap,
+                        totalAvailability: other.totalAvailability
+                    });
+                }
+            });
+
+            compatList.sort((a, b) => {
+                if (a.overlap === b.overlap) {
+                    const availabilityDiff = a.totalAvailability - b.totalAvailability;
+                    if (availabilityDiff !== 0) {
+                        return availabilityDiff;
+                    }
+                    const weightDiff = getSeedWeight(seedContext, a.name) - getSeedWeight(seedContext, b.name);
+                    if (weightDiff !== 0) {
+                        return weightDiff;
+                    }
+                    return a.name.localeCompare(b.name);
+                }
+                return b.overlap - a.overlap;
+            });
+
+            matrix.set(team.name, compatList);
+        });
+
+        return matrix;
+    }
+
+    function slotFlexibilityScore(availability, slotFlexibility) {
+        let score = 0;
+        availability.forEach((value, idx) => {
+            if (value === 1) {
+                score += slotFlexibility[idx];
+            }
+        });
+        return score;
+    }
+
+    function scoreGroupingAttempt(attempt, evaluation, groupSizes) {
+        const totalGroups = attempt.groups.length;
+        const targetGroups = groupSizes.length;
+        const leftoverPenalty = attempt.leftovers.length * 120;
+        const problematicPenalty = evaluation.problematicTeams.size * 200;
+        const sizePenalty = (evaluation.sizeMismatch || evaluation.missingSize) ? 500 : 0;
+        const overlapScore = evaluation.minOverlapScore * 10;
+        return Math.min(totalGroups, targetGroups) * 1000 + overlapScore - leftoverPenalty - problematicPenalty - sizePenalty;
+    }
+
+    function exactGroupingSearch(teams, compatibility, groupSizes, seedContext, timeLimitMs = 600) {
+        const expectedTeams = groupSizes.reduce((acc, val) => acc + val, 0);
+        if (teams.length !== expectedTeams) {
+            return null;
+        }
+
+        const nameToTeam = new Map(teams.map(team => [team.name, team]));
+        const compatibilitySets = new Map();
+        const overlapMatrix = new Map();
+
+        teams.forEach(team => {
+            const compatList = compatibility.get(team.name) || [];
+            compatibilitySets.set(team.name, new Set(compatList.map(entry => entry.name)));
+        });
+
+        teams.forEach(team => {
+            const row = new Map();
+            teams.forEach(other => {
+                if (team.name === other.name) {
+                    return;
+                }
+                row.set(other.name, getOverlapCount(team.availability, other.availability));
+            });
+            overlapMatrix.set(team.name, row);
+        });
+
+        const start = performance.now ? performance.now() : Date.now();
+        const deadline = start + timeLimitMs;
+
+        const sizesQueue = [...groupSizes];
+        const remainingNames = teams.map(team => team.name);
+
+        const solution = backtrack([], remainingNames, sizesQueue);
+        return solution;
+
+        function timeExceeded() {
+            const now = performance.now ? performance.now() : Date.now();
+            return now > deadline;
+        }
+
+        function backtrack(currentGroups, remaining, sizesLeft) {
+            if (timeExceeded()) {
+                return null;
+            }
+            if (!sizesLeft.length) {
+                if (!remaining.length) {
+                    return currentGroups.map(group => group.map(name => nameToTeam.get(name)));
+                }
+                return currentGroups.map(group => group.map(name => nameToTeam.get(name)));
+            }
+
+            const currentSize = sizesLeft[0];
+            if (remaining.length < currentSize) {
+                return null;
+            }
+
+            const orderedRemaining = [...remaining].sort((a, b) => {
+                const compatA = countCompatWithRemaining(a, remaining);
+                const compatB = countCompatWithRemaining(b, remaining);
+                if (compatA === compatB) {
+                    const availA = nameToTeam.get(a).totalAvailability;
+                    const availB = nameToTeam.get(b).totalAvailability;
+                    if (availA !== availB) {
+                        return availA - availB;
+                    }
+                    const weightDiff = getSeedWeight(seedContext, a) - getSeedWeight(seedContext, b);
+                    if (weightDiff !== 0) {
+                        return weightDiff;
+                    }
+                    return a.localeCompare(b);
+                }
+                return compatA - compatB;
+            });
+
+            for (const anchor of orderedRemaining) {
+                const remainingSet = new Set(remaining);
+                if (!remainingSet.has(anchor)) {
+                    continue;
+                }
+                const anchorCompat = compatibility.get(anchor) || [];
+                const candidateList = anchorCompat.filter(entry => remainingSet.has(entry.name)).slice(0, 14);
+
+                if (candidateList.length < currentSize - 1) {
+                    continue;
+                }
+
+                const combinations = [];
+                generateCombinations(0, [], candidateList, combinations, currentSize - 1, remainingSet, anchor);
+                combinations.sort((a, b) => {
+                    const scoreDiff = combinationScore(b, anchor) - combinationScore(a, anchor);
+                    if (scoreDiff !== 0) {
+                        return scoreDiff;
+                    }
+                    const weightA = a.reduce((acc, name) => acc + getSeedWeight(seedContext, name), 0);
+                    const weightB = b.reduce((acc, name) => acc + getSeedWeight(seedContext, name), 0);
+                    if (weightA !== weightB) {
+                        return weightA - weightB;
+                    }
+                    return a.join(",").localeCompare(b.join(","));
+                });
+
+                for (const combo of combinations) {
+                    const groupNames = [anchor, ...combo];
+                    if (!isValidGroup(groupNames)) {
+                        continue;
+                    }
+                    const nextRemaining = remaining.filter(name => !groupNames.includes(name));
+                    const result = backtrack([...currentGroups, groupNames], nextRemaining, sizesLeft.slice(1));
+                    if (result) {
+                        return result;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        function countCompatWithRemaining(name, remaining) {
+            const compatSet = compatibilitySets.get(name) || new Set();
+            let count = 0;
+            remaining.forEach(other => {
+                if (other !== name && compatSet.has(other)) {
+                    count++;
+                }
+            });
+            return count;
+        }
+
+        function generateCombinations(startIndex, current, candidates, output, targetSize, remainingSet, anchor) {
+            if (current.length === targetSize) {
+                output.push(current.map(entry => entry.name));
+                return;
+            }
+            if (startIndex >= candidates.length) {
+                return;
+            }
+
+            for (let i = startIndex; i < candidates.length; i++) {
+                const candidate = candidates[i];
+                if (!remainingSet.has(candidate.name)) {
+                    continue;
+                }
+                const fits = current.every(entry => compatibilitySets.get(entry.name)?.has(candidate.name));
+                if (!fits) {
+                    continue;
+                }
+                if (!compatibilitySets.get(candidate.name)?.has(anchor)) {
+                    continue;
+                }
+
+                current.push(candidate);
+                generateCombinations(i + 1, current, candidates, output, targetSize, remainingSet, anchor);
+                current.pop();
+
+                if (output.length >= 60) {
+                    break;
+                }
+            }
+        }
+
+        function combinationScore(combo, anchor) {
+            let minOverlap = Infinity;
+            let totalOverlap = 0;
+            const names = [anchor, ...combo];
+            for (let i = 0; i < names.length; i++) {
+                for (let j = i + 1; j < names.length; j++) {
+                    const overlap = overlapMatrix.get(names[i])?.get(names[j]) || 0;
+                    totalOverlap += overlap;
+                    if (overlap < minOverlap) {
+                        minOverlap = overlap;
+                    }
+                }
+            }
+            return minOverlap * 100 + totalOverlap;
+        }
+
+        function isValidGroup(groupNames) {
+            for (let i = 0; i < groupNames.length; i++) {
+                for (let j = i + 1; j < groupNames.length; j++) {
+                    if (!(compatibilitySets.get(groupNames[i])?.has(groupNames[j]) && compatibilitySets.get(groupNames[j])?.has(groupNames[i]))) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+    }
+
+    function createMatchesForGroup(group, groupIndex) {
+        const matches = [];
+        for (let i = 0; i < group.length; i++) {
+            for (let j = i + 1; j < group.length; j++) {
+                const teamA = group[i];
+                const teamB = group[j];
+                const sharedSlots = getOverlapIndices(teamA.availability, teamB.availability);
+                matches.push({
+                    teams: [teamA.name, teamB.name],
+                    groupIndex,
+                    availableSlots: sharedSlots,
+                    flexibility: sharedSlots.length
+                });
+            }
+        }
+        return matches;
+    }
+
+    function scheduleMatches(groups, slotFlexibility, teamLookup, seedContext) {
+        const rawWeeks = [];
+        const unscheduledMatches = [];
+        const matches = [];
+
+        groups.forEach((group, groupIndex) => {
+            matches.push(...createMatchesForGroup(group, groupIndex));
+        });
+
+        const getMinSlotFlex = (slots) => {
+            if (!slots.length) {
+                return Infinity;
+            }
+            return slots.reduce((min, idx) => Math.min(min, slotFlexibility[idx]), Infinity);
+        };
+
+        matches.sort((a, b) => {
+            if (a.flexibility !== b.flexibility) {
+                return a.flexibility - b.flexibility;
+            }
+            const aMinFlex = getMinSlotFlex(a.availableSlots);
+            const bMinFlex = getMinSlotFlex(b.availableSlots);
+            if (aMinFlex !== bMinFlex) {
+                return aMinFlex - bMinFlex;
+            }
+            const aTightness = (teamLookup.get(a.teams[0])?.totalAvailability || 0) + (teamLookup.get(a.teams[1])?.totalAvailability || 0);
+            const bTightness = (teamLookup.get(b.teams[0])?.totalAvailability || 0) + (teamLookup.get(b.teams[1])?.totalAvailability || 0);
+            if (aTightness !== bTightness) {
+                return aTightness - bTightness;
+            }
+            const weightA = getSeedWeight(seedContext, a.teams[0]) + getSeedWeight(seedContext, a.teams[1]);
+            const weightB = getSeedWeight(seedContext, b.teams[0]) + getSeedWeight(seedContext, b.teams[1]);
+            if (weightA !== weightB) {
+                return weightA - weightB;
+            }
+            return a.teams.join("-").localeCompare(b.teams.join("-"));
+        });
+
+        const teamWeekMatches = new Map();
+        const teamLastWeek = new Map();
+
+        const ensureWeek = (weekIdx) => {
+            while (rawWeeks.length <= weekIdx) {
+                rawWeeks.push({
+                    slots: Array(dictionary.length).fill(null)
+                });
+            }
+        };
+
+        const BASE_WEEKS = 6;
+        for (let i = 0; i < BASE_WEEKS; i++) {
+            ensureWeek(i);
+        }
+
+        const getTeamWeekCount = (teamName, weekIdx) => {
+            const data = teamWeekMatches.get(teamName);
+            if (!data) {
+                return 0;
+            }
+            return data[weekIdx] || 0;
+        };
+
+        const setTeamWeek = (teamName, weekIdx) => {
+            const data = teamWeekMatches.get(teamName) || [];
+            data[weekIdx] = (data[weekIdx] || 0) + 1;
+            teamWeekMatches.set(teamName, data);
+            teamLastWeek.set(teamName, weekIdx);
+        };
+
+        const getLastWeek = (teamName) => {
+            if (!teamLastWeek.has(teamName)) {
+                return null;
+            }
+            return teamLastWeek.get(teamName);
+        };
+
+        matches.forEach(match => {
+            if (!match.availableSlots.length) {
+                unscheduledMatches.push({
+                    teams: match.teams,
+                    groupIndex: match.groupIndex,
+                    reason: "Nessuna finestra condivisa"
+                });
+                return;
+            }
+
+            const candidateSlots = [...match.availableSlots].sort((a, b) => slotFlexibility[a] - slotFlexibility[b]);
+            const placements = [];
+
+            candidateSlots.forEach(slotIdx => {
+                for (let weekIdx = 0; weekIdx < rawWeeks.length; weekIdx++) {
+                    ensureWeek(weekIdx);
+                    if (rawWeeks[weekIdx].slots[slotIdx]) {
+                        continue;
+                    }
+                    if (getTeamWeekCount(match.teams[0], weekIdx) > 0 || getTeamWeekCount(match.teams[1], weekIdx) > 0) {
+                        continue;
+                    }
+                    const lastWeekA = getLastWeek(match.teams[0]);
+                    const lastWeekB = getLastWeek(match.teams[1]);
+                    const penaltyA = lastWeekA === null ? 0 : Math.max(0, weekIdx - lastWeekA - 2);
+                    const penaltyB = lastWeekB === null ? 0 : Math.max(0, weekIdx - lastWeekB - 2);
+                    const penalty = penaltyA + penaltyB;
+                    const score = penalty * 1000 + slotFlexibility[slotIdx] * 10 + weekIdx;
+                    placements.push({ slotIdx, weekIdx, penalty, score });
+                }
+            });
+
+            if (!placements.length) {
+                const newWeekIdx = rawWeeks.length;
+                ensureWeek(newWeekIdx);
+                candidateSlots.forEach(slotIdx => {
+                    const lastWeekA = getLastWeek(match.teams[0]);
+                    const lastWeekB = getLastWeek(match.teams[1]);
+                    const penaltyA = lastWeekA === null ? 0 : Math.max(0, newWeekIdx - lastWeekA - 2);
+                    const penaltyB = lastWeekB === null ? 0 : Math.max(0, newWeekIdx - lastWeekB - 2);
+                    const penalty = penaltyA + penaltyB;
+                    const score = penalty * 1000 + slotFlexibility[slotIdx] * 10 + newWeekIdx;
+                    placements.push({ slotIdx, weekIdx: newWeekIdx, penalty, score });
+                });
+            }
+
+            placements.sort((a, b) => {
+                if (a.score !== b.score) {
+                    return a.score - b.score;
+                }
+                if (a.penalty !== b.penalty) {
+                    return a.penalty - b.penalty;
+                }
+                if (a.weekIdx !== b.weekIdx) {
+                    return a.weekIdx - b.weekIdx;
+                }
+                const flexDiff = slotFlexibility[a.slotIdx] - slotFlexibility[b.slotIdx];
+                if (flexDiff !== 0) {
+                    return flexDiff;
+                }
+                const keyA = `${match.teams.join("|")}|${a.weekIdx}|${a.slotIdx}`;
+                const keyB = `${match.teams.join("|")}|${b.weekIdx}|${b.slotIdx}`;
+                const weightA = getSeedWeight(seedContext, keyA);
+                const weightB = getSeedWeight(seedContext, keyB);
+                if (weightA !== weightB) {
+                    return weightA - weightB;
+                }
+                return keyA.localeCompare(keyB);
+            });
+
+            const chosen = placements[0];
+            ensureWeek(chosen.weekIdx);
+            rawWeeks[chosen.weekIdx].slots[chosen.slotIdx] = {
+                teams: match.teams,
+                groupIndex: match.groupIndex,
+                slotIndex: chosen.slotIdx
+            };
+            setTeamWeek(match.teams[0], chosen.weekIdx);
+            setTeamWeek(match.teams[1], chosen.weekIdx);
+        });
+
+        const weeks = rawWeeks
+            .map((week, index) => ({
+                index,
+                slots: week.slots
+            }))
+            .filter(week => week.slots.some(slot => slot));
+
+        return { weeks, unscheduledMatches };
+    }
+
+    function renderGroups(groups, leftovers = [], infeasible = false) {
+        groupsContainer.innerHTML = "<h2>Gironi suggeriti</h2>";
+
+        if (!groups.length && !leftovers.length) {
+            const empty = document.createElement("p");
+            empty.textContent = "Nessuna squadra attiva.";
+            groupsContainer.appendChild(empty);
+            return;
+        }
+
+        groups.forEach((group, index) => {
+            const card = document.createElement("div");
+            card.className = "group-card";
+            const title = document.createElement("h3");
+            title.textContent = `Girone ${index + 1}`;
+            card.appendChild(title);
+
+            group.forEach(team => {
+                const row = document.createElement("p");
+                row.textContent = `${team.name} — ${team.totalAvailability} slot disponibili`;
+                card.appendChild(row);
+            });
+
+            groupsContainer.appendChild(card);
+        });
+
+        if (leftovers.length) {
+            const info = document.createElement("p");
+            info.className = "unscheduled";
+            info.textContent = `Squadre non assegnate: ${leftovers.map(team => team.name).join(", ")}`;
+            groupsContainer.appendChild(info);
+        }
+
+        if (infeasible) {
+            const warn = document.createElement("p");
+            warn.className = "unscheduled";
+            warn.textContent = "Impossibile generare gironi validi per tutte le squadre con le disponibilità attuali.";
+            groupsContainer.appendChild(warn);
+        }
+    }
+
+    function renderSchedule(weeks, unscheduledMatches = [], infeasible = false) {
+        scheduleContainer.innerHTML = "<h2>Calendario proposto</h2>";
+
+        if (infeasible) {
+            const warn = document.createElement("p");
+            warn.className = "unscheduled";
+            warn.textContent = "Calendario non generato: verifica i gironi e le disponibilità.";
+            scheduleContainer.appendChild(warn);
+            return;
+        }
+
+        if (!weeks.length) {
+            const empty = document.createElement("p");
+            empty.textContent = "Nessuna partita programmata.";
+            scheduleContainer.appendChild(empty);
+        } else {
+            weeks.forEach(week => {
+                const weekBlock = document.createElement("div");
+                weekBlock.className = "week-block";
+                const title = document.createElement("h3");
+                title.textContent = `Settimana ${week.index + 1}`;
+                weekBlock.appendChild(title);
+
+                dayOrder.forEach(dayCode => {
+                    const dayMatches = [];
+                    week.slots.forEach((assignment, slotIdx) => {
+                        if (!assignment) {
+                            return;
+                        }
+                        if (slotInfo[slotIdx].dayCode !== dayCode) {
+                            return;
+                        }
+                        dayMatches.push({ assignment, slotIdx });
+                    });
+
+                    if (!dayMatches.length) {
+                        return;
+                    }
+
+                    const dayBlock = document.createElement("div");
+                    dayBlock.className = "day-block";
+                    const dayTitle = document.createElement("h4");
+                    dayTitle.textContent = dayNames[dayCode] || dayCode;
+                    dayBlock.appendChild(dayTitle);
+
+                    dayMatches.forEach(({ assignment, slotIdx }) => {
+                        const row = document.createElement("p");
+                        row.className = "match-entry";
+                        row.textContent = `${slotInfo[slotIdx].hours} — ${assignment.teams[0]} vs ${assignment.teams[1]} (Girone ${assignment.groupIndex + 1})`;
+                        dayBlock.appendChild(row);
+                    });
+
+                    weekBlock.appendChild(dayBlock);
+                });
+
+                scheduleContainer.appendChild(weekBlock);
+            });
+        }
+
+        if (unscheduledMatches.length) {
+            const warn = document.createElement("div");
+            warn.className = "unscheduled";
+            const title = document.createElement("p");
+            title.textContent = "Incontri non programmati:";
+            warn.appendChild(title);
+
+            unscheduledMatches.forEach(match => {
+                const row = document.createElement("p");
+                row.textContent = `${match.teams[0]} vs ${match.teams[1]} (Girone ${match.groupIndex + 1}) — ${match.reason || "Verificare disponibilità"}`;
+                warn.appendChild(row);
+            });
+
+            scheduleContainer.appendChild(warn);
+        }
+    }
+
+    function renderCalendar(weeks, infeasible = false) {
+        calendarContainer.innerHTML = "<h2>Vista calendario</h2>";
+
+        if (infeasible) {
+            const warn = document.createElement("p");
+            warn.className = "unscheduled";
+            warn.textContent = "Calendario non disponibile: controlla la formazione dei gironi.";
+            calendarContainer.appendChild(warn);
+            return;
+        }
+
+        if (!weeks.length) {
+            const empty = document.createElement("p");
+            empty.textContent = "Nessun evento pianificato.";
+            calendarContainer.appendChild(empty);
+            return;
+        }
+
+        weeks.forEach(week => {
+            const weekBlock = document.createElement("div");
+            weekBlock.className = "calendar-week";
+            const title = document.createElement("h3");
+            title.textContent = `Settimana ${week.index + 1}`;
+            weekBlock.appendChild(title);
+
+            const grid = document.createElement("div");
+            grid.className = "calendar-grid";
+
+            const timeHeader = document.createElement("div");
+            timeHeader.className = "calendar-header";
+            timeHeader.textContent = "Orario";
+            grid.appendChild(timeHeader);
+
+            dayOrder.forEach(dayCode => {
+                const dayHeader = document.createElement("div");
+                dayHeader.className = "calendar-header";
+                dayHeader.textContent = dayNames[dayCode] || dayCode;
+                grid.appendChild(dayHeader);
+            });
+
+            hoursOrder.forEach(hourLabel => {
+                const hourCell = document.createElement("div");
+                hourCell.className = "calendar-hour";
+                hourCell.textContent = hourLabel;
+                grid.appendChild(hourCell);
+
+                dayOrder.forEach(dayCode => {
+                    const slotIdx = slotLookupByDayHour.get(dayCode)?.get(hourLabel);
+                    const cell = document.createElement("div");
+                    cell.className = "calendar-slot";
+
+                    if (typeof slotIdx === "number") {
+                        const assignment = week.slots[slotIdx];
+                        if (assignment) {
+                            const bg = groupColors[assignment.groupIndex % groupColors.length];
+                            cell.style.backgroundColor = bg;
+                            cell.style.color = getContrastColor(bg);
+                            cell.innerHTML = `<strong>${assignment.teams[0]} vs ${assignment.teams[1]}</strong><span>Girone ${assignment.groupIndex + 1}</span>`;
+                        } else {
+                            cell.classList.add("empty");
+                            cell.textContent = "—";
+                        }
+                    } else {
+                        cell.classList.add("empty");
+                        cell.textContent = "—";
+                    }
+
+                    grid.appendChild(cell);
+                });
+            });
+
+            weekBlock.appendChild(grid);
+            calendarContainer.appendChild(weekBlock);
+        });
+    }
+
+    function renderSummary(activeTeams, weeks, teamLookup, infeasible = false) {
+        summaryContainer.innerHTML = "<h2>Riepilogo squadre</h2>";
+
+        if (infeasible) {
+            const warn = document.createElement("p");
+            warn.className = "unscheduled";
+            warn.textContent = "Impossibile calcolare il riepilogo: nessuna pianificazione valida.";
+            summaryContainer.appendChild(warn);
+            return;
+        }
+
+        if (!activeTeams.length) {
+            const empty = document.createElement("p");
+            empty.textContent = "Nessuna squadra attiva.";
+            summaryContainer.appendChild(empty);
+            return;
+        }
+
+        const summaryMap = new Map();
+        activeTeams.forEach(team => {
+            summaryMap.set(team.name, {
+                matches: [],
+                invalidSlots: []
+            });
+        });
+
+        weeks.forEach(week => {
+            week.slots.forEach((assignment, slotIdx) => {
+                if (!assignment) {
+                    return;
+                }
+                const slot = slotInfo[slotIdx];
+                const dayLabel = dayNames[slot.dayCode] || slot.dayCode;
+                assignment.teams.forEach(teamName => {
+                    if (!summaryMap.has(teamName)) {
+                        return;
+                    }
+                    const opponent = assignment.teams.find(name => name !== teamName) || "";
+                    const teamData = summaryMap.get(teamName);
+                    const team = teamLookup.get(teamName);
+                    const available = team ? team.availability[slotIdx] === 1 : false;
+                    teamData.matches.push({
+                        weekIndex: week.index,
+                        slotIdx,
+                        slot,
+                        dayLabel,
+                        opponent,
+                        available
+                    });
+                    if (!available) {
+                        teamData.invalidSlots.push({
+                            weekIndex: week.index,
+                            slotIdx
+                        });
+                    }
+                });
+            });
+        });
+
+        const table = document.createElement("div");
+        table.className = "summary-table";
+
+        summaryMap.forEach((data, teamName) => {
+            const row = document.createElement("div");
+            row.className = "summary-row";
+            if (data.invalidSlots.length) {
+                row.classList.add("invalid");
+            }
+
+            const title = document.createElement("strong");
+            title.textContent = `${teamName} — ${data.matches.length} partite`;
+            row.appendChild(title);
+
+            if (data.invalidSlots.length) {
+                const warn = document.createElement("p");
+                warn.className = "unscheduled";
+                warn.textContent = "Attenzione: verifica queste partite, non rispettano la disponibilità dichiarata.";
+                row.appendChild(warn);
+            }
+
+            if (!data.matches.length) {
+                const info = document.createElement("p");
+                info.textContent = "Nessuna partita programmata.";
+                row.appendChild(info);
+            } else {
+                const list = document.createElement("ul");
+                data.matches.forEach(match => {
+                    const entry = document.createElement("li");
+                    entry.textContent = `Settimana ${match.weekIndex + 1}, ${match.dayLabel} ${match.slot.hours} vs ${match.opponent}`;
+                    if (!match.available) {
+                        entry.classList.add("unscheduled");
+                    }
+                    list.appendChild(entry);
+                });
+                row.appendChild(list);
+            }
+
+            table.appendChild(row);
+        });
+
+        summaryContainer.appendChild(table);
+    }
+
+    function refreshPlanning() {
+        warningsContainer.textContent = "";
+        let normalizedSeed = Math.max(0, Math.floor(plannerConfig.seed || 0));
+        let seedContext = createSeedContext(normalizedSeed, squadre);
+        let activeTeams = getActiveTeams(seedContext);
+
+        if (activeTeams.length) {
+            const maxSeedValue = Math.max(1, activeTeams.length);
+            const boundedSeed = normalizedSeed % maxSeedValue;
+            if (boundedSeed !== normalizedSeed) {
+                normalizedSeed = boundedSeed;
+                plannerConfig.seed = boundedSeed;
+                seedContext = createSeedContext(normalizedSeed, squadre);
+                activeTeams = getActiveTeams(seedContext);
+            }
+        }
+
+        if (seedInput && document.activeElement !== seedInput) {
+            seedInput.value = plannerConfig.seed;
+        }
+
+        if (!activeTeams.length) {
+            renderGroups([]);
+            renderSchedule([]);
+            renderCalendar([]);
+            renderSummary([], [], new Map());
+            return;
+        }
+
+        const totalSlots = plannerConfig.groupSizes.reduce((acc, val) => acc + val, 0);
+        if (totalSlots !== activeTeams.length) {
+            warningsContainer.textContent = `Le dimensioni dei gironi (${totalSlots}) non coincidono con le squadre attive selezionate (${activeTeams.length}). Aggiorna i valori per continuare.`;
+            renderGroups([], activeTeams, true);
+            renderSchedule([], [], true);
+            renderCalendar([], true);
+            const lookup = new Map(activeTeams.map(team => [team.name, team]));
+            renderSummary(activeTeams, [], lookup, true);
+            return;
+        }
+
+        const slotFlexibility = computeSlotFlexibility(activeTeams);
+        const groupingResult = buildGroups(activeTeams, slotFlexibility, plannerConfig);
+        renderGroups(groupingResult.groups, groupingResult.leftovers, groupingResult.infeasible === true);
+
+        if (groupingResult.infeasible || groupingResult.leftovers.length) {
+            warningsContainer.textContent = "Impossibile generare gironi validi con le impostazioni correnti.";
+            renderSchedule([], [], true);
+            renderCalendar([], true);
+            const lookup = new Map(activeTeams.map(team => [team.name, team]));
+            renderSummary(activeTeams, [], lookup, true);
+            return;
+        }
+
+        const teamLookup = new Map(activeTeams.map(team => [team.name, team]));
+        const { weeks, unscheduledMatches } = scheduleMatches(groupingResult.groups, slotFlexibility, teamLookup, seedContext);
+        renderSchedule(weeks, unscheduledMatches);
+        renderCalendar(weeks);
+        renderSummary(activeTeams, weeks, teamLookup);
+    }
+
+    const regenerateButton = document.createElement("button");
+    regenerateButton.textContent = "Rigenera gironi e calendario";
+    controlsContainer.appendChild(regenerateButton);
+    regenerateButton.addEventListener("click", () => {
+        if (seedInput && seedInput.value.trim() === "") {
+            const maxSeed = Math.max(1, plannerConfig.teamLimit || squadre.length || 1);
+            const randomSeed = Math.floor(Math.random() * maxSeed);
+            plannerConfig.seed = randomSeed;
+            seedInput.value = randomSeed;
+        }
+        refreshPlanning();
+    });
+
+    refreshPlanning();
+
+
+</script>
+
 </html>
