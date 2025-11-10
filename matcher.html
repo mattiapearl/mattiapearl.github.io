@@ -135,6 +135,47 @@
         font-size: 0.9rem;
     }
 
+    #logger .pair-calendar-result {
+        display: grid;
+        gap: 16px;
+        padding: 20px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+    }
+
+    .pair-calendar-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .pair-calendar-header h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 650;
+        color: var(--text);
+    }
+
+    .pair-calendar-meta {
+        color: var(--muted);
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+    .pair-calendar-grid {
+        overflow-x: auto;
+    }
+
+    .pair-calendar-empty {
+        margin: 0;
+        color: var(--muted);
+        font-style: italic;
+    }
+
     #insights {
         grid-column: 1 / -1;
         display: grid;
@@ -325,6 +366,26 @@
         opacity: 0.6;
     }
 
+    .calendar-grid .calendar-slot.available {
+        background: rgba(61, 127, 245, 0.12);
+        border-left-color: rgba(61, 127, 245, 0.35);
+        border-bottom-color: rgba(61, 127, 245, 0.35);
+        color: var(--text);
+        box-shadow: inset 0 0 0 1px rgba(61, 127, 245, 0.18);
+    }
+
+    .calendar-grid .calendar-slot.available strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--accent);
+    }
+
+    .calendar-grid .calendar-slot.disabled-slot {
+        background: var(--surface-alt);
+        opacity: 0.3;
+        pointer-events: none;
+    }
+
     .summary-table {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -374,8 +435,10 @@
         padding: 4px 6px;
         font-size: 0.85rem;
     }
-</style>
-<script>
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script>
     const dictionary = [
         "L 9-10", "L 10-11", "L 11-12", "L 12-13", "L 13-14", "L 14-15",
         "Ma 9-10", "Ma 10-11", "Ma 11-12", "Ma 12-13", "Ma 13-14", "Ma 14-15", "Ma 15-16", "Ma 16-17", "Ma 17-18", "Ma 18-19",
@@ -582,6 +645,109 @@
         slotLookupByDayHour.get(info.dayCode).set(info.hours, info.index);
     });
 
+    function renderPairingCalendar(teamAName, teamBName) {
+        logger.innerHTML = "";
+
+        const availabilityA = nl.get(teamAName);
+        const availabilityB = nl.get(teamBName);
+
+        if (!availabilityA || !availabilityB) {
+            return;
+        }
+
+        const overlapIndices = getOverlapIndices(availabilityA, availabilityB);
+        const overlapSet = new Set(overlapIndices);
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "pair-calendar-result";
+
+        const header = document.createElement("div");
+        header.className = "pair-calendar-header";
+
+        const title = document.createElement("h3");
+        title.textContent = `${teamAName} × ${teamBName}`;
+        header.appendChild(title);
+
+        const meta = document.createElement("span");
+        meta.className = "pair-calendar-meta";
+        meta.textContent = overlapIndices.length ? `${overlapIndices.length} slot condivisi` : "Nessuna disponibilità condivisa";
+        header.appendChild(meta);
+
+        wrapper.appendChild(header);
+
+        const gridWrapper = document.createElement("div");
+        gridWrapper.className = "pair-calendar-grid";
+
+        const grid = document.createElement("div");
+        grid.className = "calendar-grid";
+
+        const blankHeader = document.createElement("div");
+        blankHeader.className = "calendar-header";
+        grid.appendChild(blankHeader);
+
+        dayOrder.forEach(dayCode => {
+            const headerCell = document.createElement("div");
+            headerCell.className = "calendar-header";
+            headerCell.textContent = dayNames[dayCode] || dayCode;
+            grid.appendChild(headerCell);
+        });
+
+        hoursOrder.forEach(hourLabel => {
+            const hourCell = document.createElement("div");
+            hourCell.className = "calendar-hour";
+            hourCell.textContent = hourLabel;
+            grid.appendChild(hourCell);
+
+            dayOrder.forEach(dayCode => {
+                const slotCell = document.createElement("div");
+                slotCell.className = "calendar-slot";
+
+                const dayMap = slotLookupByDayHour.get(dayCode);
+                const slotIndex = dayMap ? dayMap.get(hourLabel) : undefined;
+
+                if (slotIndex === undefined) {
+                    slotCell.classList.add("disabled-slot");
+                } else if (overlapSet.has(slotIndex)) {
+                    slotCell.classList.add("available");
+
+                    const slotTitle = document.createElement("strong");
+                    slotTitle.textContent = "Disponibile";
+                    slotCell.appendChild(slotTitle);
+
+                    const detail = document.createElement("span");
+                    detail.textContent = `${dayNames[dayCode] || dayCode} ${hourLabel}`;
+                    slotCell.appendChild(detail);
+                } else {
+                    slotCell.classList.add("empty");
+                }
+
+                grid.appendChild(slotCell);
+            });
+        });
+
+        gridWrapper.appendChild(grid);
+        wrapper.appendChild(gridWrapper);
+
+        if (!overlapIndices.length) {
+            const emptyState = document.createElement("p");
+            emptyState.className = "pair-calendar-empty";
+            emptyState.textContent = "Nessuna fascia oraria condivisa tra queste due squadre.";
+            wrapper.appendChild(emptyState);
+        }
+
+        logger.appendChild(wrapper);
+    }
+
+    function updatePairingDisplay() {
+        if (btnMapper.length === 2) {
+            renderPairingCalendar(btnMapper[0], btnMapper[1]);
+        } else {
+            logger.innerHTML = "";
+        }
+    }
+
+const { jsPDF } = window.jspdf || {};
+
     function createRng(seed) {
         let state = Math.floor(seed) % 2147483647;
         if (state <= 0) {
@@ -673,6 +839,8 @@
 
     let groupSizesInput;
     let seedInput;
+let exportButton;
+let lastExportContext = null;
 
     function getContrastColor(hexColor) {
         if (!hexColor || typeof hexColor !== "string") {
@@ -769,23 +937,19 @@
         document.querySelector("ul").append(btn);
 
         btn.addEventListener("click", function () {
-            if (btnMapper.filter(el => el == sn).length != 0) {
-                btnMapper = btnMapper.filter(el => el != sn);
+            if (btn.classList.contains("active")) {
+                btnMapper = btnMapper.filter(el => el !== sn);
                 btn.classList.remove("active");
-
+                updatePairingDisplay();
             } else {
                 if (btnMapper.length > 1) {
-                    return
+                    return;
                 }
                 btn.classList.add("active");
                 btnMapper.push(sn);
-                if (btnMapper.length == 2) {
-                    const a = document.createElement("p");
-                    a.innerHTML = btnMapper[0] + "<br>" + btnMapper[1] + "<br>" + JSON.stringify(and(nl.get(btnMapper[0]), nl.get(btnMapper[1]), true, true))
-                    logger.prepend(a);
-                }
+                updatePairingDisplay();
             }
-        })
+        });
 
     }
     )
@@ -1989,33 +2153,24 @@
         });
     }
 
-    function renderSummary(activeTeams, weeks, teamLookup, infeasible = false) {
-        summaryContainer.innerHTML = "<h2>Riepilogo squadre</h2>";
+function buildSummaryData(activeTeams, weeks, teamLookup) {
+    const summaryMap = new Map();
+    if (!Array.isArray(activeTeams)) {
+        return summaryMap;
+    }
 
-        if (infeasible) {
-            const warn = document.createElement("p");
-            warn.className = "unscheduled";
-            warn.textContent = "Impossibile calcolare il riepilogo: nessuna pianificazione valida.";
-            summaryContainer.appendChild(warn);
-            return;
-        }
-
-        if (!activeTeams.length) {
-            const empty = document.createElement("p");
-            empty.textContent = "Nessuna squadra attiva.";
-            summaryContainer.appendChild(empty);
-            return;
-        }
-
-        const summaryMap = new Map();
-        activeTeams.forEach(team => {
-            summaryMap.set(team.name, {
-                matches: [],
-                invalidSlots: []
-            });
+    activeTeams.forEach(team => {
+        summaryMap.set(team.name, {
+            matches: [],
+            invalidSlots: []
         });
+    });
 
+    if (Array.isArray(weeks)) {
         weeks.forEach(week => {
+            if (!week || !Array.isArray(week.slots)) {
+                return;
+            }
             week.slots.forEach((assignment, slotIdx) => {
                 if (!assignment) {
                     return;
@@ -2028,8 +2183,8 @@
                     }
                     const opponent = assignment.teams.find(name => name !== teamName) || "";
                     const teamData = summaryMap.get(teamName);
-                    const team = teamLookup.get(teamName);
-                    const available = team ? team.availability[slotIdx] === 1 : false;
+                    const rosterEntry = teamLookup.get(teamName);
+                    const available = rosterEntry ? rosterEntry.availability[slotIdx] === 1 : false;
                     teamData.matches.push({
                         weekIndex: week.index,
                         slotIdx,
@@ -2047,6 +2202,30 @@
                 });
             });
         });
+    }
+
+    return summaryMap;
+}
+
+function renderSummary(activeTeams, weeks, teamLookup, summaryData = null, infeasible = false) {
+        summaryContainer.innerHTML = "<h2>Riepilogo squadre</h2>";
+
+        if (infeasible) {
+            const warn = document.createElement("p");
+            warn.className = "unscheduled";
+            warn.textContent = "Impossibile calcolare il riepilogo: nessuna pianificazione valida.";
+            summaryContainer.appendChild(warn);
+        return new Map();
+        }
+
+        if (!activeTeams.length) {
+            const empty = document.createElement("p");
+            empty.textContent = "Nessuna squadra attiva.";
+            summaryContainer.appendChild(empty);
+        return new Map();
+        }
+
+    const summaryMap = summaryData || buildSummaryData(activeTeams, weeks, teamLookup);
 
         const table = document.createElement("div");
         table.className = "summary-table";
@@ -2090,7 +2269,228 @@
         });
 
         summaryContainer.appendChild(table);
+    return summaryMap;
     }
+
+function toCsvValue(value) {
+    if (value === undefined || value === null) {
+        return "";
+    }
+    const str = String(value).replace(/"/g, '""');
+    return /[",\r\n]/.test(str) ? `"${str}"` : str;
+}
+
+function downloadCsv(filename, rows) {
+    const csvContent = rows.map(row => row.map(toCsvValue).join(",")).join("\r\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 0);
+}
+
+async function exportSectionsToPdf(context) {
+    if (!window.html2canvas || !jsPDF) {
+        throw new Error("Le librerie per l'esportazione non sono disponibili.");
+    }
+    const exportWrapper = document.createElement("div");
+    exportWrapper.style.position = "fixed";
+    exportWrapper.style.left = "-9999px";
+    exportWrapper.style.top = "0";
+    exportWrapper.style.width = "1024px";
+    exportWrapper.style.background = "#ffffff";
+    exportWrapper.style.padding = "24px";
+    exportWrapper.style.display = "grid";
+    exportWrapper.style.gap = "24px";
+
+    [groupsContainer, scheduleContainer, calendarContainer, summaryContainer].forEach(section => {
+        const clone = section.cloneNode(true);
+        clone.style.boxShadow = "none";
+        clone.style.border = "1px solid #e5e7eb";
+        clone.style.padding = "16px";
+        clone.style.borderRadius = "8px";
+        exportWrapper.appendChild(clone);
+    });
+
+    document.body.appendChild(exportWrapper);
+    const canvas = await window.html2canvas(exportWrapper, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        useCORS: true
+    });
+    document.body.removeChild(exportWrapper);
+
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    let heightLeft = pdfHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+    heightLeft -= pdf.internal.pageSize.getHeight();
+
+    while (heightLeft > 0) {
+        position = heightLeft - pdfHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+        heightLeft -= pdf.internal.pageSize.getHeight();
+    }
+
+    const timestamp = new Date();
+    const ts = [
+        timestamp.getFullYear(),
+        String(timestamp.getMonth() + 1).padStart(2, "0"),
+        String(timestamp.getDate()).padStart(2, "0"),
+        String(timestamp.getHours()).padStart(2, "0"),
+        String(timestamp.getMinutes()).padStart(2, "0")
+    ].join("");
+    pdf.save(`matcher-export-seed-${context.seed}-${ts}.pdf`);
+}
+
+function buildGroupsCsvRows(context) {
+    const rows = [["Girone", "Squadra", "Slot disponibili", "Seed"]];
+    if (Array.isArray(context.groups)) {
+        context.groups.forEach((group, index) => {
+            group.forEach(team => {
+                rows.push([`Girone ${index + 1}`, team.name, team.totalAvailability, context.seed]);
+            });
+        });
+    }
+    if (Array.isArray(context.leftovers) && context.leftovers.length) {
+        context.leftovers.forEach(team => {
+            rows.push(["Non assegnato", team.name, team.totalAvailability, context.seed]);
+        });
+    }
+    return rows;
+}
+
+function buildScheduleCsvRows(context) {
+    const rows = [["Settimana", "Giorno", "Orario", "Squadra A", "Squadra B", "Girone", "Seed"]];
+    if (Array.isArray(context.weeks)) {
+        context.weeks.forEach(week => {
+            week.slots.forEach((assignment, slotIdx) => {
+                if (!assignment) {
+                    return;
+                }
+                const slot = slotInfo[slotIdx];
+                rows.push([
+                    week.index + 1,
+                    dayNames[slot.dayCode] || slot.dayCode,
+                    slot.hours,
+                    assignment.teams[0],
+                    assignment.teams[1],
+                    `Girone ${assignment.groupIndex + 1}`,
+                    context.seed
+                ]);
+            });
+        });
+    }
+    if (Array.isArray(context.unscheduledMatches) && context.unscheduledMatches.length) {
+        rows.push([]);
+        rows.push(["Non programmati"]);
+        context.unscheduledMatches.forEach(match => {
+            rows.push([
+                "",
+                "",
+                "",
+                match.teams[0],
+                match.teams[1],
+                `Girone ${match.groupIndex + 1}`,
+                context.seed
+            ]);
+        });
+    }
+    return rows;
+}
+
+function buildCalendarCsvRows(context) {
+    const rows = [["Settimana", "Giorno", "Orario", "Evento", "Girone", "Seed"]];
+    if (!Array.isArray(context.weeks)) {
+        return rows;
+    }
+    context.weeks.forEach(week => {
+        hoursOrder.forEach(hourLabel => {
+            dayOrder.forEach(dayCode => {
+                const slotIdx = slotLookupByDayHour.get(dayCode)?.get(hourLabel);
+                let event = "—";
+                let groupLabel = "";
+                if (typeof slotIdx === "number") {
+                    const assignment = week.slots[slotIdx];
+                    if (assignment) {
+                        event = `${assignment.teams[0]} vs ${assignment.teams[1]}`;
+                        groupLabel = `Girone ${assignment.groupIndex + 1}`;
+                    }
+                }
+                rows.push([
+                    week.index + 1,
+                    dayNames[dayCode] || dayCode,
+                    hourLabel,
+                    event,
+                    groupLabel,
+                    context.seed
+                ]);
+            });
+        });
+    });
+    return rows;
+}
+
+function buildSummaryCsvRows(context) {
+    const rows = [["Squadra", "Partite programmate", "Avvisi disponibilità", "Settimana", "Giorno", "Orario", "Avversario", "Disponibile", "Seed"]];
+    if (!(context.summaryData instanceof Map)) {
+        return rows;
+    }
+    context.summaryData.forEach((data, teamName) => {
+        const totalMatches = data.matches.length;
+        const availabilityFlag = data.invalidSlots.length ? "Controllare" : "OK";
+        if (!totalMatches) {
+            rows.push([teamName, 0, availabilityFlag, "", "", "", "", "", context.seed]);
+            return;
+        }
+        data.matches.forEach(match => {
+            rows.push([
+                teamName,
+                totalMatches,
+                availabilityFlag,
+                match.weekIndex + 1,
+                match.dayLabel,
+                match.slot.hours,
+                match.opponent,
+                match.available ? "Si" : "No",
+                context.seed
+            ]);
+        });
+    });
+    return rows;
+}
+
+async function handleExportClick() {
+    if (!lastExportContext) {
+        alert("Nessun dato disponibile per l'esportazione. Rigenera prima il calendario.");
+        return;
+    }
+    const context = lastExportContext;
+    exportButton.disabled = true;
+    const originalLabel = exportButton.textContent;
+    exportButton.textContent = "Esporto...";
+    try {
+        await exportSectionsToPdf(context);
+        downloadCsv(`gironi-seed-${context.seed}.csv`, buildGroupsCsvRows(context));
+        downloadCsv(`calendario-seed-${context.seed}.csv`, buildCalendarCsvRows(context));
+        downloadCsv(`schedule-seed-${context.seed}.csv`, buildScheduleCsvRows(context));
+        downloadCsv(`riepilogo-seed-${context.seed}.csv`, buildSummaryCsvRows(context));
+    } catch (error) {
+        console.error(error);
+        alert("Si è verificato un problema durante l'esportazione: " + error.message);
+    } finally {
+        exportButton.disabled = false;
+        exportButton.textContent = originalLabel;
+    }
+}
 
     function refreshPlanning() {
         warningsContainer.textContent = "";
@@ -2117,18 +2517,20 @@
             renderGroups([]);
             renderSchedule([]);
             renderCalendar([]);
-            renderSummary([], [], new Map());
+        renderSummary([], [], new Map());
+        lastExportContext = null;
             return;
         }
 
         const totalSlots = plannerConfig.groupSizes.reduce((acc, val) => acc + val, 0);
         if (totalSlots !== activeTeams.length) {
             warningsContainer.textContent = `Le dimensioni dei gironi (${totalSlots}) non coincidono con le squadre attive selezionate (${activeTeams.length}). Aggiorna i valori per continuare.`;
-            renderGroups([], activeTeams, true);
-            renderSchedule([], [], true);
-            renderCalendar([], true);
-            const lookup = new Map(activeTeams.map(team => [team.name, team]));
-            renderSummary(activeTeams, [], lookup, true);
+        renderGroups([], activeTeams, true);
+        renderSchedule([], [], true);
+        renderCalendar([], true);
+        const lookup = new Map(activeTeams.map(team => [team.name, team]));
+        renderSummary(activeTeams, [], lookup, null, true);
+        lastExportContext = null;
             return;
         }
 
@@ -2138,18 +2540,30 @@
 
         if (groupingResult.infeasible || groupingResult.leftovers.length) {
             warningsContainer.textContent = "Impossibile generare gironi validi con le impostazioni correnti.";
-            renderSchedule([], [], true);
-            renderCalendar([], true);
-            const lookup = new Map(activeTeams.map(team => [team.name, team]));
-            renderSummary(activeTeams, [], lookup, true);
+        renderSchedule([], [], true);
+        renderCalendar([], true);
+        const lookup = new Map(activeTeams.map(team => [team.name, team]));
+        renderSummary(activeTeams, [], lookup, null, true);
+        lastExportContext = null;
             return;
         }
 
         const teamLookup = new Map(activeTeams.map(team => [team.name, team]));
-        const { weeks, unscheduledMatches } = scheduleMatches(groupingResult.groups, slotFlexibility, teamLookup, seedContext);
-        renderSchedule(weeks, unscheduledMatches);
-        renderCalendar(weeks);
-        renderSummary(activeTeams, weeks, teamLookup);
+    const { weeks, unscheduledMatches } = scheduleMatches(groupingResult.groups, slotFlexibility, teamLookup, seedContext);
+    renderSchedule(weeks, unscheduledMatches);
+    renderCalendar(weeks);
+    const summaryData = renderSummary(activeTeams, weeks, teamLookup);
+    lastExportContext = {
+        seed: plannerConfig.seed,
+        activeTeams,
+        groups: groupingResult.groups,
+        leftovers: groupingResult.leftovers,
+        weeks,
+        unscheduledMatches,
+        summaryData,
+        teamLookup,
+        slotFlexibility
+    };
     }
 
     const regenerateButton = document.createElement("button");
@@ -2164,6 +2578,11 @@
         }
         refreshPlanning();
     });
+
+exportButton = document.createElement("button");
+exportButton.textContent = "Esporta PDF e CSV";
+controlsContainer.appendChild(exportButton);
+exportButton.addEventListener("click", handleExportClick);
 
     refreshPlanning();
 
