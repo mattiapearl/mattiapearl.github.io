@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>TAU Matcher</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>TAU Matcher</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
 
-<body>
-    <div style="flex-direction: row; padding: 0;">
-        <a href="/">Home</a>/Matcher
-    </div>
-    <h1>Tau team match availability</h1>
-    <main>
-
-        <ul></ul>
-        <div id="logger"></div>
-    </main>
-    <!-- <script src="script.js" async defer></script> -->
-</body>
-<style>
+    <body>
+        <div style="flex-direction: row; padding: 0;">
+            <a href="/">Home</a>/Matcher
+        </div>
+        <h1>Tau team match availability</h1>
+        <main>
+            
+            <ul></ul>
+            <div id="logger"></div>
+        </main>
+        <!-- <script src="script.js" async defer></script> -->
+    </body>
+    <style>
     :root {
         color-scheme: light;
         --surface: #ffffff;
@@ -83,7 +83,7 @@
         list-style: none;
         padding: 0;
         margin: 0;
-        display: grid;
+            display: grid;
         gap: 8px;
     }
 
@@ -146,7 +146,7 @@
     }
 
     .pair-calendar-header {
-        display: flex;
+            display: flex;
         flex-wrap: wrap;
         align-items: baseline;
         justify-content: space-between;
@@ -244,6 +244,25 @@
         transform: translateY(-1px);
         box-shadow: var(--shadow);
     }
+    .disabled-slot-btn {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text);
+        border-radius: var(--radius);
+        padding: 6px 8px;
+        font-weight: 600;
+        transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+    }
+    .disabled-slot-btn:hover {
+        background: var(--surface-elev);
+        transform: translateY(-1px);
+    }
+    .disabled-slot-btn.active {
+        background: var(--danger);
+        color: #fff;
+        border-color: transparent;
+        box-shadow: var(--shadow);
+    }
 
     #warnings {
         color: var(--danger);
@@ -266,7 +285,7 @@
         border-radius: var(--radius);
         border: 1px solid var(--border);
         background: var(--surface);
-        padding: 20px;
+            padding: 20px;
         box-shadow: var(--shadow);
     }
 
@@ -375,7 +394,7 @@
     }
 
     .calendar-grid .calendar-slot.available strong {
-        display: block;
+            display: block;
         margin-bottom: 4px;
         color: var(--accent);
     }
@@ -434,119 +453,149 @@
         border: 1px solid var(--border);
         padding: 4px 6px;
         font-size: 0.85rem;
-    }
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <script>
-    const dictionary = [
+const dictionary = [
         "L 9-10", "L 10-11", "L 11-12", "L 12-13", "L 13-14", "L 14-15",
         "Ma 9-10", "Ma 10-11", "Ma 11-12", "Ma 12-13", "Ma 13-14", "Ma 14-15", "Ma 15-16", "Ma 16-17", "Ma 17-18", "Ma 18-19",
         "Me 9-10", "Me 10-11", "Me 11-12", "Me 12-13", "Me 13-14", "Me 14-15",
         "G 9-10", "G 10-11", "G 11-12", "G 12-13", "G 13-14", "G 14-15", "G 15-16", "G 16-17", "G 17-18", "G 18-19",
         "V 9-10", "V 10-11", "V 11-12", "V 12-13", "V 13-14", "V 14-15"
     ];
-    const and = function (vec1, vec2, trans = false, filter = false) {
-        let res = [
-            0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0,
-        ]
-        const l = dictionary.length;
+    let disabledSlots = new Set();
 
-        for (let i = 0; i < l; i++) {
-            res[i] = vec1[i] == vec2[i] && vec1[i] == 1 ? 1 : 0;
+    const setDisabledSlots = function (indices) {
+        if (Array.isArray(indices)) {
+            disabledSlots = new Set(indices.filter(idx => idx >= 0 && idx < dictionary.length));
         }
+    }
 
-        if (trans) {
-            for (let i = 0; i < res.length; i++) {
-                res[i] = res[i] == 1 ? dictionary[i] : 0
+    const addDisabledSlot = function (index) {
+        if (index >= 0 && index < dictionary.length) {
+            disabledSlots.add(index);
+        }
+    }
+
+    const removeDisabledSlot = function (index) {
+        disabledSlots.delete(index);
+    }
+
+    const isSlotDisabled = function (index) {
+        return disabledSlots.has(index);
+    }
+
+    const clearDisabledSlots = function () {
+        disabledSlots.clear();
+    }
+
+const and = function (vec1, vec2, trans = false, filter = false) {
+    let res = [
+            0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0,
+    ]        
+    const l = dictionary.length;
+
+    for (let i = 0; i < l; i++) {
+            if (isSlotDisabled(i)) {
+                res[i] = 0;
+            } else {
+                res[i] = vec1[i] == vec2[i] && vec1[i] == 1 ? 1 : 0;
             }
+    }
+
+    if (trans) {
+        for (let i = 0; i < res.length; i++) {        
+            res[i] = res[i] == 1 ? dictionary[i] : 0 
         }
-        if (filter) {
+    }
+    if (filter) {
             res = res.filter(el => el != 0)
-        }
-
-        return res
     }
 
-    const sum = function (vec) {
+    return res
+}
+
+const sum = function (vec) {
         return vec.reduce((a, b) => a + b, 0)
-    }
+}
 
-    const worstest = function (squadList) {
-        const list = [];
-        squadList.forEach(squad => {
-            list.push([squad[0], sum(squad[1])])
-        });
-        console.log(list);
-        list.sort((a, b) => a[1] - b[1])
-        return list
-    }
+const worstest = function (squadList) {
+    const list = [];
+    squadList.forEach(squad => {
+        list.push([squad[0], sum(squad[1])])
+    });
+    console.log(list);
+    list.sort((a, b) => a[1] - b[1])
+    return list
+}
 
 
-    const bestMatch = function (squadTime, squadList) {
-        const res = [];
+const bestMatch = function (squadTime, squadList) {
+    const res = [];
 
-        squadList.forEach(squad => {
-            res.push([
-                sum(and(squad[1], squadTime)),
-                squad[0],
-                sum(squad[1])
-            ])
-        })
+    squadList.forEach(squad => {
+        res.push([
+            sum(and(squad[1], squadTime)),
+            squad[0],
+            sum(squad[1])
+        ])
+    })
 
 
         res.sort((a, b) => a[2] - b[2]).sort((a, b) => a[0] - b[0]);
-        return res
-    }
+    return res
+}
 
-    const worstByDay = function (squadList, once = false) {
+const worstByDay = function (squadList, once = false) {
+    
+    const days = [];
+    const l = dictionary.length;
+    
+    for (let i = 0; i < l; i++) {
+        
+        days.push([]);
 
-        const days = [];
-        const l = dictionary.length;
+        squadList.forEach(squad => {
+            if (squad[1][i] == 1) {
+                days[i].push([squad[0], sum(squad[1])])        
+            }            
+        })    
+        if (days[i].length != 0) { 
+            days[i].sort((a, b) => a[1] - b[1])
 
-        for (let i = 0; i < l; i++) {
-
-            days.push([]);
-
-            squadList.forEach(squad => {
-                if (squad[1][i] == 1) {
-                    days[i].push([squad[0], sum(squad[1])])
-                }
-            })
-            if (days[i].length != 0) {
-                days[i].sort((a, b) => a[1] - b[1])
-
-            }
-        };
-
-
-        return days;
-    }
-
-    const usa = function (nome) {
-        if (nl.has(nome)) {
-            squadre = squadre.filter(squadra => squadra[0] != nome);
-            refreshPlanning();
-        } else {
-            console.log("Questa squadra non esiste")
         }
+    };
+
+
+    return days;
+}
+
+const usa = function (nome) {
+    if (nl.has(nome)) {
+        squadre = squadre.filter(squadra => squadra[0] != nome);
+            refreshPlanning();
+    } else {
+        console.log("Questa squadra non esiste")
     }
-    const rimetti = function (nome) {
-        if (nl.has(nome)) {
+}
+const rimetti = function (nome) {
+    if (nl.has(nome)) {
             if (squadre.some(squadra => squadra[0] === nome)) {
                 return;
             }
             squadre.push(nl.get(nome));
             squadre.sort((a, b) => a[0].localeCompare(b[0]));
             refreshPlanning();
-        }
     }
+}
 
-    let squadre = [
+let squadre = [
 ['Aliseo San Nicola',[0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]],['Biologia Marina PM ',[0,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1]],['Chimica 3',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,1]],['Civile 3',[0,0,0,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0]],['Economia aziendale 2',[0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,0,0,0,1,1]],['economia aziendale 2b',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['Fisica 2',[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0]],['Fisica 4',[0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0]],['Fisica 5',[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1]],['Fisioterapia 2',[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0]],['Fisioterapia 3',[0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,0,0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,0,0,0,0,0,1,1]],['Giuri 3',[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0]],['Giuri 4',[0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0]],['Giurisprudenza 2',[0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['Giurisprudenza 5',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1]],['INFORMATICA 2',[0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0]],['Ingegneria Elettrica 2',[0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0]],['INGEGNERIA GESTIONALE 1',[1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['Ingegneria Gestionale 3',[1,0,1,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1]],['Ingegneria informatica 2 ',[1,1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,0,0,1,0,0,1,1,1,0,0,0]],['Ingegneria informatica 4',[0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,1]],['Ingegneria meccanica 1',[0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0]],['INGEGNERIA MECCANICA 3',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1]],['Ingegneria Meccanica 4a',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]],['Ingegneria meccanica 4b',[0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]],['Ingegneria Meccanica 5',[0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1]],['Ingegneria Navale 1',[1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1]],['Ingegneria Navale 4',[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0]],['Ingegneria Robotica 2',[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]],['Matematica 3',[0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]],['Matematica 4',[0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1]],['MATEMATICA 5',[0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0]],['Medicina 2',[0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0]],['Medicina 3',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]],['Medicina 4',[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['MEDICINA 5',[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0]],['Medicina 6',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]],['ODONTOIATRIA 5',[0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1]],['POGIS 2',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1]],['Pogis 3A',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0]],['POGIS 3B',[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['POGIS 3C',[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,0,0,1,1,0,0,0,0,0,0,0,1,1,1,0,0,1,1,0,0]],['psicologia 2',[0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['PSICOLOGIA 3',[1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0]],['SCIENZA DEI MATERIALI 4',[0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]],['Scienze Biologiche 3',[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0]],['Scienze Internazionali e Diplomatiche 1',[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['Storia 3',[0,0,1,1,1,0,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1,1,1,1,1,0,0,0,0,1,0,0,0,1,1,1]]            
 ];
 
@@ -609,11 +658,11 @@ const defaultGroupSizes = generateDefaultGroupSizes(totalTeams, defaultGroupCoun
 
     ]
  */
-    const nl = new Map()
+const nl = new Map()
 
-    let btnMapper = [];
+let btnMapper = [];
 
-    let logger = document.getElementById("logger");
+let logger = document.getElementById("logger");
 
     const slotInfo = dictionary.map((label, index) => {
         const [dayCode, ...rest] = label.split(" ");
@@ -823,6 +872,29 @@ const { jsPDF } = window.jspdf || {};
     warningsContainer.id = "warnings";
     controlsContainer.appendChild(warningsContainer);
 
+    const availabilityToggle = document.createElement("button");
+    availabilityToggle.textContent = "Mostra opzioni slot";
+    availabilityToggle.style.alignSelf = "flex-end";
+    controlsContainer.appendChild(availabilityToggle);
+
+    const availabilityPanel = document.createElement("div");
+    availabilityPanel.style.display = "none";
+    availabilityPanel.style.padding = "12px";
+    availabilityPanel.style.border = "1px solid var(--border)";
+    availabilityPanel.style.borderRadius = "8px";
+    availabilityPanel.style.background = "var(--surface-alt)";
+    availabilityPanel.style.gap = "12px";
+    availabilityPanel.style.display = "grid";
+    controlsContainer.appendChild(availabilityPanel);
+
+    buildDisabledSlotsUI(availabilityPanel);
+
+    availabilityToggle.addEventListener("click", () => {
+        const hidden = availabilityPanel.style.display === "none";
+        availabilityPanel.style.display = hidden ? "grid" : "none";
+        availabilityToggle.textContent = hidden ? "Nascondi opzioni slot" : "Mostra opzioni slot";
+    });
+
     const groupsContainer = document.createElement("div");
     groupsContainer.id = "groups";
     groupsContainer.className = "panel";
@@ -859,9 +931,8 @@ const { jsPDF } = window.jspdf || {};
     let groupSizesInput;
     let groupCountInput;
     let seedInput;
-let exportButton;
-let lastExportContext = null;
-
+    let exportButton;
+    let lastExportContext = null;
     function getContrastColor(hexColor) {
         if (!hexColor || typeof hexColor !== "string") {
             return "#000";
@@ -991,25 +1062,25 @@ controlsContainer.appendChild(groupCountLabel);
 
     squadre.sort((a, b) => a[0].localeCompare(b[0]));
 
-    squadre.forEach(squadra => {
-        nl.set(squadra[0], squadra[1])
-        const sn = squadra[0]
+squadre.forEach(squadra => {
+    nl.set(squadra[0], squadra[1])
+    const sn = squadra[0]
+    
+    const btn = document.createElement("li");
+    btn.innerHTML = squadra[0];
+    document.querySelector("ul").append(btn);
 
-        const btn = document.createElement("li");
-        btn.innerHTML = squadra[0];
-        document.querySelector("ul").append(btn);
-
-        btn.addEventListener("click", function () {
+    btn.addEventListener("click", function () {
             if (btn.classList.contains("active")) {
                 btnMapper = btnMapper.filter(el => el !== sn);
-                btn.classList.remove("active");
+            btn.classList.remove("active");
                 updatePairingDisplay();
-            } else {
+        } else {
                 if (btnMapper.length > 1) {
                     return;
-                }
-                btn.classList.add("active");
-                btnMapper.push(sn);
+            }
+            btn.classList.add("active");
+            btnMapper.push(sn);
                 updatePairingDisplay();
             }
         });
@@ -1039,9 +1110,14 @@ controlsContainer.appendChild(groupCountLabel);
 
     function computeSlotFlexibility(teams) {
         return dictionary.map((_, idx) => {
+            if (isSlotDisabled(idx)) {
+                return 0;
+            }
             let count = 0;
             teams.forEach(team => {
-                count += team.availability[idx];
+                if (team.availability[idx] === 1) {
+                    count += 1;
+                }
             });
             return count;
         });
@@ -1050,6 +1126,9 @@ controlsContainer.appendChild(groupCountLabel);
     function getOverlapCount(vecA, vecB) {
         let count = 0;
         for (let i = 0; i < vecA.length; i++) {
+            if (isSlotDisabled(i)) {
+                continue;
+            }
             if (vecA[i] === 1 && vecB[i] === 1) {
                 count++;
             }
@@ -1060,6 +1139,9 @@ controlsContainer.appendChild(groupCountLabel);
     function getOverlapIndices(vecA, vecB) {
         const indices = [];
         for (let i = 0; i < vecA.length; i++) {
+            if (isSlotDisabled(i)) {
+                continue;
+            }
             if (vecA[i] === 1 && vecB[i] === 1) {
                 indices.push(i);
             }
@@ -1082,6 +1164,66 @@ controlsContainer.appendChild(groupCountLabel);
         return sizes;
     }
 
+function buildDisabledSlotsUI(panelElement) {
+    panelElement.innerHTML = "";
+
+    const description = document.createElement("p");
+    description.textContent = "Seleziona gli slot da disabilitare dalla pianificazione:";
+    panelElement.appendChild(description);
+
+    const dayWrapper = document.createElement("div");
+    dayWrapper.style.display = "grid";
+    dayWrapper.style.gap = "12px";
+
+    dayOrder.forEach(dayCode => {
+        const section = document.createElement("div");
+        section.style.border = "1px solid var(--border)";
+        section.style.borderRadius = "8px";
+        section.style.padding = "10px";
+        section.style.background = "var(--surface)";
+        const title = document.createElement("h4");
+        title.textContent = dayNames[dayCode] || dayCode;
+        title.style.margin = "0 0 8px 0";
+        section.appendChild(title);
+
+        const slotButtons = document.createElement("div");
+        slotButtons.style.display = "grid";
+        slotButtons.style.gridTemplateColumns = "repeat(auto-fit, minmax(80px, 1fr))";
+        slotButtons.style.gap = "6px";
+
+        slotInfo.filter(info => info.dayCode === dayCode).forEach(info => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.textContent = info.hours;
+            button.style.fontSize = "0.75rem";
+            button.dataset.slotIndex = info.index;
+            button.dataset.dayCode = dayCode;
+            button.classList.add("disabled-slot-btn");
+            if (disabledSlots.has(info.index)) {
+                button.classList.add("active");
+            }
+            button.addEventListener("click", () => {
+                const idx = info.index;
+                if (disabledSlots.has(idx)) {
+                    disabledSlots.delete(idx);
+                    button.classList.remove("active");
+                } else {
+                    disabledSlots.add(idx);
+                    button.classList.add("active");
+                }
+                refreshPlanning();
+            });
+            slotButtons.appendChild(button);
+        });
+
+        section.appendChild(slotButtons);
+        dayWrapper.appendChild(section);
+    });
+
+    panelElement.appendChild(dayWrapper);
+    setDisabledSlots([...disabledSlots]);
+}
+
     function buildGroups(teams, slotFlexibility, config, seedContext) {
         if (!teams.length) {
             return { groups: [], leftovers: [] };
@@ -1094,6 +1236,7 @@ controlsContainer.appendChild(groupCountLabel);
 
         const compatibility = computeCompatibilityMatrix(teams, seedContext);
         const strategies = [
+            () => seededShuffleGrouping(teams, slotFlexibility, compatibility, groupSizes, seedContext),
             () => iterativeGrouping(teams, slotFlexibility, compatibility, groupSizes, seedContext),
             () => compatibilityDrivenGrouping(teams, slotFlexibility, compatibility, groupSizes, seedContext),
             () => balancedGrouping(teams, slotFlexibility, compatibility, groupSizes, seedContext)
@@ -1130,6 +1273,33 @@ controlsContainer.appendChild(groupCountLabel);
         }
 
         return { groups: [], leftovers: [...teams] };
+    }
+
+    function seededShuffleGrouping(teams, slotFlexibility, compatibility, groupSizes, seedContext) {
+        const ordered = [...teams].sort((a, b) => {
+            const weightDiff = getSeedWeight(seedContext, a.name) - getSeedWeight(seedContext, b.name);
+            if (weightDiff !== 0) {
+                return weightDiff;
+            }
+            const availabilityDiff = a.totalAvailability - b.totalAvailability;
+            if (availabilityDiff !== 0) {
+                return availabilityDiff;
+            }
+            return a.name.localeCompare(b.name);
+        });
+
+        const rotated = (() => {
+            if (!seedContext) {
+                return ordered;
+            }
+            const offset = Math.abs(seedContext.seed || 0) % Math.max(ordered.length, 1);
+            if (!offset) {
+                return ordered;
+            }
+            return ordered.slice(offset).concat(ordered.slice(0, offset));
+        })();
+
+        return buildGroupsSingle(rotated, slotFlexibility, compatibility, groupSizes, seedContext);
     }
 
     function iterativeGrouping(teams, slotFlexibility, compatibility, groupSizes, seedContext) {
@@ -1633,7 +1803,7 @@ controlsContainer.appendChild(groupCountLabel);
     function slotFlexibilityScore(availability, slotFlexibility) {
         let score = 0;
         availability.forEach((value, idx) => {
-            if (value === 1) {
+            if (value === 1 && !isSlotDisabled(idx)) {
                 score += slotFlexibility[idx];
             }
         });
@@ -2270,7 +2440,7 @@ function buildSummaryData(activeTeams, weeks, teamLookup) {
     return summaryMap;
 }
 
-function renderSummary(activeTeams, weeks, teamLookup, summaryData = null, infeasible = false) {
+    function renderSummary(activeTeams, weeks, teamLookup, summaryData = null, infeasible = false, groupMetadata = null) {
         summaryContainer.innerHTML = "<h2>Riepilogo squadre</h2>";
 
         if (infeasible) {
@@ -2301,7 +2471,18 @@ function renderSummary(activeTeams, weeks, teamLookup, summaryData = null, infea
             }
 
             const title = document.createElement("strong");
-            title.textContent = `${teamName} — ${data.matches.length} partite`;
+            const titleParts = [`${teamName}`, `${data.matches.length} partite`];
+            if (groupMetadata instanceof Map) {
+                const meta = groupMetadata.get(teamName);
+                if (meta && typeof meta.index === "number" && typeof meta.size === "number") {
+                    titleParts.push(`Girone ${meta.index + 1} (${meta.size} squadre)`);
+                    data.groupInfo = { index: meta.index, size: meta.size };
+                } else if (groupMetadata.size > 0) {
+                    titleParts.push("Non assegnato a un girone");
+                    data.groupInfo = null;
+                }
+            }
+            title.textContent = titleParts.join(" — ");
             row.appendChild(title);
 
             if (data.invalidSlots.length) {
@@ -2576,14 +2757,15 @@ async function handleExportClick() {
             seedInput.value = plannerConfig.seed;
         }
 
-        if (!activeTeams.length) {
-            renderGroups([]);
-            renderSchedule([]);
-            renderCalendar([]);
+    if (!activeTeams.length) {
+        renderGroups([]);
+        renderSchedule([]);
+        renderCalendar([]);
         renderSummary([], [], new Map());
         lastExportContext = null;
-            return;
-        }
+        buildDisabledSlotsUI(availabilityPanel);
+        return;
+    }
 
         const totalSlots = plannerConfig.groupSizes.reduce((acc, val) => acc + val, 0);
         if (totalSlots !== activeTeams.length) {
@@ -2594,11 +2776,12 @@ async function handleExportClick() {
         const lookup = new Map(activeTeams.map(team => [team.name, team]));
         renderSummary(activeTeams, [], lookup, null, true);
         lastExportContext = null;
-            return;
-        }
+        buildDisabledSlotsUI(availabilityPanel);
+        return;
+    }
 
         const slotFlexibility = computeSlotFlexibility(activeTeams);
-        const groupingResult = buildGroups(activeTeams, slotFlexibility, plannerConfig);
+        const groupingResult = buildGroups(activeTeams, slotFlexibility, plannerConfig, seedContext);
         renderGroups(groupingResult.groups, groupingResult.leftovers, groupingResult.infeasible === true);
 
         if (groupingResult.infeasible || groupingResult.leftovers.length) {
@@ -2608,14 +2791,27 @@ async function handleExportClick() {
         const lookup = new Map(activeTeams.map(team => [team.name, team]));
         renderSummary(activeTeams, [], lookup, null, true);
         lastExportContext = null;
-            return;
-        }
+        buildDisabledSlotsUI(availabilityPanel);
+        return;
+    }
 
         const teamLookup = new Map(activeTeams.map(team => [team.name, team]));
+        const groupMetadata = new Map();
+        groupingResult.groups.forEach((group, index) => {
+            const size = group.length;
+            group.forEach(team => {
+                groupMetadata.set(team.name, { index, size });
+            });
+        });
+        groupingResult.leftovers.forEach(team => {
+            if (team && team.name && !groupMetadata.has(team.name)) {
+                groupMetadata.set(team.name, null);
+            }
+        });
     const { weeks, unscheduledMatches } = scheduleMatches(groupingResult.groups, slotFlexibility, teamLookup, seedContext);
     renderSchedule(weeks, unscheduledMatches);
     renderCalendar(weeks);
-    const summaryData = renderSummary(activeTeams, weeks, teamLookup);
+    const summaryData = renderSummary(activeTeams, weeks, teamLookup, null, false, groupMetadata);
     lastExportContext = {
         seed: plannerConfig.seed,
         activeTeams,
@@ -2627,6 +2823,7 @@ async function handleExportClick() {
         teamLookup,
         slotFlexibility
     };
+    buildDisabledSlotsUI(availabilityPanel);
     }
 
     const regenerateButton = document.createElement("button");
@@ -2650,6 +2847,6 @@ exportButton.addEventListener("click", handleExportClick);
     refreshPlanning();
 
 
-</script>
+    </script>
 
 </html>
