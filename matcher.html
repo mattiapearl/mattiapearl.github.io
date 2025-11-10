@@ -446,9 +446,6 @@
         "G 9-10", "G 10-11", "G 11-12", "G 12-13", "G 13-14", "G 14-15", "G 15-16", "G 16-17", "G 17-18", "G 18-19",
         "V 9-10", "V 10-11", "V 11-12", "V 12-13", "V 13-14", "V 14-15"
     ];
-    const totali = 50;
-    const gironi = 10;
-
     const and = function (vec1, vec2, trans = false, filter = false) {
         let res = [
             0, 0, 0, 0, 0, 0,
@@ -552,6 +549,10 @@
     let squadre = [
 ['Aliseo San Nicola',[0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]],['Biologia Marina PM ',[0,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1]],['Chimica 3',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,1]],['Civile 3',[0,0,0,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0]],['Economia aziendale 2',[0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,0,0,0,1,1]],['economia aziendale 2b',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['Fisica 2',[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0]],['Fisica 4',[0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0]],['Fisica 5',[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1]],['Fisioterapia 2',[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0]],['Fisioterapia 3',[0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,0,0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,0,0,0,0,0,1,1]],['Giuri 3',[0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0]],['Giuri 4',[0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0]],['Giurisprudenza 2',[0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['Giurisprudenza 5',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1]],['INFORMATICA 2',[0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0]],['Ingegneria Elettrica 2',[0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0]],['INGEGNERIA GESTIONALE 1',[1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['Ingegneria Gestionale 3',[1,0,1,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1]],['Ingegneria informatica 2 ',[1,1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,0,0,1,0,0,1,1,1,0,0,0]],['Ingegneria informatica 4',[0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,1]],['Ingegneria meccanica 1',[0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0]],['INGEGNERIA MECCANICA 3',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1]],['Ingegneria Meccanica 4a',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]],['Ingegneria meccanica 4b',[0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]],['Ingegneria Meccanica 5',[0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1]],['Ingegneria Navale 1',[1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1]],['Ingegneria Navale 4',[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0]],['Ingegneria Robotica 2',[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]],['Matematica 3',[0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]],['Matematica 4',[0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1]],['MATEMATICA 5',[0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0]],['Medicina 2',[0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0]],['Medicina 3',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]],['Medicina 4',[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['MEDICINA 5',[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0]],['Medicina 6',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]],['ODONTOIATRIA 5',[0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1]],['POGIS 2',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1]],['Pogis 3A',[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0]],['POGIS 3B',[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['POGIS 3C',[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,0,0,1,1,0,0,0,0,0,0,0,1,1,1,0,0,1,1,0,0]],['psicologia 2',[0,0,0,0,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['PSICOLOGIA 3',[1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0]],['SCIENZA DEI MATERIALI 4',[0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]],['Scienze Biologiche 3',[0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0]],['Scienze Internazionali e Diplomatiche 1',[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],['Storia 3',[0,0,1,1,1,0,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,0,1,1,1,1,1,0,0,0,0,1,0,0,0,1,1,1]]            
 ];
+
+const totalTeams = squadre.length;
+const defaultGroupCount = Math.max(1, Math.min(10, totalTeams || 10));
+const defaultGroupSizes = generateDefaultGroupSizes(totalTeams, defaultGroupCount);
 
 /*     let squadre = [
 
@@ -746,6 +747,24 @@
         }
     }
 
+function generateDefaultGroupSizes(totalTeams, groupsCount) {
+    const teamTotal = Math.max(0, totalTeams);
+    const requestedGroups = Math.max(1, groupsCount);
+    const effectiveGroups = Math.min(requestedGroups, Math.max(1, teamTotal || 1));
+
+    if (teamTotal === 0) {
+        return Array(effectiveGroups).fill(0);
+    }
+
+    const baseSize = Math.floor(teamTotal / effectiveGroups);
+    const remainder = teamTotal % effectiveGroups;
+    const sizes = [];
+    for (let i = 0; i < effectiveGroups; i++) {
+        sizes.push(baseSize + (i < remainder ? 1 : 0));
+    }
+    return sizes;
+}
+
 const { jsPDF } = window.jspdf || {};
 
     function createRng(seed) {
@@ -824,7 +843,6 @@ const { jsPDF } = window.jspdf || {};
     summaryContainer.className = "panel";
     insightsContainer.appendChild(summaryContainer);
 
-    const defaultGroupSizes = Array(gironi).fill(5);
     const groupColors = [
         "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
         "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf",
@@ -832,12 +850,14 @@ const { jsPDF } = window.jspdf || {};
     ];
 
     let plannerConfig = {
-        teamLimit: Math.min(squadre.length, defaultGroupSizes.reduce((acc, val) => acc + val, 0)),
+        teamLimit: totalTeams,
+        groupCount: defaultGroupCount,
         groupSizes: [...defaultGroupSizes],
         seed: 0
     };
 
     let groupSizesInput;
+    let groupCountInput;
     let seedInput;
 let exportButton;
 let lastExportContext = null;
@@ -867,7 +887,7 @@ let lastExportContext = null;
     const teamLimitInput = document.createElement("input");
     teamLimitInput.type = "number";
     teamLimitInput.min = 1;
-    teamLimitInput.max = squadre.length;
+teamLimitInput.max = totalTeams;
     teamLimitInput.value = plannerConfig.teamLimit;
     teamLimitInput.addEventListener("change", () => {
         const parsed = parseInt(teamLimitInput.value, 10);
@@ -875,12 +895,50 @@ let lastExportContext = null;
             teamLimitInput.value = plannerConfig.teamLimit;
             return;
         }
-        plannerConfig.teamLimit = Math.min(parsed, squadre.length);
+        plannerConfig.teamLimit = Math.min(parsed, totalTeams);
+        if (plannerConfig.groupCount > plannerConfig.teamLimit) {
+            plannerConfig.groupCount = plannerConfig.teamLimit;
+        }
         teamLimitInput.value = plannerConfig.teamLimit;
+        if (groupCountInput) {
+            groupCountInput.max = plannerConfig.teamLimit || 1;
+            groupCountInput.value = plannerConfig.groupCount || 1;
+        }
+        plannerConfig.groupSizes = generateDefaultGroupSizes(plannerConfig.teamLimit, plannerConfig.groupCount);
+        if (groupSizesInput) {
+            groupSizesInput.value = plannerConfig.groupSizes.join(", ");
+        }
         refreshPlanning();
     });
     teamLimitLabel.appendChild(teamLimitInput);
     controlsContainer.appendChild(teamLimitLabel);
+
+const groupCountLabel = document.createElement("label");
+groupCountLabel.textContent = "Numero di gironi";
+groupCountInput = document.createElement("input");
+groupCountInput.type = "number";
+groupCountInput.min = 1;
+groupCountInput.max = plannerConfig.teamLimit || 1;
+groupCountInput.value = plannerConfig.groupCount;
+groupCountInput.addEventListener("change", () => {
+    if (groupCountInput.value.trim() === "") {
+        return;
+    }
+    const parsed = parseInt(groupCountInput.value, 10);
+    if (Number.isNaN(parsed) || parsed < 1) {
+        groupCountInput.value = plannerConfig.groupCount;
+        return;
+    }
+    plannerConfig.groupCount = Math.min(parsed, plannerConfig.teamLimit);
+    groupCountInput.value = plannerConfig.groupCount;
+    plannerConfig.groupSizes = generateDefaultGroupSizes(plannerConfig.teamLimit, plannerConfig.groupCount);
+    if (groupSizesInput) {
+        groupSizesInput.value = plannerConfig.groupSizes.join(", ");
+    }
+    refreshPlanning();
+});
+groupCountLabel.appendChild(groupCountInput);
+controlsContainer.appendChild(groupCountLabel);
 
     const groupSizesLabel = document.createElement("label");
     groupSizesLabel.textContent = "Dimensioni dei gironi (es. 5,5,5,5,5,5,5,5,4,4)";
@@ -894,6 +952,11 @@ let lastExportContext = null;
             return;
         }
         plannerConfig.groupSizes = parsed;
+        plannerConfig.groupCount = parsed.length;
+        if (groupCountInput) {
+            groupCountInput.value = plannerConfig.groupCount;
+            groupCountInput.max = plannerConfig.teamLimit || 1;
+        }
         groupSizesInput.value = plannerConfig.groupSizes.join(", ");
         plannerConfig.teamLimit = Math.min(plannerConfig.teamLimit, plannerConfig.groupSizes.reduce((acc, val) => acc + val, 0));
         teamLimitInput.value = plannerConfig.teamLimit;
@@ -1961,7 +2024,7 @@ let lastExportContext = null;
     }
 
     function renderGroups(groups, leftovers = [], infeasible = false) {
-        groupsContainer.innerHTML = "<h2>Gironi suggeriti</h2>";
+        groupsContainer.innerHTML = "<h2>Gironi</h2>"
 
         if (!groups.length && !leftovers.length) {
             const empty = document.createElement("p");
@@ -2002,7 +2065,7 @@ let lastExportContext = null;
     }
 
     function renderSchedule(weeks, unscheduledMatches = [], infeasible = false) {
-        scheduleContainer.innerHTML = "<h2>Calendario proposto</h2>";
+        scheduleContainer.innerHTML = "<h2>Calendario</h2>";
 
         if (infeasible) {
             const warn = document.createElement("p");
