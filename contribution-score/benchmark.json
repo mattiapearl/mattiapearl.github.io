@@ -1,0 +1,701 @@
+{
+  "schema": "match-score-benchmark-public/1",
+  "date": "2026-09-28",
+  "aggregate_only": true,
+  "baseline": "rational__all_current",
+  "policy_sha256": "a042935d96c9d9c49a6ca6b62b1a15dfb6d521d044f3660b676a4264a9cd0f2d",
+  "population": {
+    "matches": 18741,
+    "player_games": 224892,
+    "development_matches": 17741,
+    "later_matches": 1000,
+    "reused_data": true,
+    "independent_holdout": false,
+    "all_outliers_and_bounds_retained": true
+  },
+  "comparison": {
+    "matches": 11,
+    "player_games": 132,
+    "common_exact_player_games": 110,
+    "bootstrap_draws": 1000,
+    "intervals_adjusted_for_multiple_comparisons": false,
+    "target": "historical external scorer; agreement is not ground-truth accuracy"
+  },
+  "audit": {
+    "confirmed_credited_player_events": 1497530,
+    "confirmed_events_reusing_interval_damage": 1195282,
+    "mean_deduction_bounds": [
+      3.7780697911988232,
+      3.962352071698584
+    ],
+    "maximum_deduction_upper": 19.53989380394599,
+    "uncapped_linear_gross_upper_over_100": 2744
+  },
+  "verification": {
+    "archived_baseline_max_abs_error": 0,
+    "implementation_tests_passed": 55,
+    "quality_accuracy_test": false
+  },
+  "variants": [
+    {
+      "id": "rational__none",
+      "curve": "rational",
+      "adjustment": "none",
+      "diagnostic_only": false,
+      "exact_scores": 219505,
+      "bounded_scores": 5387,
+      "complete_rosters": 14007,
+      "top_changed": 2172,
+      "top_comparable": 18324,
+      "pair_reversals": 79039,
+      "pairs_comparable": 1222051,
+      "score_upper_max": 77.19713733591438,
+      "score_upper_over_100": 0,
+      "agreement": 0.810419883147156,
+      "agreement_delta": -0.013818000181636531,
+      "agreement_delta_ci95": [
+        -0.07853184694093789,
+        0.053899887990797084
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 612,
+        "definite_disagreement": 111,
+        "tied_or_unresolved": 3
+      }
+    },
+    {
+      "id": "rational__all_half",
+      "curve": "rational",
+      "adjustment": "all_half",
+      "diagnostic_only": false,
+      "exact_scores": 179828,
+      "bounded_scores": 45064,
+      "complete_rosters": 4111,
+      "top_changed": 891,
+      "top_comparable": 18264,
+      "pair_reversals": 27539,
+      "pairs_comparable": 1219279,
+      "score_upper_max": 77.19713733591438,
+      "score_upper_over_100": 0,
+      "agreement": 0.8271092543819816,
+      "agreement_delta": 0.002871371053189252,
+      "agreement_delta_ci95": [
+        -0.01584022038567494,
+        0.028875821148548444
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 612,
+        "definite_disagreement": 106,
+        "tied_or_unresolved": 8
+      }
+    },
+    {
+      "id": "rational__all_current",
+      "curve": "rational",
+      "adjustment": "all_current",
+      "diagnostic_only": false,
+      "exact_scores": 179828,
+      "bounded_scores": 45064,
+      "complete_rosters": 4111,
+      "top_changed": 0,
+      "top_comparable": 18375,
+      "pair_reversals": 0,
+      "pairs_comparable": 1223650,
+      "score_upper_max": 77.19713733591438,
+      "score_upper_over_100": 0,
+      "agreement": 0.8242378833287923,
+      "agreement_delta": 0.0,
+      "agreement_delta_ci95": [
+        0.0,
+        0.0
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 610,
+        "definite_disagreement": 105,
+        "tied_or_unresolved": 11
+      }
+    },
+    {
+      "id": "rational__all_double",
+      "curve": "rational",
+      "adjustment": "all_double",
+      "diagnostic_only": false,
+      "exact_scores": 179828,
+      "bounded_scores": 45064,
+      "complete_rosters": 4111,
+      "top_changed": 1309,
+      "top_comparable": 18031,
+      "pair_reversals": 33680,
+      "pairs_comparable": 1212142,
+      "score_upper_max": 77.19713733591438,
+      "score_upper_over_100": 0,
+      "agreement": 0.7927557291193654,
+      "agreement_delta": -0.03148215420942693,
+      "agreement_delta_ci95": [
+        -0.06708571731299,
+        -0.004643841007477359
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 604,
+        "definite_disagreement": 111,
+        "tied_or_unresolved": 11
+      }
+    },
+    {
+      "id": "rational__objective_only",
+      "curve": "rational",
+      "adjustment": "objective_only",
+      "diagnostic_only": false,
+      "exact_scores": 182869,
+      "bounded_scores": 42023,
+      "complete_rosters": 4549,
+      "top_changed": 1181,
+      "top_comparable": 18263,
+      "pair_reversals": 53643,
+      "pairs_comparable": 1220425,
+      "score_upper_max": 77.19713733591438,
+      "score_upper_over_100": 0,
+      "agreement": 0.8280522507795236,
+      "agreement_delta": 0.003814367450731099,
+      "agreement_delta_ci95": [
+        -0.04454863318499683,
+        0.05895263827082009
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 619,
+        "definite_disagreement": 97,
+        "tied_or_unresolved": 10
+      }
+    },
+    {
+      "id": "rational__fixed_reference",
+      "curve": "rational",
+      "adjustment": "fixed_reference",
+      "diagnostic_only": false,
+      "exact_scores": 179831,
+      "bounded_scores": 45061,
+      "complete_rosters": 4111,
+      "top_changed": 262,
+      "top_comparable": 18323,
+      "pair_reversals": 6443,
+      "pairs_comparable": 1220575,
+      "score_upper_max": 77.19713733591438,
+      "score_upper_over_100": 0,
+      "agreement": 0.8271304453122638,
+      "agreement_delta": 0.0028925619834710777,
+      "agreement_delta_ci95": [
+        -0.004958677685950385,
+        0.013636363636363618
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 611,
+        "definite_disagreement": 105,
+        "tied_or_unresolved": 10
+      }
+    },
+    {
+      "id": "exponential__none",
+      "curve": "exponential",
+      "adjustment": "none",
+      "diagnostic_only": false,
+      "exact_scores": 219505,
+      "bounded_scores": 5387,
+      "complete_rosters": 14007,
+      "top_changed": 2262,
+      "top_comparable": 18311,
+      "pair_reversals": 84013,
+      "pairs_comparable": 1222120,
+      "score_upper_max": 89.32489087416579,
+      "score_upper_over_100": 0,
+      "agreement": 0.8440014530923623,
+      "agreement_delta": 0.019763569763569796,
+      "agreement_delta_ci95": [
+        -0.025374890261253894,
+        0.07709631277813095
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 623,
+        "definite_disagreement": 100,
+        "tied_or_unresolved": 3
+      }
+    },
+    {
+      "id": "exponential__all_half",
+      "curve": "exponential",
+      "adjustment": "all_half",
+      "diagnostic_only": false,
+      "exact_scores": 179828,
+      "bounded_scores": 45064,
+      "complete_rosters": 4111,
+      "top_changed": 1341,
+      "top_comparable": 18255,
+      "pair_reversals": 40623,
+      "pairs_comparable": 1218851,
+      "score_upper_max": 89.32489087416579,
+      "score_upper_over_100": 0,
+      "agreement": 0.8325341325341327,
+      "agreement_delta": 0.008296249205340132,
+      "agreement_delta_ci95": [
+        -0.004545454545454519,
+        0.02871715405806316
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 618,
+        "definite_disagreement": 99,
+        "tied_or_unresolved": 9
+      }
+    },
+    {
+      "id": "exponential__all_current",
+      "curve": "exponential",
+      "adjustment": "all_current",
+      "diagnostic_only": false,
+      "exact_scores": 179828,
+      "bounded_scores": 45064,
+      "complete_rosters": 4111,
+      "top_changed": 557,
+      "top_comparable": 18272,
+      "pair_reversals": 19949,
+      "pairs_comparable": 1218083,
+      "score_upper_max": 89.32489087416579,
+      "score_upper_over_100": 0,
+      "agreement": 0.8316864953228591,
+      "agreement_delta": 0.0074486119940665755,
+      "agreement_delta_ci95": [
+        -0.005721551176096578,
+        0.024890072049163
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 613,
+        "definite_disagreement": 98,
+        "tied_or_unresolved": 15
+      }
+    },
+    {
+      "id": "exponential__all_double",
+      "curve": "exponential",
+      "adjustment": "all_double",
+      "diagnostic_only": false,
+      "exact_scores": 179828,
+      "bounded_scores": 45064,
+      "complete_rosters": 4111,
+      "top_changed": 682,
+      "top_comparable": 18174,
+      "pair_reversals": 31137,
+      "pairs_comparable": 1213457,
+      "score_upper_max": 89.32489087416579,
+      "score_upper_over_100": 0,
+      "agreement": 0.8180501316864954,
+      "agreement_delta": -0.006187751642297053,
+      "agreement_delta_ci95": [
+        -0.02082326764144948,
+        0.00868112947658411
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 608,
+        "definite_disagreement": 106,
+        "tied_or_unresolved": 12
+      }
+    },
+    {
+      "id": "exponential__objective_only",
+      "curve": "exponential",
+      "adjustment": "objective_only",
+      "diagnostic_only": false,
+      "exact_scores": 182869,
+      "bounded_scores": 42023,
+      "complete_rosters": 4549,
+      "top_changed": 1529,
+      "top_comparable": 18267,
+      "pair_reversals": 68282,
+      "pairs_comparable": 1220618,
+      "score_upper_max": 89.32489087416579,
+      "score_upper_over_100": 0,
+      "agreement": 0.8391245118517847,
+      "agreement_delta": 0.014886628522992202,
+      "agreement_delta_ci95": [
+        -0.027029561347743113,
+        0.06485510701419793
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 626,
+        "definite_disagreement": 93,
+        "tied_or_unresolved": 7
+      }
+    },
+    {
+      "id": "exponential__fixed_reference",
+      "curve": "exponential",
+      "adjustment": "fixed_reference",
+      "diagnostic_only": false,
+      "exact_scores": 179833,
+      "bounded_scores": 45059,
+      "complete_rosters": 4112,
+      "top_changed": 841,
+      "top_comparable": 18245,
+      "pair_reversals": 22172,
+      "pairs_comparable": 1217317,
+      "score_upper_max": 89.32489087416579,
+      "score_upper_over_100": 0,
+      "agreement": 0.8257742257742259,
+      "agreement_delta": 0.001536342445433396,
+      "agreement_delta_ci95": [
+        -0.012088366179275193,
+        0.020061983471074414
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 612,
+        "definite_disagreement": 102,
+        "tied_or_unresolved": 12
+      }
+    },
+    {
+      "id": "capped_linear__none",
+      "curve": "capped_linear",
+      "adjustment": "none",
+      "diagnostic_only": false,
+      "exact_scores": 219723,
+      "bounded_scores": 5169,
+      "complete_rosters": 14174,
+      "top_changed": 2979,
+      "top_comparable": 18313,
+      "pair_reversals": 106519,
+      "pairs_comparable": 1222200,
+      "score_upper_max": 100.0,
+      "score_upper_over_100": 0,
+      "agreement": 0.8350059031877216,
+      "agreement_delta": 0.010768019858929006,
+      "agreement_delta_ci95": [
+        -0.05128379196561006,
+        0.0775109738746103
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 631,
+        "definite_disagreement": 91,
+        "tied_or_unresolved": 4
+      }
+    },
+    {
+      "id": "capped_linear__all_half",
+      "curve": "capped_linear",
+      "adjustment": "all_half",
+      "diagnostic_only": false,
+      "exact_scores": 180028,
+      "bounded_scores": 44864,
+      "complete_rosters": 4139,
+      "top_changed": 2387,
+      "top_comparable": 18269,
+      "pair_reversals": 73521,
+      "pairs_comparable": 1218530,
+      "score_upper_max": 100.0,
+      "score_upper_over_100": 0,
+      "agreement": 0.840237035691581,
+      "agreement_delta": 0.015999152362788763,
+      "agreement_delta_ci95": [
+        -0.03131762177216714,
+        0.052781309599491434
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 624,
+        "definite_disagreement": 93,
+        "tied_or_unresolved": 9
+      }
+    },
+    {
+      "id": "capped_linear__all_current",
+      "curve": "capped_linear",
+      "adjustment": "all_current",
+      "diagnostic_only": false,
+      "exact_scores": 180028,
+      "bounded_scores": 44864,
+      "complete_rosters": 4139,
+      "top_changed": 1945,
+      "top_comparable": 18233,
+      "pair_reversals": 56412,
+      "pairs_comparable": 1216422,
+      "score_upper_max": 100.0,
+      "score_upper_over_100": 0,
+      "agreement": 0.8371991644718918,
+      "agreement_delta": 0.012961281143099386,
+      "agreement_delta_ci95": [
+        -0.013937955983410483,
+        0.039102866830139624
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 615,
+        "definite_disagreement": 100,
+        "tied_or_unresolved": 11
+      }
+    },
+    {
+      "id": "capped_linear__all_double",
+      "curve": "capped_linear",
+      "adjustment": "all_double",
+      "diagnostic_only": false,
+      "exact_scores": 180028,
+      "bounded_scores": 44864,
+      "complete_rosters": 4139,
+      "top_changed": 1397,
+      "top_comparable": 18184,
+      "pair_reversals": 49661,
+      "pairs_comparable": 1213627,
+      "score_upper_max": 100.0,
+      "score_upper_over_100": 0,
+      "agreement": 0.8307677171313536,
+      "agreement_delta": 0.0065298338025611335,
+      "agreement_delta_ci95": [
+        -0.014620379620379572,
+        0.026389595253231663
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 612,
+        "definite_disagreement": 101,
+        "tied_or_unresolved": 13
+      }
+    },
+    {
+      "id": "capped_linear__objective_only",
+      "curve": "capped_linear",
+      "adjustment": "objective_only",
+      "diagnostic_only": false,
+      "exact_scores": 183069,
+      "bounded_scores": 41823,
+      "complete_rosters": 4582,
+      "top_changed": 2524,
+      "top_comparable": 18278,
+      "pair_reversals": 99886,
+      "pairs_comparable": 1220985,
+      "score_upper_max": 100.0,
+      "score_upper_over_100": 0,
+      "agreement": 0.8288605334059881,
+      "agreement_delta": 0.004622650077195594,
+      "agreement_delta_ci95": [
+        -0.050426391790028065,
+        0.05397920261556629
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 630,
+        "definite_disagreement": 92,
+        "tied_or_unresolved": 4
+      }
+    },
+    {
+      "id": "capped_linear__fixed_reference",
+      "curve": "capped_linear",
+      "adjustment": "fixed_reference",
+      "diagnostic_only": false,
+      "exact_scores": 180037,
+      "bounded_scores": 44855,
+      "complete_rosters": 4141,
+      "top_changed": 2194,
+      "top_comparable": 18258,
+      "pair_reversals": 56349,
+      "pairs_comparable": 1215818,
+      "score_upper_max": 100.0,
+      "score_upper_over_100": 0,
+      "agreement": 0.8401901129173858,
+      "agreement_delta": 0.015952229588593284,
+      "agreement_delta_ci95": [
+        -0.010883056337601745,
+        0.042743392970665754
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 615,
+        "definite_disagreement": 99,
+        "tied_or_unresolved": 12
+      }
+    },
+    {
+      "id": "linear_unbounded__none",
+      "curve": "linear_unbounded",
+      "adjustment": "none",
+      "diagnostic_only": true,
+      "exact_scores": 219505,
+      "bounded_scores": 5387,
+      "complete_rosters": 14007,
+      "top_changed": 2922,
+      "top_comparable": 18307,
+      "pair_reversals": 106947,
+      "pairs_comparable": 1222191,
+      "score_upper_max": 199.97328615402984,
+      "score_upper_over_100": 2744,
+      "agreement": 0.8438334392879848,
+      "agreement_delta": 0.019595555959192358,
+      "agreement_delta_ci95": [
+        -0.04691603850694755,
+        0.09070081433717801
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 631,
+        "definite_disagreement": 91,
+        "tied_or_unresolved": 4
+      }
+    },
+    {
+      "id": "linear_unbounded__all_half",
+      "curve": "linear_unbounded",
+      "adjustment": "all_half",
+      "diagnostic_only": true,
+      "exact_scores": 179828,
+      "bounded_scores": 45064,
+      "complete_rosters": 4111,
+      "top_changed": 2391,
+      "top_comparable": 18258,
+      "pair_reversals": 74130,
+      "pairs_comparable": 1218514,
+      "score_upper_max": 199.97328615402984,
+      "score_upper_over_100": 2612,
+      "agreement": 0.8490645717918445,
+      "agreement_delta": 0.024826688463052117,
+      "agreement_delta_ci95": [
+        -0.027061045015590438,
+        0.06938152756334577
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 624,
+        "definite_disagreement": 93,
+        "tied_or_unresolved": 9
+      }
+    },
+    {
+      "id": "linear_unbounded__all_current",
+      "curve": "linear_unbounded",
+      "adjustment": "all_current",
+      "diagnostic_only": true,
+      "exact_scores": 179828,
+      "bounded_scores": 45064,
+      "complete_rosters": 4111,
+      "top_changed": 1987,
+      "top_comparable": 18236,
+      "pair_reversals": 57114,
+      "pairs_comparable": 1216425,
+      "score_upper_max": 199.97328615402984,
+      "score_upper_over_100": 2497,
+      "agreement": 0.8481912027366575,
+      "agreement_delta": 0.023953319407864906,
+      "agreement_delta_ci95": [
+        -0.010856567674749483,
+        0.06295026942754213
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 617,
+        "definite_disagreement": 100,
+        "tied_or_unresolved": 9
+      }
+    },
+    {
+      "id": "linear_unbounded__all_double",
+      "curve": "linear_unbounded",
+      "adjustment": "all_double",
+      "diagnostic_only": true,
+      "exact_scores": 179828,
+      "bounded_scores": 45064,
+      "complete_rosters": 4111,
+      "top_changed": 1425,
+      "top_comparable": 18208,
+      "pair_reversals": 50306,
+      "pairs_comparable": 1213664,
+      "score_upper_max": 199.97328615402984,
+      "score_upper_over_100": 2354,
+      "agreement": 0.841759755396119,
+      "agreement_delta": 0.017521872067326652,
+      "agreement_delta_ci95": [
+        -0.012217668694941368,
+        0.054548633184996864
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 613,
+        "definite_disagreement": 101,
+        "tied_or_unresolved": 12
+      }
+    },
+    {
+      "id": "linear_unbounded__objective_only",
+      "curve": "linear_unbounded",
+      "adjustment": "objective_only",
+      "diagnostic_only": true,
+      "exact_scores": 182869,
+      "bounded_scores": 42023,
+      "complete_rosters": 4549,
+      "top_changed": 2518,
+      "top_comparable": 18267,
+      "pair_reversals": 100458,
+      "pairs_comparable": 1220978,
+      "score_upper_max": 199.97328615402984,
+      "score_upper_over_100": 2596,
+      "agreement": 0.8376880695062513,
+      "agreement_delta": 0.013450186177458938,
+      "agreement_delta_ci95": [
+        -0.048301773983592075,
+        0.06958208458208459
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 630,
+        "definite_disagreement": 93,
+        "tied_or_unresolved": 3
+      }
+    },
+    {
+      "id": "linear_unbounded__fixed_reference",
+      "curve": "linear_unbounded",
+      "adjustment": "fixed_reference",
+      "diagnostic_only": true,
+      "exact_scores": 179837,
+      "bounded_scores": 45055,
+      "complete_rosters": 4113,
+      "top_changed": 2224,
+      "top_comparable": 18258,
+      "pair_reversals": 57014,
+      "pairs_comparable": 1215822,
+      "score_upper_max": 199.97328615402984,
+      "score_upper_over_100": 2618,
+      "agreement": 0.8490176490176492,
+      "agreement_delta": 0.024779765688856648,
+      "agreement_delta_ci95": [
+        -0.009362834135561361,
+        0.06295053431417065
+      ],
+      "external_pairs": {
+        "strict_label_pairs": 726,
+        "definite_agreement": 617,
+        "definite_disagreement": 99,
+        "tied_or_unresolved": 10
+      }
+    }
+  ],
+  "provenance": {
+    "protocol_sha256": "7606c672978270443dc11ef3595d228e69911f31c4133578636b4d67709b304f",
+    "benchmark_script_sha256": "f904df600755123e4018b5fd7a08289b603d277fd5c459e3192ce63b6217d229",
+    "input_archive_sha256": "7eae822a4312421fda91aef35c860d6de58ebcfee71cd4af38e0e2c58b79d7fe",
+    "summary_sha256": {
+      "freeze": "04c3df1febce2d85f7ee375a5a1c7c1b8dda919cf72061801b1bae4722e45f52",
+      "run_summary": "92acd9c725402a63f75c7d1a889839a76296a5a36bec17447a8d2d7bd282a2f2",
+      "metrics": "534a9292c00b334a7bc12d183aa8b9c71ce5eede32e3f604074fdcc39fd88d2d",
+      "external_comparison": "feb7abc06a653c248e5710a37a42e3d68579b7d334a38f293b76d5008fb9c528",
+      "input_and_deduction_audit": "99884c8bd69c914cab63d56300332308c49259e186acc81062dd980e69c1a8f7"
+    }
+  }
+}

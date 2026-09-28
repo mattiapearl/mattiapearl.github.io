@@ -1,4 +1,4 @@
-// Dependency-free Chrome acceptance. Synthetic data only, no external page requests.
+// Dependency-free Chrome acceptance. Aggregate results + synthetic players only.
 // node _checks/browser.mjs [https://.../contribution-score/] (default: isolated localhost server)
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
@@ -54,7 +54,7 @@ async function choose(key) {
 try {
   let target = process.argv[2];
   if (!target) {
-    const allowed = new Set(['index.html', 'style.css', 'app.mjs', 'math.mjs', 'cases.json']);
+    const allowed = new Set(['index.html', 'style.css', 'app.mjs', 'math.mjs', 'cases.json', 'benchmark.json']);
     const mime = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.mjs': 'text/javascript', '.json': 'application/json' };
     server = createServer(async (req, res) => {
       const path = new URL(req.url, 'http://127.0.0.1').pathname;
@@ -96,7 +96,28 @@ try {
   assert.equal(await evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth'), true);
   await screenshot('desktop-overview.png');
 
+  stage = 'benchmark';
+  const aggregate = JSON.parse(await readFile(join(root, 'benchmark.json'), 'utf8'));
+  assert.equal(await evaluate('document.querySelectorAll("#all-variants tr").length'), 24);
+  assert.deepEqual(await evaluate("['benchmark-matches','benchmark-players','benchmark-variants','comparison-games','top-change-percent','current-bounded-percent','no-factor-bounded-percent','objective-reuse-percent'].map(id=>document.getElementById(id).textContent)"),
+    ['18,741', '224,892', '24', '11', '11.85%', '20.04%', '2.40%', '79.82%']);
+  for (const row of aggregate.variants) {
+    const cells = await evaluate(`Array.from(document.querySelector('#all-variants [data-variant="${row.id}"]').children, td=>td.textContent)`);
+    assert.equal(cells[3], `${(100 * row.bounded_scores / aggregate.population.player_games).toFixed(2)}% (${row.bounded_scores.toLocaleString('en-US')})`);
+    assert.equal(cells[4], row.agreement.toFixed(4));
+  }
+  await evaluate("document.getElementById('benchmark').scrollIntoView()");
+  await screenshot('desktop-benchmark.png');
+  await evaluate("document.getElementById('comparison').scrollIntoView()");
+  await screenshot('desktop-comparison.png');
+  await evaluate("document.querySelector('#all-results > summary').focus()");
+  await cdp.send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, text: '\r', unmodifiedText: '\r' });
+  await cdp.send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13 });
+  assert.equal(await evaluate("document.getElementById('all-results').open"), true);
+  await evaluate("document.getElementById('all-results').open=false");
+
   stage = 'process';
+  await evaluate("document.getElementById('process-demo').open=true");
   for (const [key, status, evaluated] of [['cached', 'ready', true], ['score', 'ready', true], ['range', 'ready', true], ['missing', 'metadata unavailable', false], ['unsupported', 'unsupported mode', false]]) {
     const response = await evaluate(`(() => { const select=document.getElementById('scenario');select.value='${key}';select.dispatchEvent(new Event('change'));const next=document.getElementById('next-step');for(let i=0;i<8&&!next.disabled;i++) next.click();return JSON.parse(document.getElementById('flow-json').textContent); })()`);
     assert.equal(response.status, status); assert.equal(response.evaluated, evaluated);
@@ -105,8 +126,17 @@ try {
   }
   await evaluate("document.getElementById('scenario').value='range';document.getElementById('scenario').dispatchEvent(new Event('change'));for(let i=0;i<5;i++)document.getElementById('next-step').click();document.getElementById('process').scrollIntoView()");
   await screenshot('desktop-process.png');
+  await evaluate("document.getElementById('process-demo').open=false");
 
   stage = 'playground';
+  await evaluate("document.getElementById('event-lab').open=true;document.getElementById('curve-tradeoff').open=true;document.getElementById('concentrated-work').click()");
+  assert.equal(await evaluate("document.getElementById('gross-total').textContent"), '32.00');
+  await evaluate("document.getElementById('balanced-work').click()");
+  assert.equal(await evaluate("document.getElementById('gross-total').textContent"), '50.00');
+  await evaluate("document.getElementById('reset-work').click();document.getElementById('curve-tradeoff').open=false");
+  assert.equal(await evaluate("document.getElementById('points-removed').textContent"), '2.67');
+  assert.equal(await evaluate("document.getElementById('loss-at-20').textContent"), '0.94');
+  assert.equal(await evaluate("document.getElementById('loss-at-80').textContent"), '3.77');
   await evaluate("document.getElementById('zero-work').click()");
   assert.equal(await evaluate("document.getElementById('final-score').textContent"), '0.00');
   assert.deepEqual(await evaluate("[...document.querySelectorAll('#final-bar > span')].map(e=>e.style.width)"), ['0%', '0%', '0%']);
@@ -122,6 +152,7 @@ try {
   assert.equal(await evaluate("document.getElementById('fight-r').value"), '2.05');
   await evaluate("document.getElementById('reset-work').click();document.getElementById('consequence').scrollIntoView()");
   await screenshot('desktop-consequences.png');
+  await evaluate("document.getElementById('event-lab').open=false");
 
   stage = 'evidence';
   for (const [key, score, rank, coverage] of [['known', '27.8', '#7', '12 exact · 0 bounded'], ['duration', '18.5–27.8', '#7–#11', '11 exact · 1 bounded'], ['ordering', '22.2–27.8', '#7–#10', '11 exact · 1 bounded'], ['claimant', '27.7–39.2', '#6–#10', '1 exact · 11 bounded']]) {
@@ -142,6 +173,15 @@ try {
     assert.equal(await evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth'), true, `overflow at ${width}`);
     await evaluate('window.scrollTo(0,0)');
     await screenshot(`mobile-${width}.png`);
+    await evaluate("document.getElementById('benchmark').scrollIntoView()");
+    await screenshot(`mobile-benchmark-${width}.png`);
+    await evaluate("document.getElementById('coverage-finding').scrollIntoView()");
+    await screenshot(`mobile-coverage-${width}.png`);
+    const disclosureState = await evaluate("[...document.querySelectorAll('details')].map(d=>d.open)");
+    await evaluate("document.querySelectorAll('details').forEach(d=>d.open=true)");
+    await settle();
+    assert.equal(await evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth'), true, `expanded overflow at ${width}`);
+    await evaluate(`[...document.querySelectorAll('details')].forEach((d,i)=>d.open=${JSON.stringify(disclosureState)}[i])`);
     await evaluate("document.getElementById('uncertainty').scrollIntoView()");
     await screenshot(`mobile-evidence-${width}.png`);
   }
@@ -155,7 +195,8 @@ try {
   assert.equal(await evaluate('document.body.innerText.toLowerCase().includes("deadchaps")'), false);
   assert.deepEqual(blocked, []); assert.deepEqual(errors, []);
   const result = { status: 'passed', target, process_routes: 5, oracle_scenarios: 4, roster: 12, keyboard_slider: true,
-    zero_work: true, one_factor: true, viewport_widths: [1440, 390, 320], horizontal_overflow: false,
+    zero_work: true, one_factor: true, benchmark_variants: 24, benchmark_keyboard_disclosure: true,
+    curve_presets: true, viewport_widths: [1440, 390, 320], horizontal_overflow: false, expanded_overflow: false,
     print_disclosures: true, external_requests: blocked, runtime_errors: errors, page_requests: requests, output };
   await writeFile(join(output, 'RESULT.json'), JSON.stringify(result, null, 2), { flag: 'wx' });
   console.log(JSON.stringify(result, null, 2));

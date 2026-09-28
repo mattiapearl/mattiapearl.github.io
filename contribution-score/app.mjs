@@ -1,4 +1,4 @@
-import { PARTS, FLOW, component, playground, interval, formatBounds, rankLabel, average, flowState } from './math.mjs';
+import { PARTS, FLOW, component, playground, interval, formatBounds, rankLabel, flowState } from './math.mjs';
 
 const $ = id => document.getElementById(id);
 const text = (id, value) => { $(id).textContent = value; };
@@ -11,6 +11,7 @@ const node = (tag, className, content) => {
 const fixed = (n, digits = 2) => n.toFixed(digits);
 const clock = n => `${Math.floor(n / 60)}:${String(Math.floor(n % 60)).padStart(2, '0')}`;
 let fixtures;
+let benchmark;
 let flowIndex = 0;
 let selectedCase = 'duration';
 let own = [true, true, true, false, false, false];
@@ -62,6 +63,8 @@ function renderPlayground() {
   text('gross-total', fixed(result.gross)); stack('gross-bar', result.parts, 'gross');
   text('loss-total', fixed(result.loss, 4)); text('presence', fixed(result.p, 4));
   text('final-gross', fixed(result.gross)); text('final-p', fixed(result.p, 4)); text('final-score', fixed(result.score));
+  text('points-removed', fixed(result.gross - result.score));
+  text('loss-at-20', fixed(20 * (1 - result.p))); text('loss-at-80', fixed(80 * (1 - result.p)));
   stack('final-bar', result.parts, 'final');
   $('final-parts').replaceChildren(...result.parts.map(part => {
     const box = node('div', part.key);
@@ -171,6 +174,43 @@ function renderEvidence() {
   }));
 }
 
+const CURVE_NAMES = { rational: 'Current rational', exponential: 'Exponential', capped_linear: 'Capped linear', linear_unbounded: 'Unbounded linear · diagnostic' };
+const ADJUSTMENT_NAMES = { none: 'None', all_half: 'Whole score · 0.2', all_current: 'Whole score · 0.4', all_double: 'Whole score · 0.8', objective_only: 'Objectives only · 0.4', fixed_reference: 'Fixed-reference point charge' };
+const integer = n => n.toLocaleString('en-US');
+const signed = n => `${n < 0 ? '−' : '+'}${Math.abs(n).toFixed(4)}`;
+const agreementDifference = row => row.id === benchmark.baseline ? 'Reference'
+  : `${signed(row.agreement_delta)} [${row.agreement_delta_ci95.map(signed).join(', ')}]`;
+
+function renderBenchmark() {
+  const baseline = benchmark.variants.find(row => row.id === benchmark.baseline);
+  const noFactor = benchmark.variants.find(row => row.id === 'rational__none');
+  text('benchmark-matches', integer(benchmark.population.matches));
+  text('benchmark-players', integer(benchmark.population.player_games));
+  text('benchmark-variants', integer(benchmark.variants.length));
+  text('comparison-games', integer(benchmark.comparison.matches));
+  text('top-change-percent', `${fixed(100 * noFactor.top_changed / noFactor.top_comparable)}%`);
+  text('top-change-count', `${integer(noFactor.top_changed)} / ${integer(noFactor.top_comparable)}`);
+  text('objective-reuse-percent', `${fixed(100 * benchmark.audit.confirmed_events_reusing_interval_damage / benchmark.audit.confirmed_credited_player_events)}%`);
+  for (const [prefix, row] of [['current', baseline], ['no-factor', noFactor]]) {
+    const percent = 100 * row.bounded_scores / benchmark.population.player_games;
+    text(`${prefix}-bounded-percent`, `${fixed(percent)}%`);
+    $(`${prefix}-bounded-bar`).setAttribute('width', String(percent));
+  }
+  for (const tr of document.querySelectorAll('#main-comparison [data-variant]')) {
+    const row = benchmark.variants.find(value => value.id === tr.dataset.variant);
+    tr.children[1].textContent = fixed(row.agreement, 4);
+    tr.children[2].textContent = agreementDifference(row);
+  }
+  $('all-variants').replaceChildren(...benchmark.variants.map(row => {
+    const tr = node('tr'); tr.dataset.variant = row.id;
+    const title = node('th', '', CURVE_NAMES[row.curve]); title.scope = 'row'; tr.append(title);
+    [ADJUSTMENT_NAMES[row.adjustment], row.id === benchmark.baseline ? 'Reference' : `${integer(row.top_changed)} / ${integer(row.top_comparable)}`,
+      `${fixed(100 * row.bounded_scores / benchmark.population.player_games)}% (${integer(row.bounded_scores)})`,
+      fixed(row.agreement, 4), agreementDifference(row)].forEach(value => tr.append(node('td', '', value)));
+    return tr;
+  }));
+}
+
 // Print the complete explanation, then restore the reader's disclosure state.
 let printDetails = [];
 window.addEventListener('beforeprint', () => {
@@ -181,9 +221,13 @@ window.addEventListener('afterprint', () => { printDetails.forEach(([element, op
 $('print').addEventListener('click', () => window.print());
 
 try {
-  const response = await fetch(new URL('./cases.json', import.meta.url));
-  if (!response.ok) throw new Error('Fixture unavailable');
-  fixtures = await response.json();
+  const responses = await Promise.all(['cases.json', 'benchmark.json'].map(path => fetch(new URL(path, import.meta.url))));
+  if (responses.some(response => !response.ok)) throw new Error('Local evidence unavailable');
+  [fixtures, benchmark] = await Promise.all(responses.map(response => response.json()));
+  if (benchmark.schema !== 'match-score-benchmark-public/1' || benchmark.aggregate_only !== true
+      || benchmark.policy_sha256 !== 'a042935d96c9d9c49a6ca6b62b1a15dfb6d521d044f3660b676a4264a9cd0f2d'
+      || benchmark.variants.length !== 24 || benchmark.baseline !== 'rational__all_current'
+      || benchmark.variants.some(row => !CURVE_NAMES[row.curve] || !ADJUSTMENT_NAMES[row.adjustment])) throw new Error('Incompatible benchmark');
   if (fixtures.schema !== 'contribution-explainer-fixtures/1' || fixtures.synthetic_only !== true
       || fixtures.policy_sha256 !== 'a042935d96c9d9c49a6ca6b62b1a15dfb6d521d044f3660b676a4264a9cd0f2d') throw new Error('Incompatible fixture');
   const points = Array.from({ length: 121 }, (_, i) => {
@@ -194,14 +238,16 @@ try {
   for (const id of ['fight-r', 'objective-r', 'economy-r', 'events', 'span', 'enemy-gain']) $(id).addEventListener('input', renderPlayground);
   $('zero-work').addEventListener('click', () => { PARTS.forEach(p => { $(`${p.key}-r`).value = '0'; }); renderPlayground(); });
   $('reset-work').addEventListener('click', () => { PARTS.forEach(p => { $(`${p.key}-r`).value = p.key === 'fight' ? '2' : '1'; }); renderPlayground(); });
+  for (const [id, values] of [['concentrated-work', [4, 0, 0]], ['balanced-work', [1, 1, 1]]]) {
+    $(id).addEventListener('click', () => { PARTS.forEach((part, i) => { $(`${part.key}-r`).value = String(values[i]); }); renderPlayground(); });
+  }
   $('equal-exchange').addEventListener('click', () => { own = [true, true, true, false, false, false]; enemy = [...own]; $('enemy-gain').checked = true; renderTeams(); renderPlayground(); });
   $('reset-event').addEventListener('click', () => { own = [true, true, true, false, false, false]; enemy = [true, false, false, false, false, false]; $('events').value = '1'; $('span').value = '1200'; $('enemy-gain').checked = true; renderTeams(); renderPlayground(); });
   $('scenario').addEventListener('change', () => { flowIndex = 0; renderFlow(); });
   $('next-step').addEventListener('click', () => { if (flowIndex < FLOW[$('scenario').value].path.length - 1) flowIndex++; renderFlow(); });
   $('reset-flow').addEventListener('click', () => { flowIndex = 0; renderFlow(); });
   document.querySelectorAll('[data-case]').forEach(button => button.addEventListener('click', () => { selectedCase = button.dataset.case; renderEvidence(); }));
-  text('mean-result', formatBounds(average([[40, 40], [41.2, 44.8], [0, 0]]).bounds));
-  renderTeams(); renderPlayground(); renderFlow(); renderEvidence();
+  renderBenchmark(); renderTeams(); renderPlayground(); renderFlow(); renderEvidence();
   document.body.dataset.ready = 'true';
 } catch {
   $('load-error').hidden = false;

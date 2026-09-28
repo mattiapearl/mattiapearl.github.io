@@ -1,64 +1,65 @@
-# From a match to a score
+# A candidate match score
 
-An unbranded, static explanation of model v8: request lifecycle, positive work, the single map-consequence factor, evidence intervals, ranking and history aggregation. The final section distinguishes the current contribution model from a possible future league rating.
+Unbranded, static explanation of the unchanged frozen v8 formula and the completed formula benchmark. The public page is organized as **results → inputs/math → adjustment → synthetic player example → request process**. History averaging and future rating-system design are no longer part of the presentation.
 
-## Scope
+This simplifies the explanation, not the scoring policy. None of the benchmark alternatives is promoted or substituted into the player examples. The page is a candidate for assessment, not a claim of proven scoring accuracy.
 
-- Only this `contribution-score/` subtree is added. Existing tools, homepage and Pages configuration are unchanged.
-- No runtime dependency, framework, external font/script, analytics, credential, player lookup or live scorer call.
-- The page fetches only its local `cases.json`; examples contain synthetic players, not real identities.
-- Formula sliders are hypothetical. The four twelve-player scenarios are separate, byte-pinned scorer outputs.
-- No policy, production integration, database, metadata retention or leaderboard is changed by publishing this page.
-- Displayed response fields are illustrative lifecycle labels, not a promised wire-API schema.
+## Public data and boundaries
 
-## Run locally
+- Only `contribution-score/` changes; the existing homepage, other tools and Pages configuration are untouched.
+- No framework, dependency installation, analytics, credentials, external runtime assets or live scoring/player-lookup requests.
+- `cases.json`: four unchanged, byte-pinned synthetic twelve-player scenarios. No real identities.
+- `benchmark.json`: aggregate-only results for all 24 variants. No player/account/match identifiers, names, raw metadata, selected case rosters or private filesystem paths.
+- The main benchmark remains readable without JavaScript; details contain the full matrix, exact work definitions and request simulation.
+- The large 18,741-match run is a sensitivity study on reused data, not an independent accuracy test. The external agreement comparison has only 11 historical matches and 110 common-exact player observations. Nominal intervals are not multiplicity-adjusted.
+- The unbounded linear variants are labelled diagnostics that violate component limits. No range is replaced by a midpoint or counted as an unfinished job.
+- Native inputs remain Ranked-only; the page does not promise custom-match support or one exact scalar for every player.
+- No production scorer, website integration, database or retention policy is changed by this publication.
+
+## Run and check
 
 From the repository root:
 
 ```sh
 python -m http.server 8000 --bind 127.0.0.1
-# Open http://127.0.0.1:8000/contribution-score/
+# http://127.0.0.1:8000/contribution-score/
 ```
 
-No build or package installation is required. Use the page's Print / PDF button to expand the technical disclosures for printing.
-
-## Checks
-
-From this directory, with Node 22+ and an installed Chrome:
+From `contribution-score/`, with Node 22+ and Chrome:
 
 ```sh
-node --test --test-reporter=spec _checks/math.test.mjs
+node --test --test-reporter=spec _checks/math.test.mjs _checks/benchmark.test.mjs
 node _checks/browser.mjs
-# Optional published-site verification:
+# Published-site acceptance:
 node _checks/browser.mjs https://mattiapearl.github.io/contribution-score/
 ```
 
-`CHROME_BIN` can override the installed Chrome path. The browser check uses an isolated profile, blocks off-origin page requests and leaves screenshots plus a JSON receipt in an OS temporary directory. It exercises all five process routes, all four oracle cases, twelve individual results, zero work, no-conversion/equal-exchange rules, keyboard controls, print disclosure restoration and 1440/390/320 px layouts. No user browser profile is accessed.
+`CHROME_BIN` overrides the installed Chrome path. The browser check uses an isolated profile and blocks off-origin page requests. It covers all 24 aggregate rows, keyboard disclosure, the five request routes, all four oracle cases/all twelve players, curve presets, zero-work and consequence rules, keyboard slider input, print disclosure restoration, and collapsed/expanded layouts at 1440/390/320px. Receipts and screenshots go to an OS temporary directory. No user browser profile is accessed.
 
-The 14 arithmetic/content tests verify all 48 scenario rows against the frozen outputs: raw-work ratios, component points, one factor, score bounds and rank bounds. They also check event-budget conservation, objective shrinkage, equal-game endpoint averages, outward rounding and absence of branding/external runtime code.
+The Node checks retain all 48 native oracle-row comparisons and verify aggregate identities, counts, denominators, intervals, static fallback values, privacy, branding absence and link/ID integrity. The `_checks` directory is developer tooling, normally excluded by legacy Pages/Jekyll underscore-directory handling.
 
-The `_checks` directory is developer tooling; the legacy Pages/Jekyll build does not publish underscore-prefixed directories. It contains no private data either way.
+## Reproduce the aggregate export
 
-## Reproduce the synthetic oracle
+Using the small delivered benchmark summaries (not raw data or parquet):
 
-Provide a local copy of the frozen archive (not downloaded or bundled by this page):
+```sh
+python _checks/build-benchmark.py /path/to/compact-benchmark-delivery
+python _checks/build-benchmark.py /path/to/compact-benchmark-delivery --check
+```
+
+The exporter verifies source artifact hashes and the frozen policy/protocol/input/script identities, then selects an explicit aggregate field whitelist. Output is deterministic UTF-8/LF JSON. `--check` compares bytes without rewriting them. No full report or real-player case CSV is published.
+
+The benchmark protocol is `7606c672978270443dc11ef3595d228e69911f31c4133578636b4d67709b304f`; implementation identity is `f904df600755123e4018b5fd7a08289b603d277fd5c459e3192ce63b6217d229`. Input archive and summary hashes are included in the public aggregate JSON.
+
+## Synthetic oracle and formula identity
 
 ```sh
 python _checks/build-oracle.py /path/to/scorer.pyz
 ```
 
-The builder checks the artifact hash before executing it. It constructs a six-minute, twelve-player synthetic match and changes only the focus player's death duration or the reported claimant:
+This optional builder checks the local artifact hash, then constructs a six-minute synthetic match with twelve players. It changes only the focus player's death duration/order or the reported claimant. The actual fixtures are unchanged by the benchmark-page revision.
 
-| Case | Exact / bounded scores | Focus score bounds | Focus rank bounds |
-| --- | --- | --- | --- |
-| Known respawn | 12 / 0 | 27.755002221800773, 27.755002221800773 | 7, 7 |
-| Missing respawn | 11 / 1 | 18.57524421072499, 27.755002221800773 | 7, 11 |
-| Same-second ordering | 11 / 1 | 22.25569618283844, 27.755002221800773 | 7, 10 |
-| Unknown claimant | 1 / 11 | 27.755002221800773, 39.122733728772516 | 6, 10 |
+- Policy: `a042935d96c9d9c49a6ca6b62b1a15dfb6d521d044f3660b676a4264a9cd0f2d`
+- Artifact: `bdbb77d0abbb1db9a23c4fe018218947feff39796fe44d2d79c22ce10f669840`
 
-Each case records its canonical input hash. Zero work remains zero in all four cases. No unknown point is replaced by a midpoint, dropped from an evaluated-game average, or sorted as zero.
-
-- Policy SHA-256: `a042935d96c9d9c49a6ca6b62b1a15dfb6d521d044f3660b676a4264a9cd0f2d`
-- Artifact SHA-256: `bdbb77d0abbb1db9a23c4fe018218947feff39796fe44d2d79c22ce10f669840`
-
-The explanation deliberately retains Ranked-only admission, historical mixed-mode reference calibration, the claim-timing proxy (not a pickup timestamp), unsupported evidence and non-causal interpretation. It does not claim the frozen formula is already validated for tournament/custom matches or a new league population.
+The boss-kill clock remains a **claim-timing proxy, not a pickup timestamp**. The four work references retain their mixed-mode historical provenance. Passing implementation tests or reproducing archived outputs is not evidence of correct causal attribution or an optimal formula.
