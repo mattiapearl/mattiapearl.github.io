@@ -90,7 +90,7 @@ try {
   await cdp.send('Emulation.setDeviceMetricsOverride', { width: 1440, height: 1050, deviceScaleFactor: 1, mobile: false });
   await cdp.send('Page.navigate', { url: target });
   stage = 'page-ready';
-  await until(() => evaluate('document.body.dataset.ready === "true"'));
+  await until(() => evaluate('document.body?.dataset.ready === "true"'));
   assert.equal(await evaluate('document.querySelectorAll("#roster li").length'), 12);
   assert.equal(await evaluate('document.getElementById("focus-score").textContent'), '18.5–27.8');
   assert.equal(await evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth'), true);
