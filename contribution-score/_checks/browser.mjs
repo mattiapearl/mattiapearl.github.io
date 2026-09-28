@@ -52,9 +52,10 @@ async function choose(key) {
   await evaluate(`document.querySelector('[data-case="${key}"]').click()`);
 }
 try {
-  let target = process.argv[2];
+  const detailed = process.argv.includes('--details');
+  let target = process.argv.find((arg, i) => i >= 2 && arg.startsWith('http'));
   if (!target) {
-    const allowed = new Set(['index.html', 'style.css', 'app.mjs', 'math.mjs', 'cases.json', 'benchmark.json']);
+    const allowed = new Set(['index.html', 'details.html', 'walkthrough.css', 'walkthrough.mjs', 'style.css', 'app.mjs', 'math.mjs', 'cases.json', 'benchmark.json']);
     const mime = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.mjs': 'text/javascript', '.json': 'application/json' };
     server = createServer(async (req, res) => {
       const path = new URL(req.url, 'http://127.0.0.1').pathname;
@@ -64,7 +65,7 @@ try {
       catch { res.writeHead(500); res.end(); }
     });
     await new Promise(ok => server.listen(0, '127.0.0.1', ok));
-    target = `http://127.0.0.1:${server.address().port}/contribution-score/`;
+    target = `http://127.0.0.1:${server.address().port}/contribution-score/${detailed ? 'details.html' : ''}`;
   }
   const origin = new URL(target).origin;
   const profile = join(output, 'profile');
@@ -91,6 +92,57 @@ try {
   await cdp.send('Page.navigate', { url: target });
   stage = 'page-ready';
   await until(() => evaluate('document.body?.dataset.ready === "true"'));
+  if (!detailed) {
+    stage = 'visual-score';
+    assert.equal(await evaluate("document.getElementById('score').textContent"), '52.9');
+    assert.deepEqual(await evaluate("[0,1,2].map(i=>document.getElementById('part-'+i).textContent)"), ['22.9','19.1','13.4']);
+    assert.equal(await evaluate("document.getElementById('fight').hidden"), false);
+    assert.ok(await evaluate("document.getElementById('score').getBoundingClientRect().bottom < innerHeight"), 'score visible on first screen');
+    await screenshot('desktop-visual.png');
+    await evaluate("document.getElementById('tab-fight').focus()");
+    await cdp.send('Input.dispatchKeyEvent', {type:'keyDown',key:'ArrowRight',code:'ArrowRight',windowsVirtualKeyCode:39});
+    await cdp.send('Input.dispatchKeyEvent', {type:'keyUp',key:'ArrowRight',code:'ArrowRight',windowsVirtualKeyCode:39});
+    assert.equal(await evaluate("document.activeElement.id"), 'tab-objective');
+    assert.equal(await evaluate("document.getElementById('objective').hidden"), false);
+    assert.equal(await evaluate("document.getElementById('share-percent').textContent"), '27.4%');
+    await screenshot('desktop-objective.png');
+    await evaluate("document.getElementById('boss').value=0;document.getElementById('boss').dispatchEvent(new Event('input'))");
+    assert.equal(await evaluate("document.getElementById('part-1').textContent"), '0.0');
+    await evaluate("document.getElementById('reset').click();document.getElementById('tab-economy').click()");
+    assert.equal(await evaluate("document.getElementById('farm-rate').textContent"), '2,700');
+    await screenshot('desktop-economy.png');
+    await evaluate("document.getElementById('gain').click()");
+    assert.equal(await evaluate("document.getElementById('deduction').textContent"), '0.0');
+    assert.equal(await evaluate("document.getElementById('score').textContent"), '55.5');
+    await evaluate("document.getElementById('zero').click()");
+    assert.equal(await evaluate("document.getElementById('score').textContent"), '0.0');
+    assert.deepEqual(await evaluate("[...document.getElementById('score-strip').children].map(e=>e.style.width)"), ['0%','0%','0%']);
+    await evaluate("document.getElementById('reset').click();document.getElementById('tab-fight').click();document.getElementById('damage').focus()");
+    await cdp.send('Input.dispatchKeyEvent', {type:'keyDown',key:'ArrowRight',code:'ArrowRight',windowsVirtualKeyCode:39});
+    await cdp.send('Input.dispatchKeyEvent', {type:'keyUp',key:'ArrowRight',code:'ArrowRight',windowsVirtualKeyCode:39});
+    assert.equal(await evaluate("document.getElementById('damage').value"), '21000');
+    await evaluate("document.getElementById('reset').click()");
+    for (const width of [1440, 390, 320]) {
+      await cdp.send('Emulation.setDeviceMetricsOverride', {width,height:width===1440?1050:844,deviceScaleFactor:1,mobile:width!==1440});
+      for (const key of ['fight','objective','economy']) {
+        await evaluate(`document.getElementById('tab-${key}').click();window.scrollTo(0,0)`);
+        await settle();
+        assert.equal(await evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth'), true, `${key} overflow at ${width}`);
+        assert.equal(await evaluate("document.querySelectorAll('[role=tabpanel]:not([hidden])').length"), 1);
+        assert.ok(await evaluate("document.getElementById('score').getBoundingClientRect().bottom < innerHeight"), `score visible at ${width}`);
+        if (width !== 1440) {
+          await screenshot(`mobile-${key}-${width}.png`);
+          await evaluate(`document.getElementById('${key}').scrollIntoView()`);
+          await screenshot(`mobile-pipeline-${key}-${width}.png`);
+        }
+      }
+    }
+    const prior = await evaluate("[...document.querySelectorAll('[role=tabpanel]')].map(p=>p.hidden)");
+    await evaluate("window.dispatchEvent(new Event('beforeprint'))");
+    assert.equal(await evaluate("[...document.querySelectorAll('[role=tabpanel]')].every(p=>!p.hidden)"), true);
+    await evaluate("window.dispatchEvent(new Event('afterprint'))");
+    assert.deepEqual(await evaluate("[...document.querySelectorAll('[role=tabpanel]')].map(p=>p.hidden)"), prior);
+  } else {
   assert.equal(await evaluate('document.querySelectorAll("#roster li").length'), 12);
   assert.equal(await evaluate('document.getElementById("focus-score").textContent'), '18.5–27.8');
   assert.equal(await evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth'), true);
@@ -192,11 +244,12 @@ try {
   assert.equal(await evaluate("[...document.querySelectorAll('details')].every(d=>d.open)"), true);
   await evaluate("window.dispatchEvent(new Event('afterprint'))");
   assert.deepEqual(await evaluate("[...document.querySelectorAll('details')].map(d=>d.open)"), prior);
+  }
   assert.equal(await evaluate('document.body.innerText.toLowerCase().includes("deadchaps")'), false);
   assert.deepEqual(blocked, []); assert.deepEqual(errors, []);
-  const result = { status: 'passed', target, process_routes: 5, oracle_scenarios: 4, roster: 12, keyboard_slider: true,
-    zero_work: true, one_factor: true, benchmark_variants: 24, benchmark_keyboard_disclosure: true,
-    curve_presets: true, viewport_widths: [1440, 390, 320], horizontal_overflow: false, expanded_overflow: false,
+  const result = { status: 'passed', target, mode: detailed ? 'technical-details' : 'visual-walkthrough',
+    ...(detailed ? {process_routes:5, oracle_scenarios:4, roster:12, benchmark_variants:24} : {components:3, raw_stat_controls:true, keyboard_tabs:true, first_screen_score:true}),
+    keyboard_slider: true, zero_work: true, one_factor: true, viewport_widths: [1440, 390, 320], horizontal_overflow: false,
     print_disclosures: true, external_requests: blocked, runtime_errors: errors, page_requests: requests, output };
   await writeFile(join(output, 'RESULT.json'), JSON.stringify(result, null, 2), { flag: 'wx' });
   console.log(JSON.stringify(result, null, 2));

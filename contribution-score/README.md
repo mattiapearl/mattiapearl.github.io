@@ -1,6 +1,8 @@
 # A candidate match score
 
-Unbranded, static explanation of the unchanged frozen v8 formula and the completed formula benchmark. The public page is organized as **results → inputs/math → adjustment → synthetic player example → request process**. History averaging and future rating-system design are no longer part of the presentation.
+Unbranded, static explanation of the unchanged frozen v8 formula. The homepage now leads with **three coloured component totals → raw-input-to-points diagrams → the final deduction**. Switch components and change recorded stats to see every linked value update. Research and the former long explanation live separately in `details.html`, linked only as supporting detail.
+
+`walkthrough.mjs` uses the unchanged `math.mjs` functions. Its invented 20-minute example assumes constant 2,000 team median HP, three eligible friendly completions in one 180-second damage interval (18,000 team damage), work-backed farm receipts, and one enemy gain with the focus player dead / three own dead / one enemy dead. It is an arithmetic example, not a metadata parser or another native oracle. Display values round only after calculation.
 
 This simplifies the explanation, not the scoring policy. None of the benchmark alternatives is promoted or substituted into the player examples. The page is a candidate for assessment, not a claim of proven scoring accuracy.
 
@@ -10,7 +12,7 @@ This simplifies the explanation, not the scoring policy. None of the benchmark a
 - No framework, dependency installation, analytics, credentials, external runtime assets or live scoring/player-lookup requests.
 - `cases.json`: four unchanged, byte-pinned synthetic twelve-player scenarios. No real identities.
 - `benchmark.json`: aggregate-only results for all 24 variants. No player/account/match identifiers, names, raw metadata, selected case rosters or private filesystem paths.
-- The main benchmark remains readable without JavaScript; details contain the full matrix, exact work definitions and request simulation.
+- The initial fighting calculation remains readable without JavaScript. Switching components and changing raw-stat sliders requires it. The technical page retains the full matrix, exact work definitions and request simulation.
 - The large 18,741-match run is a sensitivity study on reused data, not an independent accuracy test. The external agreement comparison has only 11 historical matches and 110 common-exact player observations. Nominal intervals are not multiplicity-adjusted.
 - The unbounded linear variants are labelled diagnostics that violate component limits. No range is replaced by a midpoint or counted as an unfinished job.
 - Native inputs remain Ranked-only; the page does not promise custom-match support or one exact scalar for every player.
@@ -28,13 +30,15 @@ python -m http.server 8000 --bind 127.0.0.1
 From `contribution-score/`, with Node 22+ and Chrome:
 
 ```sh
-node --test --test-reporter=spec _checks/math.test.mjs _checks/benchmark.test.mjs
+node --test --test-reporter=spec _checks/math.test.mjs _checks/benchmark.test.mjs _checks/walkthrough.test.mjs
 node _checks/browser.mjs
+node _checks/browser.mjs --details
 # Published-site acceptance:
 node _checks/browser.mjs https://mattiapearl.github.io/contribution-score/
+node _checks/browser.mjs --details https://mattiapearl.github.io/contribution-score/details.html
 ```
 
-`CHROME_BIN` overrides the installed Chrome path. The browser check uses an isolated profile and blocks off-origin page requests. It covers all 24 aggregate rows, keyboard disclosure, the five request routes, all four oracle cases/all twelve players, curve presets, zero-work and consequence rules, keyboard slider input, print disclosure restoration, and collapsed/expanded layouts at 1440/390/320px. Receipts and screenshots go to an OS temporary directory. No user browser profile is accessed.
+`CHROME_BIN` overrides the installed Chrome path. The browser check uses an isolated profile and blocks off-origin page requests. The default check covers all three visual component paths, linked raw-stat controls, first-screen score visibility, keyboard tabs/sliders, zero work, no-gain deductions and print state at 1440/390/320px. `--details` retains coverage of all 24 aggregate rows, five request routes, four oracle cases/all twelve players and expanded layouts. Public asset bytes are checked separately from browser behavior. Receipts and screenshots go to an OS temporary directory. No user browser profile is accessed.
 
 The Node checks retain all 48 native oracle-row comparisons and verify aggregate identities, counts, denominators, intervals, static fallback values, privacy, branding absence and link/ID integrity. The `_checks` directory is developer tooling, normally excluded by legacy Pages/Jekyll underscore-directory handling.
 

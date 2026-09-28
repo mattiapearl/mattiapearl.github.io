@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 
 const raw = await readFile(new URL('../benchmark.json', import.meta.url), 'utf8');
 const data = JSON.parse(raw);
-const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+const html = await readFile(new URL('../details.html', import.meta.url), 'utf8');
 const app = await readFile(new URL('../app.mjs', import.meta.url), 'utf8');
 const row = id => data.variants.find(value => value.id === id);
 const close = (a, b) => assert.ok(Math.abs(a - b) < 1e-12, `${a} != ${b}`);
