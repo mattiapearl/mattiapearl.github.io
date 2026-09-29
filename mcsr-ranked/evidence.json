@@ -1,0 +1,2452 @@
+{
+  "schemaVersion": 1,
+  "evidenceDate": "2026-09-29",
+  "scope": {
+    "minecraft": "1.16.1",
+    "ranked": "5.8.26",
+    "standardizedPortalEyes": true,
+    "endToEndHumanTrials": 0,
+    "rankedApproval": false,
+    "execution": "Pi AI assistant under the account owner's direction",
+    "interpretation": "Synthetic fixtures and headless/isolated code tests, not played matches. Expected eye counts are calculated from fixture seeds, not read from visited portals. All outcomes retained; no outliers removed."
+  },
+  "motion": {
+    "firstSiteDrops": 6,
+    "secondSiteDrops": 3,
+    "additionalTranslatedFixtures": 10,
+    "additionalChecks": "All ten translated-position/height cases passed an unused tenth-drop check; no human/client measurement validation.",
+    "measurementModel": {
+      "assumedAimErrorDegrees": 0.05,
+      "yawDisplayStepDegrees": 0.1,
+      "assumedExactStationPositions": true,
+      "solverToleranceBlocksPerAxis": 0.04,
+      "geometryCases": 40804,
+      "maxSyntheticAxisErrorBlocks": 0.01958
+    },
+    "cases": [
+      {
+        "fixture": 0,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.422
+      },
+      {
+        "fixture": 1,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.226
+      },
+      {
+        "fixture": 2,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.233
+      },
+      {
+        "fixture": 3,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.223
+      },
+      {
+        "fixture": 4,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.227
+      },
+      {
+        "fixture": 5,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.203
+      },
+      {
+        "fixture": 6,
+        "expectedEyesFromCode": 3,
+        "candidateEyes": [
+          3
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.223
+      },
+      {
+        "fixture": 7,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.213
+      },
+      {
+        "fixture": 8,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.214
+      },
+      {
+        "fixture": 9,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.21
+      },
+      {
+        "fixture": 10,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.222
+      },
+      {
+        "fixture": 11,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.209
+      },
+      {
+        "fixture": 12,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.21
+      },
+      {
+        "fixture": 13,
+        "expectedEyesFromCode": 3,
+        "candidateEyes": [
+          3
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.217
+      },
+      {
+        "fixture": 14,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.224
+      },
+      {
+        "fixture": 15,
+        "expectedEyesFromCode": 4,
+        "candidateEyes": [
+          4
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.23
+      },
+      {
+        "fixture": 16,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.227
+      },
+      {
+        "fixture": 17,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.216
+      },
+      {
+        "fixture": 18,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.214
+      },
+      {
+        "fixture": 19,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.205
+      },
+      {
+        "fixture": 20,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.182
+      },
+      {
+        "fixture": 21,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.154
+      },
+      {
+        "fixture": 22,
+        "expectedEyesFromCode": 4,
+        "candidateEyes": [
+          4
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.164
+      },
+      {
+        "fixture": 23,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.154
+      },
+      {
+        "fixture": 24,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.162
+      },
+      {
+        "fixture": 25,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.178
+      },
+      {
+        "fixture": 26,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.172
+      },
+      {
+        "fixture": 27,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.17
+      },
+      {
+        "fixture": 28,
+        "expectedEyesFromCode": 3,
+        "candidateEyes": [
+          3
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.166
+      },
+      {
+        "fixture": 29,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.175
+      },
+      {
+        "fixture": 30,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.169
+      },
+      {
+        "fixture": 31,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.152
+      },
+      {
+        "fixture": 32,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.157
+      },
+      {
+        "fixture": 33,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.145
+      },
+      {
+        "fixture": 34,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.152
+      },
+      {
+        "fixture": 35,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.148
+      },
+      {
+        "fixture": 36,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.146
+      },
+      {
+        "fixture": 37,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.142
+      },
+      {
+        "fixture": 38,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.152
+      },
+      {
+        "fixture": 39,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.154
+      },
+      {
+        "fixture": 40,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.175
+      },
+      {
+        "fixture": 41,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.171
+      },
+      {
+        "fixture": 42,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.164
+      },
+      {
+        "fixture": 43,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.168
+      },
+      {
+        "fixture": 44,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.159
+      },
+      {
+        "fixture": 45,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.156
+      },
+      {
+        "fixture": 46,
+        "expectedEyesFromCode": 3,
+        "candidateEyes": [
+          3
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.165
+      },
+      {
+        "fixture": 47,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.16
+      },
+      {
+        "fixture": 48,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.159
+      },
+      {
+        "fixture": 49,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.158
+      },
+      {
+        "fixture": 50,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.164
+      },
+      {
+        "fixture": 51,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.149
+      },
+      {
+        "fixture": 52,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.156
+      },
+      {
+        "fixture": 53,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.17
+      },
+      {
+        "fixture": 54,
+        "expectedEyesFromCode": 3,
+        "candidateEyes": [
+          3
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.165
+      },
+      {
+        "fixture": 55,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.166
+      },
+      {
+        "fixture": 56,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.146
+      },
+      {
+        "fixture": 57,
+        "expectedEyesFromCode": 3,
+        "candidateEyes": [
+          3
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.159
+      },
+      {
+        "fixture": 58,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.158
+      },
+      {
+        "fixture": 59,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.146
+      },
+      {
+        "fixture": 60,
+        "expectedEyesFromCode": 3,
+        "candidateEyes": [
+          3
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.144
+      },
+      {
+        "fixture": 61,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.148
+      },
+      {
+        "fixture": 62,
+        "expectedEyesFromCode": 3,
+        "candidateEyes": [
+          3
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.146
+      },
+      {
+        "fixture": 63,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.158
+      },
+      {
+        "fixture": 64,
+        "expectedEyesFromCode": 3,
+        "candidateEyes": [
+          3
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.153
+      },
+      {
+        "fixture": 65,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.152
+      },
+      {
+        "fixture": 66,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.156
+      },
+      {
+        "fixture": 67,
+        "expectedEyesFromCode": 3,
+        "candidateEyes": [
+          3
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.169
+      },
+      {
+        "fixture": 68,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.147
+      },
+      {
+        "fixture": 69,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.149
+      },
+      {
+        "fixture": 70,
+        "expectedEyesFromCode": 4,
+        "candidateEyes": [
+          4
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.153
+      },
+      {
+        "fixture": 71,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.155
+      },
+      {
+        "fixture": 72,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.173
+      },
+      {
+        "fixture": 73,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.147
+      },
+      {
+        "fixture": 74,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.153
+      },
+      {
+        "fixture": 75,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.169
+      },
+      {
+        "fixture": 76,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.153
+      },
+      {
+        "fixture": 77,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.179
+      },
+      {
+        "fixture": 78,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.158
+      },
+      {
+        "fixture": 79,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.15
+      },
+      {
+        "fixture": 80,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.151
+      },
+      {
+        "fixture": 81,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.164
+      },
+      {
+        "fixture": 82,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.146
+      },
+      {
+        "fixture": 83,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.142
+      },
+      {
+        "fixture": 84,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.138
+      },
+      {
+        "fixture": 85,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.139
+      },
+      {
+        "fixture": 86,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.144
+      },
+      {
+        "fixture": 87,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.142
+      },
+      {
+        "fixture": 88,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.194
+      },
+      {
+        "fixture": 89,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.173
+      },
+      {
+        "fixture": 90,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.143
+      },
+      {
+        "fixture": 91,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.173
+      },
+      {
+        "fixture": 92,
+        "expectedEyesFromCode": 0,
+        "candidateEyes": [
+          0
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.18
+      },
+      {
+        "fixture": 93,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.139
+      },
+      {
+        "fixture": 94,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.148
+      },
+      {
+        "fixture": 95,
+        "expectedEyesFromCode": 4,
+        "candidateEyes": [
+          4
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.152
+      },
+      {
+        "fixture": 96,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.165
+      },
+      {
+        "fixture": 97,
+        "expectedEyesFromCode": 3,
+        "candidateEyes": [
+          3
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.175
+      },
+      {
+        "fixture": 98,
+        "expectedEyesFromCode": 1,
+        "candidateEyes": [
+          1
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.153
+      },
+      {
+        "fixture": 99,
+        "expectedEyesFromCode": 2,
+        "candidateEyes": [
+          2
+        ],
+        "uniqueTrueRngSeed": true,
+        "solverSeconds": 0.152
+      }
+    ]
+  },
+  "gravel": {
+    "sameFixtureCohortForBothVariants": true,
+    "rngBaseVersion": 2,
+    "blazeTargetRods": 6,
+    "variants": [
+      {
+        "targetFlints": 10,
+        "finalCorrectUniqueRoots": 20,
+        "cases": [
+          {
+            "fixture": 0,
+            "gravelBreaks": 58,
+            "flintIndices": [
+              3,
+              5,
+              10,
+              11,
+              22,
+              25,
+              33,
+              38,
+              56,
+              58
+            ],
+            "blazeOutcomes": [
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 3,
+            "extraBushCounts": [
+              1
+            ],
+            "expectedEyesFromCode": 2,
+            "solverSeconds": 6.201
+          },
+          {
+            "fixture": 1,
+            "gravelBreaks": 104,
+            "flintIndices": [
+              29,
+              43,
+              50,
+              53,
+              68,
+              78,
+              79,
+              91,
+              94,
+              104
+            ],
+            "blazeOutcomes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 0,
+            "solverSeconds": 7.555
+          },
+          {
+            "fixture": 2,
+            "gravelBreaks": 100,
+            "flintIndices": [
+              8,
+              27,
+              28,
+              32,
+              50,
+              54,
+              62,
+              76,
+              92,
+              100
+            ],
+            "blazeOutcomes": [
+              1,
+              0,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 0,
+            "solverSeconds": 6.049
+          },
+          {
+            "fixture": 3,
+            "gravelBreaks": 167,
+            "flintIndices": [
+              35,
+              47,
+              69,
+              92,
+              95,
+              110,
+              121,
+              150,
+              159,
+              167
+            ],
+            "blazeOutcomes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 0,
+            "solverSeconds": 4.913
+          },
+          {
+            "fixture": 4,
+            "gravelBreaks": 173,
+            "flintIndices": [
+              43,
+              100,
+              107,
+              108,
+              120,
+              130,
+              133,
+              141,
+              159,
+              173
+            ],
+            "blazeOutcomes": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 1,
+            "solverSeconds": 7.051
+          },
+          {
+            "fixture": 5,
+            "gravelBreaks": 136,
+            "flintIndices": [
+              2,
+              14,
+              56,
+              63,
+              64,
+              68,
+              73,
+              85,
+              113,
+              136
+            ],
+            "blazeOutcomes": [
+              1,
+              0,
+              1,
+              1,
+              1,
+              0,
+              1,
+              0,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 0,
+            "solverSeconds": 5.433
+          },
+          {
+            "fixture": 6,
+            "gravelBreaks": 87,
+            "flintIndices": [
+              3,
+              16,
+              19,
+              47,
+              57,
+              61,
+              63,
+              65,
+              85,
+              87
+            ],
+            "blazeOutcomes": [
+              0,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 1,
+            "solverSeconds": 5.552
+          },
+          {
+            "fixture": 7,
+            "gravelBreaks": 86,
+            "flintIndices": [
+              1,
+              24,
+              47,
+              48,
+              53,
+              61,
+              68,
+              73,
+              80,
+              86
+            ],
+            "blazeOutcomes": [
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 1,
+            "solverSeconds": 4.833
+          },
+          {
+            "fixture": 8,
+            "gravelBreaks": 110,
+            "flintIndices": [
+              8,
+              17,
+              26,
+              33,
+              49,
+              59,
+              62,
+              76,
+              99,
+              110
+            ],
+            "blazeOutcomes": [
+              1,
+              0,
+              1,
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 0,
+            "solverSeconds": 7.314
+          },
+          {
+            "fixture": 9,
+            "gravelBreaks": 100,
+            "flintIndices": [
+              8,
+              19,
+              23,
+              48,
+              63,
+              73,
+              76,
+              95,
+              97,
+              100
+            ],
+            "blazeOutcomes": [
+              1,
+              0,
+              0,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 3,
+            "solverSeconds": 7.005
+          },
+          {
+            "fixture": 10,
+            "gravelBreaks": 66,
+            "flintIndices": [
+              3,
+              5,
+              9,
+              16,
+              20,
+              28,
+              32,
+              34,
+              61,
+              66
+            ],
+            "blazeOutcomes": [
+              1,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 2,
+            "extraBushCounts": [
+              0,
+              2,
+              0
+            ],
+            "expectedEyesFromCode": 2,
+            "solverSeconds": 6.623
+          },
+          {
+            "fixture": 11,
+            "gravelBreaks": 40,
+            "flintIndices": [
+              5,
+              7,
+              12,
+              20,
+              24,
+              26,
+              29,
+              30,
+              36,
+              40
+            ],
+            "blazeOutcomes": [
+              1,
+              1,
+              0,
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 2,
+            "extraBushCounts": [
+              2,
+              0
+            ],
+            "expectedEyesFromCode": 1,
+            "solverSeconds": 4.683
+          },
+          {
+            "fixture": 12,
+            "gravelBreaks": 90,
+            "flintIndices": [
+              2,
+              4,
+              14,
+              20,
+              23,
+              34,
+              50,
+              59,
+              73,
+              90
+            ],
+            "blazeOutcomes": [
+              1,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 0,
+            "solverSeconds": 5.635
+          },
+          {
+            "fixture": 13,
+            "gravelBreaks": 89,
+            "flintIndices": [
+              12,
+              30,
+              40,
+              43,
+              78,
+              79,
+              83,
+              86,
+              88,
+              89
+            ],
+            "blazeOutcomes": [
+              1,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              0,
+              0,
+              0,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 1,
+            "solverSeconds": 6.615
+          },
+          {
+            "fixture": 14,
+            "gravelBreaks": 173,
+            "flintIndices": [
+              5,
+              19,
+              39,
+              52,
+              88,
+              102,
+              119,
+              166,
+              170,
+              173
+            ],
+            "blazeOutcomes": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 0,
+            "solverSeconds": 5.892
+          },
+          {
+            "fixture": 15,
+            "gravelBreaks": 67,
+            "flintIndices": [
+              5,
+              12,
+              26,
+              27,
+              37,
+              40,
+              43,
+              51,
+              61,
+              67
+            ],
+            "blazeOutcomes": [
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 2,
+            "solverSeconds": 3.941
+          },
+          {
+            "fixture": 16,
+            "gravelBreaks": 81,
+            "flintIndices": [
+              6,
+              16,
+              17,
+              27,
+              42,
+              47,
+              51,
+              66,
+              68,
+              81
+            ],
+            "blazeOutcomes": [
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+              1,
+              1,
+              0,
+              0,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 2,
+            "solverSeconds": 4.699
+          },
+          {
+            "fixture": 17,
+            "gravelBreaks": 61,
+            "flintIndices": [
+              13,
+              19,
+              21,
+              24,
+              28,
+              40,
+              49,
+              50,
+              56,
+              61
+            ],
+            "blazeOutcomes": [
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 3,
+            "solverSeconds": 7.375
+          },
+          {
+            "fixture": 18,
+            "gravelBreaks": 112,
+            "flintIndices": [
+              13,
+              23,
+              30,
+              40,
+              66,
+              71,
+              83,
+              97,
+              101,
+              112
+            ],
+            "blazeOutcomes": [
+              1,
+              1,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 1,
+            "solverSeconds": 6.535
+          },
+          {
+            "fixture": 19,
+            "gravelBreaks": 53,
+            "flintIndices": [
+              3,
+              20,
+              27,
+              33,
+              36,
+              37,
+              42,
+              45,
+              48,
+              53
+            ],
+            "blazeOutcomes": [
+              1,
+              1,
+              0,
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 1,
+            "solverSeconds": 6.154
+          }
+        ]
+      },
+      {
+        "targetFlints": 12,
+        "finalCorrectUniqueRoots": 20,
+        "cases": [
+          {
+            "fixture": 0,
+            "gravelBreaks": 82,
+            "flintIndices": [
+              3,
+              5,
+              10,
+              11,
+              22,
+              25,
+              33,
+              38,
+              56,
+              58,
+              70,
+              82
+            ],
+            "blazeOutcomes": [
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 2,
+            "solverSeconds": 1.741
+          },
+          {
+            "fixture": 1,
+            "gravelBreaks": 118,
+            "flintIndices": [
+              29,
+              43,
+              50,
+              53,
+              68,
+              78,
+              79,
+              91,
+              94,
+              104,
+              107,
+              118
+            ],
+            "blazeOutcomes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 0,
+            "solverSeconds": 1.532
+          },
+          {
+            "fixture": 2,
+            "gravelBreaks": 130,
+            "flintIndices": [
+              8,
+              27,
+              28,
+              32,
+              50,
+              54,
+              62,
+              76,
+              92,
+              100,
+              108,
+              130
+            ],
+            "blazeOutcomes": [
+              1,
+              0,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 0,
+            "solverSeconds": 1.368
+          },
+          {
+            "fixture": 3,
+            "gravelBreaks": 199,
+            "flintIndices": [
+              35,
+              47,
+              69,
+              92,
+              95,
+              110,
+              121,
+              150,
+              159,
+              167,
+              195,
+              199
+            ],
+            "blazeOutcomes": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 0,
+            "solverSeconds": 1.63
+          },
+          {
+            "fixture": 4,
+            "gravelBreaks": 197,
+            "flintIndices": [
+              43,
+              100,
+              107,
+              108,
+              120,
+              130,
+              133,
+              141,
+              159,
+              173,
+              176,
+              197
+            ],
+            "blazeOutcomes": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 1,
+            "solverSeconds": 1.876
+          },
+          {
+            "fixture": 5,
+            "gravelBreaks": 146,
+            "flintIndices": [
+              2,
+              14,
+              56,
+              63,
+              64,
+              68,
+              73,
+              85,
+              113,
+              136,
+              141,
+              146
+            ],
+            "blazeOutcomes": [
+              1,
+              0,
+              1,
+              1,
+              1,
+              0,
+              1,
+              0,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 0,
+            "solverSeconds": 1.72
+          },
+          {
+            "fixture": 6,
+            "gravelBreaks": 98,
+            "flintIndices": [
+              3,
+              16,
+              19,
+              47,
+              57,
+              61,
+              63,
+              65,
+              85,
+              87,
+              89,
+              98
+            ],
+            "blazeOutcomes": [
+              0,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 1,
+            "solverSeconds": 1.766
+          },
+          {
+            "fixture": 7,
+            "gravelBreaks": 105,
+            "flintIndices": [
+              1,
+              24,
+              47,
+              48,
+              53,
+              61,
+              68,
+              73,
+              80,
+              86,
+              104,
+              105
+            ],
+            "blazeOutcomes": [
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 1,
+            "solverSeconds": 1.808
+          },
+          {
+            "fixture": 8,
+            "gravelBreaks": 148,
+            "flintIndices": [
+              8,
+              17,
+              26,
+              33,
+              49,
+              59,
+              62,
+              76,
+              99,
+              110,
+              139,
+              148
+            ],
+            "blazeOutcomes": [
+              1,
+              0,
+              1,
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 0,
+            "solverSeconds": 2.177
+          },
+          {
+            "fixture": 9,
+            "gravelBreaks": 151,
+            "flintIndices": [
+              8,
+              19,
+              23,
+              48,
+              63,
+              73,
+              76,
+              95,
+              97,
+              100,
+              124,
+              151
+            ],
+            "blazeOutcomes": [
+              1,
+              0,
+              0,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 3,
+            "solverSeconds": 1.791
+          },
+          {
+            "fixture": 10,
+            "gravelBreaks": 76,
+            "flintIndices": [
+              3,
+              5,
+              9,
+              16,
+              20,
+              28,
+              32,
+              34,
+              61,
+              66,
+              68,
+              76
+            ],
+            "blazeOutcomes": [
+              1,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 2,
+            "solverSeconds": 1.774
+          },
+          {
+            "fixture": 11,
+            "gravelBreaks": 58,
+            "flintIndices": [
+              5,
+              7,
+              12,
+              20,
+              24,
+              26,
+              29,
+              30,
+              36,
+              40,
+              55,
+              58
+            ],
+            "blazeOutcomes": [
+              1,
+              1,
+              0,
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 1,
+            "solverSeconds": 1.495
+          },
+          {
+            "fixture": 12,
+            "gravelBreaks": 105,
+            "flintIndices": [
+              2,
+              4,
+              14,
+              20,
+              23,
+              34,
+              50,
+              59,
+              73,
+              90,
+              98,
+              105
+            ],
+            "blazeOutcomes": [
+              1,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 0,
+            "solverSeconds": 1.483
+          },
+          {
+            "fixture": 13,
+            "gravelBreaks": 96,
+            "flintIndices": [
+              12,
+              30,
+              40,
+              43,
+              78,
+              79,
+              83,
+              86,
+              88,
+              89,
+              94,
+              96
+            ],
+            "blazeOutcomes": [
+              1,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              0,
+              0,
+              0,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 1,
+            "solverSeconds": 1.504
+          },
+          {
+            "fixture": 14,
+            "gravelBreaks": 179,
+            "flintIndices": [
+              5,
+              19,
+              39,
+              52,
+              88,
+              102,
+              119,
+              166,
+              170,
+              173,
+              175,
+              179
+            ],
+            "blazeOutcomes": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 0,
+            "solverSeconds": 1.432
+          },
+          {
+            "fixture": 15,
+            "gravelBreaks": 75,
+            "flintIndices": [
+              5,
+              12,
+              26,
+              27,
+              37,
+              40,
+              43,
+              51,
+              61,
+              67,
+              69,
+              75
+            ],
+            "blazeOutcomes": [
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 2,
+            "solverSeconds": 2.001
+          },
+          {
+            "fixture": 16,
+            "gravelBreaks": 119,
+            "flintIndices": [
+              6,
+              16,
+              17,
+              27,
+              42,
+              47,
+              51,
+              66,
+              68,
+              81,
+              115,
+              119
+            ],
+            "blazeOutcomes": [
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+              1,
+              1,
+              0,
+              0,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 2,
+            "solverSeconds": 1.546
+          },
+          {
+            "fixture": 17,
+            "gravelBreaks": 82,
+            "flintIndices": [
+              13,
+              19,
+              21,
+              24,
+              28,
+              40,
+              49,
+              50,
+              56,
+              61,
+              65,
+              82
+            ],
+            "blazeOutcomes": [
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 3,
+            "solverSeconds": 1.937
+          },
+          {
+            "fixture": 18,
+            "gravelBreaks": 118,
+            "flintIndices": [
+              13,
+              23,
+              30,
+              40,
+              66,
+              71,
+              83,
+              97,
+              101,
+              112,
+              114,
+              118
+            ],
+            "blazeOutcomes": [
+              1,
+              1,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 1,
+            "solverSeconds": 1.627
+          },
+          {
+            "fixture": 19,
+            "gravelBreaks": 67,
+            "flintIndices": [
+              3,
+              20,
+              27,
+              33,
+              36,
+              37,
+              42,
+              45,
+              48,
+              53,
+              56,
+              67
+            ],
+            "blazeOutcomes": [
+              1,
+              1,
+              0,
+              1,
+              0,
+              1,
+              1,
+              1
+            ],
+            "candidatesAfterBlazes": 1,
+            "extraBushCounts": [],
+            "expectedEyesFromCode": 1,
+            "solverSeconds": 1.363
+          }
+        ]
+      }
+    ]
+  },
+  "coordinates": {
+    "distribution": "Uniform seed reference, not calibrated to the private Ranked filter or player route",
+    "heldOutSeeds": 50000000,
+    "ideal": [
+      {
+        "group": "No observation",
+        "pAtLeastOne": 0.71751214,
+        "pAtLeastTwo": 0.34116042
+      },
+      {
+        "group": "Low phase",
+        "pAtLeastOne": 0.6860883939948761,
+        "pAtLeastTwo": 0.3028259446923428
+      },
+      {
+        "group": "Favourable phase",
+        "pAtLeastOne": 0.7908498723609222,
+        "pAtLeastTwo": 0.4306266309937792
+      }
+    ],
+    "actualPositionSeeds": 50000,
+    "actualPositions": 150000,
+    "safeFavourablePositions": 33066,
+    "actualFavourablePAtLeastOne": 0.7895118853202685,
+    "actualFavourable95PercentSeedClusteredInterval": [
+      0.782145145044668,
+      0.796878625595869
+    ],
+    "frameZeroExclusionsChecked": 92211,
+    "falseFrameZeroExclusions": 0
+  },
+  "temple": {
+    "conditionalGuaranteesChecked": 13041,
+    "violations": 0,
+    "important": "These conditional tests do not assert that an origin temple exists in every fixture.",
+    "eligiblePracticeFixtures": 10,
+    "eligibilitySeedsSampled": 100000000,
+    "eligibleOriginTemples": 10504,
+    "eastFacingEligibleTemples": 2590,
+    "eastFacingEligiblePAtLeastOne": 0.8042471042471042
+  },
+  "workedExample": {
+    "fixtureSeed": "8675309",
+    "eyeCountFromCode": 2,
+    "filledLocalFrameIndices": [
+      8,
+      9
+    ],
+    "visitedPortal": false
+  },
+  "provenance": {
+    "note": "Hashes identify retained local research artifacts. The raw logs, proprietary JARs, decompiled game code and seed-recovery executables are not distributed with this page. These are evidence summaries, not a standalone reproduction package.",
+    "artifacts": [
+      {
+        "name": "coordinate-recovery-100.log",
+        "sha256": "3debe9f423be96cd60c0d53b595a54594ad10b453dfbd2cde753ffb652ecddce"
+      },
+      {
+        "name": "coordinate-results.json",
+        "sha256": "97e408cf68156cca1cc4a3c53e5da18899a082176f9fbf500a995f072863a2cd"
+      },
+      {
+        "name": "fixtures-10-flints.log",
+        "sha256": "7cc660f3d32acfc95804d943db1588b189f9a261df9536a545dd100312cec041"
+      },
+      {
+        "name": "fixtures-12-flints.log",
+        "sha256": "a45a569d38400d6f4d6aa72d20ba4f15599fb8f67e65c5e9258a50024a8d1217"
+      },
+      {
+        "name": "protocol-validation.log",
+        "sha256": "cbe73260331228dc76cf13cebc6a1918e055dc4a6d5d64c2802040f74aa1c029"
+      },
+      {
+        "name": "readout-validation.json",
+        "sha256": "59e94ed0a61119e28b86b053df4e5c288a16f3e202345a12fb3003740191cc4f"
+      },
+      {
+        "name": "analysis-summary.txt",
+        "sha256": "bad6d7f95e75a1a655da462362b205f4f4608d8f2a2851c2d0c6b9696803280a"
+      },
+      {
+        "name": "calculator-validation.json",
+        "sha256": "edb15a54d1d8362687f03da8ff3446ab8d9889fa07ee6f7da21a4c1a655c3ac6"
+      }
+    ]
+  }
+}

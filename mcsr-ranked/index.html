@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A readable research register for predicting End Portal eyes in MCSR Ranked: observations, maths, offline results and the limits of the evidence.">
+  <meta property="og:title" content="Can we predict portal eyes?">
+  <meta property="og:description" content="Five methods, the maths behind them, and what the tests actually prove. Independent, AI-assisted research—not a Ranked-approved tool.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://mattiapearl.github.io/mcsr-ranked/">
+  <meta name="color-scheme" content="light">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <link rel="canonical" href="https://mattiapearl.github.io/mcsr-ranked/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='2' width='28' height='28' rx='8' fill='%23195046'/%3E%3Ccircle cx='16' cy='16' r='8' fill='%23d8e8a2'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23195046'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./style.css">
+  <title>Portal-eye research · mattiapearl</title>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to the research</a>
+<header class="site-header">
+  <a class="brand" href="../"><span class="brand-mark" aria-hidden="true">◎</span> mattiapearl <span class="brand-divider">/ research</span></a>
+  <a class="header-link" href="#evidence">Evidence &amp; sources <span aria-hidden="true">↗</span></a>
+</header>
+<main id="main" class="page" tabindex="-1">
+  <section class="hero" aria-labelledby="title">
+    <div class="hero-copy">
+      <p class="eyebrow">MCSR RANKED · METHOD REGISTER</p>
+      <h1 id="title">Can we predict<br>portal eyes?</h1>
+      <p class="lede">Five ways to read the clues. What we observe, how the maths works, and what the tests actually prove.</p>
+      <div class="version-line"><span>Ranked 5.8.26</span><span>Minecraft 1.16.1</span><span>Evidence: <time datetime="2026-09-29">29 Sep 2026</time></span></div>
+      <a class="primary-link" href="#overview">See the results <span aria-hidden="true">↓</span></a>
+    </div>
+    <div class="hero-evidence" aria-label="Evidence snapshot">
+      <p class="eyebrow">THE IMPORTANT DISTINCTION</p>
+      <div class="stat"><strong>100<span>/100</span></strong><p>correct offline nine-drop fixtures<br><small>Original motion code + simulated F3 readings</small></p></div>
+      <div class="stat human-stat"><strong>0</strong><p>completed human end-to-end trials<br><small>Observe → predict → visit the actual portal</small></p></div>
+      <p class="snapshot-note">A successful simulation is not a proven in-game workflow.</p>
+    </div>
+  </section>
+
+  <aside class="scope-note" aria-label="Research scope and rules">
+    <strong>Independent research, not a Ranked-approved tool.</strong> These results require the inspected version and standardized portal eyes. Seed-recovery methods also require the RNG seed to equal the Overworld seed to predict eyes. <a href="#limitations">Read the assumptions and rules.</a>
+  </aside>
+
+  <div class="reading-layout">
+    <nav class="contents" aria-label="On this page">
+      <p class="eyebrow">IN THIS NOTEBOOK</p>
+      <a href="#overview">The results</a>
+      <a href="#m01"><span>01</span> Falling-item positions</a>
+      <a href="#m02"><span>02</span> Gravel + loot</a>
+      <a href="#m03"><span>03</span> Durability counter</a>
+      <a href="#m04"><span>04</span> Stronghold coordinates</a>
+      <a href="#m05"><span>05</span> Origin-temple anchor</a>
+      <a href="#shared-math">From seed to eyes</a>
+      <a href="#not-yet">What didn’t work</a>
+      <a href="#evidence">Evidence &amp; next steps</a>
+    </nav>
+
+    <div class="research">
+      <section id="overview" class="section" aria-labelledby="overview-title">
+        <p class="eyebrow">AT A GLANCE</p>
+        <h2 id="overview-title">Different clues. Different answers.</h2>
+        <p>Some methods reconstruct an exact count. Others only change the odds—or guarantee a minimum under very specific conditions.</p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Method comparison, scroll horizontally if needed">
+          <table class="comparison">
+            <caption>Recorded results, not human gameplay success rates</caption>
+            <thead><tr><th scope="col">Method</th><th scope="col">What you get</th><th scope="col">What was checked</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><a href="#m01">01 · Nine controlled drops</a></th><td><span class="tag exact">Exact-count prototype</span></td><td><b>100/100</b> correct offline fixtures; aiming was simulated.</td></tr>
+              <tr><th scope="row"><a href="#m02">02 · Gravel + blaze outcomes</a></th><td><span class="tag exact">Exact count / candidates</span></td><td>12 flints: <b>20/20</b>. 10 flints: <b>17/20</b>, then 20/20 with extra bushes.</td></tr>
+              <tr><th scope="row"><a href="#m03">03 · Shovel durability</a></th><td><span class="tag aid">Recording aid</span></td><td>Counts gravel breaks. It does not predict eyes on its own.</td></tr>
+              <tr><th scope="row"><a href="#m04">04 · Stronghold coordinates</a></th><td><span class="tag probability">Reference probability</span></td><td>Favourable phase: <b>79.08%</b> chance of ≥1 eye, versus 71.75% baseline.</td></tr>
+              <tr><th scope="row"><a href="#m05">05 · Temple + coordinates</a></th><td><span class="tag guarantee">Conditional minimum</span></td><td>At least one eye if the rare observation combination is correct.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="meaning-grid">
+          <article><h3>Correct tests ≠ live accuracy</h3><p>“100/100” means the code recovered the known fixture answers. People and real clients have not been tested end to end.</p></article>
+          <article><h3>Probability ≠ certainty</h3><p>“79.08%” is a uniform-seed reference. About 20.92% of that favourable group still has <em>zero</em> eyes.</p></article>
+          <article><h3>A guarantee has conditions</h3><p>“At least one” follows from the code only when the observations, version and generation settings are correct.</p></article>
+        </div>
+      </section>
+
+      <section id="m01" class="section method" aria-labelledby="m01-title">
+        <div class="method-heading"><span class="method-number">01</span><div><span class="tag exact">Exact-count prototype</span><h2 id="m01-title">Read where an item stops.</h2></div></div>
+        <p class="method-intro">A falling gravel block breaks on a floor button or torch and becomes a raw item at a known location. Its sideways travel reveals its randomized starting velocity.</p>
+        <div class="flow">
+          <article><span class="step">OBSERVE</span><h3>6 drops + 3 drops</h3><p>Use two fresh spawn locations. Measure each settled item, collect it, then release the next. One gravel block is reusable.</p></article>
+          <article><span class="step">RECONSTRUCT</span><h3>Position → velocity</h3><p>Triangulate the same white hitbox edge using two F3 yaw readings. Work backward through the motion and RNG.</p></article>
+          <article><span class="step">CALCULATE</span><h3>Seed → eye count</h3><p>Keep the seeds that fit every observation. Compute the twelve frame checks; report agreement or ambiguity.</p></article>
+        </div>
+        <div class="result-strip"><strong>100/100 correct</strong><span>offline fixtures</span><span>0.138–0.422 s per solve</span></div>
+        <p class="cost-note"><b>Actual observation cost:</b> 9 drops mean <b>18 angle readings</b>, two known viewing positions, and a controlled landing area. Setup and human recording time were not measured. A tenth, unused drop is recommended as a check.</p>
+        <details class="math-panel">
+          <summary>The calculation, step by step</summary>
+          <ol>
+            <li>Each sight line is <code>playerXZ + t × (−sin(yaw), cos(yaw))</code>. Convert yaw to radians and intersect the two lines. Aim at the same <b>northwest vertical F3+B hitbox edge</b>, not the rotating item artwork. Add <code>(0.125, 0.125)</code> to get the centre.</li>
+            <li>Subtract the breaker block’s integer X/Z. The item starts at relative <code>(0.5, 0.5)</code>. On the tested normal-friction floor:<pre><code>x ≈ 0.5 + 9.526808774 × vx
+vx ≈ (x − 0.5) / 9.526808774
+RNG fraction u ≈ (vx + 0.1) / 0.2</code></pre>The same calculation applies to Z. Relative X=0.26, for example, implies vx≈−0.0252 and u≈0.374.</li>
+            <li>The multiplier is a geometric sum of motion: <code>C = (1+a+…+a⁷) + a⁸/(1−g)</code>, with <code>a=0.98f</code> and <code>g=0.6f×0.98f</code> using Minecraft’s float rounding. The real movement cutoff makes the final position slightly different from this infinite-decay limit.</li>
+            <li>Fit the Java generator to the twelve X/Z components from six items. Each constructor consumes an unused yaw float and two doubles: <b>five generator steps per item</b>. The solver uses bounded intervals, not exact decimal equality.</li>
+            <li>A first-site mixed state leaves 16 missing seed bits. Reverse the mixing function for the <b>65,536 high-bit completions of each candidate state</b>, then reject full seeds inconsistent with the second site’s three drops. Nine drops are not universally sufficient.</li>
+          </ol>
+        </details>
+        <details class="math-panel">
+          <summary>What did the 100 fixtures actually predict?</summary>
+          <div class="histogram" aria-label="Counts of fixtures by code-calculated portal eyes"><div class="histogram-row"><span>0 eyes</span><meter min="0" max="100" value="23" aria-label="23 of 100 fixtures had 0 eyes">23/100</meter><b>23 cases</b></div>
+<div class="histogram-row"><span>1 eyes</span><meter min="0" max="100" value="34" aria-label="34 of 100 fixtures had 1 eyes">34/100</meter><b>34 cases</b></div>
+<div class="histogram-row"><span>2 eyes</span><meter min="0" max="100" value="28" aria-label="28 of 100 fixtures had 2 eyes">28/100</meter><b>28 cases</b></div>
+<div class="histogram-row"><span>3 eyes</span><meter min="0" max="100" value="11" aria-label="11 of 100 fixtures had 3 eyes">11/100</meter><b>11 cases</b></div>
+<div class="histogram-row"><span>4 eyes</span><meter min="0" max="100" value="4" aria-label="4 of 100 fixtures had 4 eyes">4/100</meter><b>4 cases</b></div></div>
+          <p>No 5–12-eye case occurred in this small sample. Every observed outcome was retained. This is a histogram of the fixtures, <b>not a live Ranked eye-frequency estimate</b>.</p>
+          <p>Another <b>10</b> translated-position/height fixtures recovered the seed and passed an unused tenth-drop check.</p>
+        </details>
+        <div class="caution"><h3>The missing proof is the human readout.</h3><p>The solver assumes total error no larger than <b>±0.04 block per axis</b>. In 40,804 synthetic geometry cases, assumed ±0.05° aiming error followed by 0.1° yaw rounding gave at most <b>0.01958 block</b> axis error after centimetre rounding, with exact station positions. That does not establish human precision or real-client replication accuracy.</p><p>Keep an air gap above the breaker; use a dry, unobstructed full-block normal-friction floor. Prior item spawns at the same key, merging, camera movement and different surfaces can invalidate the model. The current lab solver is Overworld-only. <b>No complete live Mixin/client/portal-visit pipeline has been tested.</b></p></div>
+      </section>
+
+      <section id="m02" class="section method" aria-labelledby="m02-title">
+        <div class="method-heading"><span class="method-number">02</span><div><span class="tag exact">Exact count / candidates</span><h2 id="m02-title">Record gravel. Add another clue.</h2></div></div>
+        <p class="method-intro">Flint and non-flint results constrain a deterministic random sequence. Ordered blaze drops and, if needed, dead-bush counts help separate seeds that look identical through gravel alone.</p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Paired gravel experiments">
+          <table>
+            <caption>The same 20 fixtures, compared at two observation lengths</caption>
+            <thead><tr><th scope="col">Recorded work / result</th><th scope="col">10 flints</th><th scope="col">12 flints</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Gravel breaks</th><td>40–173</td><td>58–199</td></tr>
+              <tr><th scope="row">Mean gravel breaks</th><td>97.65</td><td>117.45</td></tr>
+              <tr><th scope="row">Unique after blaze observations</th><td>17/20</td><td>20/20</td></tr>
+              <tr><th scope="row">Additional bush observations</th><td>1, 3 and 2 in the three unresolved cases</td><td>None</td></tr>
+              <tr><th scope="row">Final uniquely correct roots</th><td>20/20</td><td>20/20</td></tr>
+              <tr><th scope="row">Recorded solver time</th><td>3.941–7.555 s</td><td>1.363–2.177 s</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="cost-note">Both variants recorded eligible, unlooted blaze kills until <b>six rods</b> dropped: 7–19 kills, mean 12.20. That is not the same as six blaze kills. More flints reduced computation, but required more mining.</p>
+        <details class="math-panel">
+          <summary>Why the sequence reveals information</summary>
+          <p>An ordinary gravel break supplies an inequality:</p><pre><code>flint  → nextFloat() &lt; 0.1f
+gravel → nextFloat() ≥ 0.1f</code></pre>
+          <p>Flints at indices 3 and 5 therefore also tell us that breaks 1, 2 and 4 were non-flints. A lattice-based reverser finds generator states consistent with the complete sequence, then reverses the category initialization.</p>
+          <p>The other observations reject candidates whose <code>BLAZE nextInt(2)</code> or <code>DEAD_BUSH nextInt(3)</code> outputs disagree. The categories have separate state but derive from the same seed. Two roots can produce the <b>same entire FLINT stream</b> and different eye counts; more gravel alone cannot separate that pair.</p>
+          <h3>One concrete fixture</h3>
+          <p>For seed <code>8675309</code>, ten flints arrived at breaks:</p><pre><code>3, 5, 10, 11, 22, 25, 33, 38, 56, 58</code></pre>
+          <p>Blaze outcomes <code>0,1,0,1,0,1,0,1,1,1</code> left three candidates. First bush count <code>1</code> left one, predicting <b>2 eyes</b>. Twelve flints by break 82 resolved the same answer without bushes.</p>
+          <p>The older sixteen-flint method passed 20 fixtures representing 18 distinct low-48 seeds, using 110–259 breaks and 0–3 bushes. That is a different cohort, not another twenty independent confirmations of the new comparison.</p>
+        </details>
+        <p class="limitation"><b>Conditions:</b> exact order and known stream start; ordinary unenchanted gravel; no Looting, missed eligible kills or uncertain pickups for the blaze model. Auxiliary logs begin at their own stream starts. These are code tests, not a played recording session. Neither flint count guarantees resolution for every seed.</p>
+      </section>
+
+      <section id="m03" class="section method" aria-labelledby="m03-title">
+        <div class="method-heading"><span class="method-number">03</span><div><span class="tag aid">Recording aid</span><h2 id="m03-title">Let the shovel do the counting.</h2></div></div>
+        <p>Enable <b>F3+H</b>. Use a shovel exclusively for these gravel breaks, with no Fortune, Silk Touch, Unbreaking or Mending. Record its starting remaining durability, then read it only when flint appears.</p>
+        <div class="equation"><span>Flint break index</span><strong>starting durability − remaining durability</strong></div>
+        <div class="durability-example"><div><small>Start</small><b>250</b></div><span aria-hidden="true">→</span><div><small>Read at flints</small><b>247 · 245 · 240</b></div><span aria-hidden="true">→</span><div><small>Break indices</small><b>3 · 5 · 10</b></div></div>
+        <p>Each ordinary gravel break costs one durability, whether the drop is flint or gravel. The original damage code was checked through <b>249 readable iron-shovel uses</b> and its <b>250th breaking use</b>.</p>
+        <p class="limitation"><b>Not a predictor by itself.</b> This supplies indices to method 02; it does not create extra RNG information or reduce the required breaks. No unrelated tool use or repairs. Start a clearly accounted-for segment before the shovel breaks. A new shovel does not reset the RNG.</p>
+      </section>
+
+      <section id="m04" class="section method" aria-labelledby="m04-title">
+        <div class="method-heading"><span class="method-number">04</span><div><span class="tag probability">Reference probability</span><h2 id="m04-title">The stronghold’s angle is a clue.</h2></div></div>
+        <p class="method-intro">Read the correctly identified <b>first-ring stronghold start chunk</b> from normal triangulation—not the player’s chunk or the portal-room chunk.</p>
+        <div class="odds-comparison"><div><small>No observation</small><strong>71.75%</strong></div><span aria-hidden="true">→</span><div><small>Ideal favourable phase</small><strong>79.08%</strong></div></div>
+        <p class="caption">P(at least one prefilled eye), under the uniform-seed reference. Not calibrated to Ranked’s private seed filter or a player’s route.</p>
+        <div class="equation"><span>First convert chunk coordinates into block coordinates</span><code>X = 16 × chunkX; Z = 16 × chunkZ<br>phase = atan2(Z, X) in degrees, normalized modulo 120°</code></div>
+        <p>For an exact default first-ring start chunk, phase <b>92°–112°</b> is a conservative favourable shortcut. Phase <b>8°–76°</b> excludes one particular frame, <em>not all twelve</em>. Extra triangulation uncertainty needs an additional bound.</p>
+        <details class="math-panel">
+          <summary>Shared random bits, not twelve independent coin flips</summary>
+          <p>The original stronghold-ring angle and standardized frame 0 expose overlapping bits of the same initial Java random draw. Frame 0 fills when the initial angle is at least <b>324.0000128746°</b>.</p>
+          <p>A first-ring phase leaves three labels, 120° apart. At or above phase <b>84.0000128746°</b>, one label permits frame 0; below it, none does. Biome relocation can shift the observed angle, so the calculator widens it by <code>asin((169.7056 + extraPositionError) / distance)</code> and leaves unsafe boundaries unresolved.</p>
+          <p>For intuition only, <code>1 − (2/3) × 0.9¹¹ ≈ 79.08%</code>. The actual reported probabilities use the <b>full standardized twelve-frame formula</b>, not that independence approximation.</p>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="Uniform reference probabilities"><table><caption>50,000,000 independently held-out uniform seeds</caption><thead><tr><th scope="col">Information</th><th scope="col">P(≥1 eye)</th><th scope="col">P(≥2 eyes)</th></tr></thead><tbody><tr><th scope="row">No observation</th><td>71.75%</td><td>34.12%</td></tr>
+<tr><th scope="row">Low phase</th><td>68.61%</td><td>30.28%</td></tr>
+<tr><th scope="row">Favourable phase</th><td>79.08%</td><td>43.06%</td></tr></tbody></table></div>
+          <p>The original vanilla routine also generated <b>150,000 positions from 50,000 seeds</b> with real biome relocation. The safely favourable group measured <b>78.95%</b>, with seed-clustered 95% interval <b>78.21%–79.69%</b>. Three positions from one seed are not independent samples.</p>
+        </details>
+        <p class="limitation"><b>An inventory interpretation:</b> arriving with 11 eyes requires at least one prefill; arriving with 10 requires at least two. These odds do not include eyes lost during further travel. A favourable position is not a guarantee. This geometry method does not require the separately configured RNG seed to equal the Overworld seed.</p>
+      </section>
+
+      <section id="m05" class="section method" aria-labelledby="m05-title">
+        <div class="method-heading"><span class="method-number">05</span><div><span class="tag guarantee">Conditional minimum</span><h2 id="m05-title">A rare temple removes the ambiguity.</h2></div></div>
+        <p>You need all three observations—not just any east-facing desert temple:</p>
+        <ol class="conditions"><li>The central <b>blue terracotta</b> block is exactly at <b>X=10, Z=10</b>, identifying an origin-chunk temple.</li><li>The main entrance faces outward <b>east</b>.</li><li>A correctly identified first-ring stronghold has a safely favourable phase, including the necessary error bound.</li></ol>
+        <div class="equation guarantee-result"><span>Under those conditions and standardized eyes</span><strong>at least 1 prefilled eye</strong><small>Not the exact total</small></div>
+        <details class="math-panel">
+          <summary>Why this is a guarantee rather than better odds</summary>
+          <p>At the origin, the temple’s first orientation draw fixes the ring’s initial angle to <code>[270°, 360°)</code>. Intersect that quarter with the safely favourable stronghold-phase intervals: every remaining angle is above the frame-0 threshold. Frame 0 must contain an eye.</p>
+          <p><b>13,041 conditional code cases</b> matched. This does <b>not</b> mean that many actual origin temples were found—the broad tests supplied a hypothetical quarter anchor. Ten separate position/biome-eligible practice fixtures were checked.</p>
+          <p>Example fixture <code>−8152824522481496679</code>, stronghold start chunk <code>(151,−43)</code>: the method guarantees a minimum of one; the portal code predicts <b>two</b>. There was no subsequent human portal visit.</p>
+          <p>An east-facing origin temple <em>alone</em> is not enough for certainty. A separate 100-million-seed placement/biome study found <b>10,504 eligible origin temples</b>; the <b>2,590 east-facing cases</b> had <b>80.42%</b> ≥1-eye outcomes. This is still not live Ranked-filter calibration.</p>
+        </details>
+        <p class="limitation"><b>Rare, conditional, and version-specific.</b> Misidentifying the centre, entrance, ring or start chunk invalidates the inference. Like method 04, it uses the Overworld generation seed directly and does not need loot-RNG/world-seed equality.</p>
+      </section>
+
+      <section id="shared-math" class="section" aria-labelledby="shared-math-title">
+        <p class="eyebrow">THE COMMON LAST STEP</p>
+        <h2 id="shared-math-title">A seed gives twelve deterministic checks.</h2>
+        <p>“Random” here does not mean unpredictable once the starting state is known. The exact-count methods recover candidates, then calculate what each candidate would put in the portal.</p>
+        <figure class="worked-example"><div class="example-heading"><div><span class="eyebrow">CODE FIXTURE, NOT A VISITED PORTAL</span><h3>Seed 8675309</h3></div><strong>2 <small>eyes</small></strong></div><ol class="frame-checks" aria-label="Twelve local frame checks"><li class="empty" aria-label="Frame check 0: no eye"><span>0</span><b aria-hidden="true">○</b></li>
+<li class="empty" aria-label="Frame check 1: no eye"><span>1</span><b aria-hidden="true">○</b></li>
+<li class="empty" aria-label="Frame check 2: no eye"><span>2</span><b aria-hidden="true">○</b></li>
+<li class="empty" aria-label="Frame check 3: no eye"><span>3</span><b aria-hidden="true">○</b></li>
+<li class="empty" aria-label="Frame check 4: no eye"><span>4</span><b aria-hidden="true">○</b></li>
+<li class="empty" aria-label="Frame check 5: no eye"><span>5</span><b aria-hidden="true">○</b></li>
+<li class="empty" aria-label="Frame check 6: no eye"><span>6</span><b aria-hidden="true">○</b></li>
+<li class="empty" aria-label="Frame check 7: no eye"><span>7</span><b aria-hidden="true">○</b></li>
+<li class="filled" aria-label="Frame check 8: eye present"><span>8</span><b aria-hidden="true">●</b></li>
+<li class="filled" aria-label="Frame check 9: eye present"><span>9</span><b aria-hidden="true">●</b></li>
+<li class="empty" aria-label="Frame check 10: no eye"><span>10</span><b aria-hidden="true">○</b></li>
+<li class="empty" aria-label="Frame check 11: no eye"><span>11</span><b aria-hidden="true">○</b></li></ol><figcaption>Checks 8 and 9 contain eyes. This is an ordered list of checks, not the room’s physical frame layout.</figcaption></figure>
+        <details class="math-panel">
+          <summary>The generator and exact portal formula</summary>
+          <p>The 48-bit internal Java state advances as:</p><pre><code>q_next = (25214903917 × q + 11) mod 2⁴⁸
+nextFloat = (q_next >>> 24) / 2²⁴</code></pre>
+          <p>For the Overworld generation seed S, standardized eyes are equivalent to:</p><pre><code>r = JavaRandom(S)
+a = r.nextLong() | 1
+b = r.nextLong() | 1
+for i = 0..11:
+    p = (i × a + (2 × i) × b) XOR S
+    eye[i] = JavaRandom(p).nextFloat() > 0.9f
+count = number of true eye[i] values</code></pre>
+          <p>Use Java 64-bit wrapping arithmetic. <code>| 1</code> makes each multiplier odd. JavaRandom(s) initializes its state to <code>(s XOR 0x5DEECE66D) &amp; (2⁴⁸−1)</code>. The eye count depends only on the seed’s low 48 bits.</p>
+          <p>The formula was separately compared with the shipped mixin method and original Minecraft RNG code. Those isolated checks do not establish full live injection or portal-generation integration.</p>
+          <p><b>Two seeds must not be confused:</b> methods 01/02 recover the configured RNG seed. They can substitute it for S only when it equals the Overworld generation seed. The gravel categories use successive nextLong seeds from <code>JavaRandom(RNGseed + 4262064045)</code> in RNG base version 2; the motion method uses a different position-salted mixing path.</p>
+        </details>
+      </section>
+
+      <section id="not-yet" class="section" aria-labelledby="not-yet-title">
+        <p class="eyebrow">NEGATIVE RESULTS COUNT TOO</p>
+        <h2 id="not-yet-title">Not every clue became a shortcut.</h2>
+        <dl class="negative-results">
+          <div><dt>Falling breakers as flint generators</dt><dd>They drop raw gravel without evaluating the flint loot roll. Useful for method 01, not extra FLINT observations.</dd></div>
+          <div><dt>Ordinary hoppers and comparators</dt><dd>Stack merging and slot extraction lose the original sequence; fullness is not a flint-event log. Custom recording machinery is not ruled out.</dd></div>
+          <div><dt>Five coarse landing bins per axis</dt><dd>Two reversals timed out at 180 seconds. No fast coarse-bin solver was delivered; a timeout is not an impossibility proof.</dd></div>
+          <div><dt>Fortune III / Fortune II</dt><dd>Always-flint Fortune III outcomes carry no flint/gravel information. The Fortune II experiment’s first case took about 192 seconds; the batch timed out at 300.</dd></div>
+          <div><dt>Bush-only, glowstone and melon reversal</dt><dd>Attempts timed out at 360, 120 and 120 seconds respectively. Short loot-pattern probability rules did not establish a comparably useful shortcut on holdout data.</dd></div>
+          <div><dt>Spawner timing, blaze positions and barters</dt><dd>Interesting information sources, but hidden attempts, measurement and call schedules remain unresolved. Ordinary F3 does not directly show arbitrary entity XYZ.</dd></div>
+        </dl>
+        <p class="caption">Superseded pilots—including a wrong blaze enum ordinal and an omitted glowstone RNG call—are not counted as successes. A remote F3/pie portal-eye counter was not found.</p>
+      </section>
+
+      <section id="limitations" class="section" aria-labelledby="limitations-title">
+        <p class="eyebrow">THE BOUNDARY OF THE CLAIM</p>
+        <h2 id="limitations-title">What this page does not establish.</h2>
+        <ul class="limit-list"><li><b>No completed human trial.</b> Nobody used the full observation protocol and then visited the portal as part of these tests. Real aiming, rendering and acquisition time are still unknown.</li><li><b>No calibrated live-match probabilities.</b> Ranked’s private seed filtering and route choice can change the odds. Uniform-seed statistics are reference estimates.</li><li><b>No version-independent promise.</b> Standardized eyes, default first-ring placement where relevant, and all per-method conditions matter. Vanilla filling, disabled standardization or changed versions are different cases.</li><li><b>No competition approval.</b> Manual entry does not make an unapproved calculator permissible. The motion route internally recovers full 64-bit RNG seeds; if that is the world seed, it implicates the explicit full-world-seed prohibition. Hiding the seed from output does not avoid that issue.</li></ul>
+        <p class="caution compact">This page explains private/offline research. It does not distribute a seed cracker, proprietary JAR, decompiled game code or game-state extraction tool.</p>
+      </section>
+
+      <section id="evidence" class="section" aria-labelledby="evidence-title">
+        <p class="eyebrow">A LIVING REGISTER, NOT A CLAIM OF COMPLETION</p>
+        <h2 id="evidence-title">Evidence you can inspect.</h2>
+        <p>The downloadable snapshot includes all 100 falling-item cases, both paired gravel experiments, reference statistics, scope notes and hashes identifying the retained lab artifacts. “Expected eyes” means the fixture seed’s <b>code-calculated result</b>, not a visited portal.</p>
+        <a class="primary-link" href="./evidence.json" download="portal-eye-evidence.json">Download the test summaries <span aria-hidden="true">↓</span></a>
+        <p class="caption">Original research data, with no clipping of zero-eye or rare outcomes. Raw lab logs and proprietary binaries stay local; this is not a standalone reproduction package. All quoted runtime is computation only.</p>
+        <h3>Public reference points</h3>
+        <ul class="source-links"><li><a href="https://modrinth.com/mod/mcsr-ranked/version/nt5s6inb">Inspected Ranked 5.8.26 release</a></li><li><a href="https://github.com/MCSR-Ranked/Wiki/blob/337bd33cd010701ba001c2d891e7a64b4ed6a66f/docs/gameplay/rng.md">Ranked RNG documentation — pinned revision</a></li><li><a href="https://github.com/MCSR-Ranked/Wiki/blob/337bd33cd010701ba001c2d891e7a64b4ed6a66f/docs/gameplay/seed.md">Ranked seed documentation — pinned revision</a></li><li><a href="https://mcsrranked.com/guidelines">Ranked guidelines</a> · <a href="https://mc.sr/rules">Speedrunning rules</a></li></ul>
+        <div class="next-step"><span class="eyebrow">THE NEXT MEANINGFUL TEST</span><h3>A private practice-world trial.</h3><p>Save the observations and predictions first. Check an unused tenth landing, then inspect the untouched portal. Record build time, aiming effort, ambiguous cases and failures—not just successful solver output.</p></div>
+        <p>Future entries should retain the method ID, version, inputs, calculation, predicted and checked results, correct/ambiguous/failed counts, human effort and evidence source. This snapshot does not update automatically and no game monitoring is running.</p>
+      </section>
+    </div>
+  </div>
+</main>
+<footer class="site-footer"><p>mattiapearl · Independent, AI-assisted research</p><p>Experiments constructed and run by the Pi AI assistant under the account owner’s direction. Not affiliated with or approved by MCSR Ranked or Mojang.</p><div><a href="../">All tools</a><a href="https://github.com/mattiapearl/mattiapearl.github.io/tree/main/mcsr-ranked">Page source</a><a href="#title">Back to top ↑</a></div></footer>
+</body>
+</html>
