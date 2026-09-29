@@ -1,0 +1,38 @@
+[
+  {
+    "file": "atkinson-400.woff2",
+    "family": "Atkinson Hyperlegible",
+    "weight": 400,
+    "source": "https://fonts.gstatic.com/s/atkinsonhyperlegible/v12/9Bt23C1KxNDXMspQ1lPyU89-1h6ONRlW45G04pIo.woff2",
+    "sha256": "d64ba838ef5472bba248620ec4fd8b5aa7cf0db2908e0bb230600caf279ba7bc",
+    "bytes": 17208
+  },
+  {
+    "file": "atkinson-700.woff2",
+    "family": "Atkinson Hyperlegible",
+    "weight": 700,
+    "source": "https://fonts.gstatic.com/s/atkinsonhyperlegible/v12/9Bt73C1KxNDXMspQ1lPyU89-1h6ONRlW45G8Wbc9dCWP.woff2",
+    "sha256": "140e2bd25a7315c8a062508391426b0d8c3297400c947b8d847be28f73a199f0",
+    "bytes": 17524
+  },
+  {
+    "file": "pixelify-600.woff2",
+    "family": "Pixelify Sans",
+    "weight": 600,
+    "source": "https://fonts.gstatic.com/s/pixelifysans/v3/CHy2V-3HFUT7aC4iv1TxGDR9DHEserHN25py2TQ3101fZZM.woff2",
+    "sha256": "9ee47c039a991caea6072eecfe03cf36debf4f70bb2566bd602b9eada1ab1112",
+    "bytes": 8216
+  },
+  {
+    "file": "atkinsonhyperlegible-OFL.txt",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/atkinsonhyperlegible/OFL.txt",
+    "sha256": "f32d22b3908fcad2c86a74000614ec22e6a7f66ea7e867e616026a27aebdc143",
+    "bytes": 4352
+  },
+  {
+    "file": "pixelifysans-OFL.txt",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/pixelifysans/OFL.txt",
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+    "bytes": 4488
+  }
+]

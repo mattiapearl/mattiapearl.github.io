@@ -1,9 +1,8 @@
-"""Render the static research page using only Python's standard library.
+"""Build the visual guide: evidence + original SVGs + LaTeX rendered to MathML.
 
-The committed index.html is the GitHub Pages artifact; no runtime JS or build
-service is required. Content lives in page.html; measured values in evidence.json.
+Install _src/requirements.txt for the build. Published HTML needs no JavaScript,
+CDN, runtime renderer or GitHub build service.
 """
-from collections import Counter
 from datetime import date
 from html import escape
 from pathlib import Path
@@ -11,8 +10,18 @@ from statistics import mean
 from string import Template
 import argparse
 import json
+import runpy
+from latex2mathml.converter import convert
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def typeset(tex):
+    """Keep accessible native MathML plus the original LaTeX annotation."""
+    markup = convert(tex, display="block")
+    opening, _, body = markup.partition(">")
+    body = body.removesuffix("</math>")
+    return opening + "><semantics>" + body + '<annotation encoding="application/x-tex">' + escape(tex) + '</annotation></semantics></math>'
 
 
 def percent(value):
@@ -72,7 +81,10 @@ def render():
         "temple_one": percent(data["temple"]["eastFacingEligiblePAtLeastOne"]),
         "example_seed": example["fixtureSeed"],
         "example_eyes": example["eyeCountFromCode"],
-        "filled_frames": " and ".join(str(i) for i in example["filledLocalFrameIndices"]),
+        "example_needed": 12 - example["eyeCountFromCode"],
+        "baseline_probability": reference[0]["pAtLeastOne"],
+        "high_probability": reference[2]["pAtLeastOne"],
+        "histogram_description": "; ".join(f"{i} eyes: {sum(r['expectedEyesFromCode'] == i for r in motion)}" for i in range(13)),
     }
     for n, variant in variants.items():
         rows = variant["cases"]
@@ -89,19 +101,30 @@ def render():
     values["rod_kill_range"] = span([len(r["blazeOutcomes"]) for r in variants[10]["cases"]])
     values["rod_mean"] = f"{mean(len(r['blazeOutcomes']) for r in variants[10]['cases']):.2f}"
     values = {key: escape(str(value)) for key, value in values.items()}
-    histogram = Counter(r["expectedEyesFromCode"] for r in motion)
-    values["motion_histogram"] = "\n".join(
-        f'<div class="histogram-row"><span>{eyes} eyes</span><meter min="0" max="{len(motion)}" value="{number}" aria-label="{number} of {len(motion)} fixtures had {eyes} eyes">{number}/{len(motion)}</meter><b>{number} cases</b></div>'
-        for eyes, number in sorted(histogram.items())
-    )
-    values["reference_rows"] = "\n".join(
-        f'<tr><th scope="row">{escape(row["group"])}</th><td>{percent(row["pAtLeastOne"])}</td><td>{percent(row["pAtLeastTwo"])}</td></tr>'
-        for row in reference
-    )
-    values["example_checks"] = "\n".join(
-        f'<li class="{"filled" if i in example["filledLocalFrameIndices"] else "empty"}" aria-label="Frame check {i}: {"eye present" if i in example["filledLocalFrameIndices"] else "no eye"}"><span>{i}</span><b aria-hidden="true">{"●" if i in example["filledLocalFrameIndices"] else "○"}</b></li>'
-        for i in range(12)
-    )
+    visuals = runpy.run_path(str(ROOT / "_src" / "visuals.py"))
+    values.update({f"icon_{name}": visuals["icon"](name) for name in visuals["ICONS"]})
+    values.update({
+        "icon_sprite": visuals["sprite"](),
+        "portal_svg": visuals["portal"](example["eyeCountFromCode"]),
+        "falling_svg": visuals["falling"](),
+        "aiming_svg": visuals["aiming"](),
+        "compass_svg": visuals["compass"](),
+        "temple_svg": visuals["temple"](),
+        "drop_sequence": visuals["timeline"](variants[12]["cases"][0]["flintIndices"]),
+        "motion_histogram": visuals["histogram"](motion),
+    })
+    equations = {
+        "velocity": r"v_x \approx \frac{x-0.5}{9.5268}",
+        "flint": r"u_n < 0.1_f \;\Rightarrow\; \mathrm{flint}",
+        "durability": r"n = D_0 - D",
+        "angle": r"\theta = \mathrm{atan2}(Z,X)",
+        "phase": r"\phi = \theta \bmod 120^\circ",
+        "minimum": r"E \geq 1",
+        "frame_seed": r"s_i = (ia + 2ib) \oplus S",
+        "frame_float": r"u_i = \operatorname{nextFloat}(s_i)",
+        "eye_count": r"E = \sum_{i=0}^{11} \mathbf{1}[u_i > 0.9_f]",
+    }
+    values.update({"math_" + key: typeset(tex) for key, tex in equations.items()})
     return Template((ROOT / "_src" / "page.html").read_text(encoding="utf-8")).substitute(values)
 
 
