@@ -1,30 +1,67 @@
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
-<html>
-
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Graffe Tools</title>
-    <meta name="description" content="A manufacturer set of work tools">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="mattiapearl's tools and research: a counter, team matcher, match-score explainer and End Portal eye predictions.">
+  <meta property="og:title" content="mattiapearl · Tools & research">
+  <meta property="og:description" content="Browser tools, visual research guides and prototypes. All pages in one place.">
+  <meta name="color-scheme" content="light">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; font-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <link rel="canonical" href="https://mattiapearl.github.io/">
+  <link rel="stylesheet" href="home.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23244f45'/%3E%3Cpath d='M8 9h6v6H8zm10 0h6v6h-6zM8 19h6v6H8zm10 0h6v6h-6z' fill='%23e8f0da'/%3E%3C/svg%3E">
+  <title>mattiapearl · Tools &amp; research</title>
 </head>
-
 <body>
-    <div>
-            Home
-        </div>
-    <h1>Graffe Tools</h1>
-    We usually make clothing, but I'm a Developer!<br>
-    Check our main website <a href="https://graffeproject.com">Graffeproject.com</a>
-    <h2>The tools</h2>
-    <h3><a href="counthing.html">Counter</a></h3>
-    <h3><a href="matcher.html">Team Matcher</a></h3>
-    <h3><a href="mcsr-ranked/">Portal-eye research</a></h3>
-</body>
+<a class="skip-link" href="#main">Skip to projects</a>
+<header class="site-header"><a class="brand" href="./">mattiapearl</a><a href="https://github.com/mattiapearl">GitHub ↗</a></header>
+<main id="main" tabindex="-1">
+  <h1>Tools &amp; research</h1>
+  <nav class="section-nav" aria-label="Categories"><a href="#research">Research guides</a><a href="#tools">Browser tools</a><a href="#prototypes">Prototypes</a></nav>
 
+  <section id="research" aria-labelledby="research-title">
+    <h2 id="research-title">Research guides</h2>
+    <div class="project-grid">
+      <article class="project">
+        <a class="project-link" href="mcsr-ranked/">
+          <svg class="project-icon portal" viewBox="0 0 40 40" aria-hidden="true"><path d="M11 5h18v6h6v18h-6v6H11v-6H5V11h6z" fill="currentColor"/><path d="M15 11h10v18H15z" fill="#174d42"/><path d="M18 15h4v10h-4z" fill="#edf4df"/></svg>
+          <div><h3>End Portal eyes <span aria-hidden="true">→</span></h3><p>Minecraft diagrams, prediction methods and offline test results.</p></div>
+        </a>
+      </article>
+      <article class="project">
+        <a class="project-link" href="contribution-score/">
+          <svg class="project-icon score" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 21h7v13H6zM17 6h7v28h-7zM28 14h7v20h-7z" fill="currentColor"/></svg>
+          <div><h3>Match-score explainer <span aria-hidden="true">→</span></h3><p>A candidate scoring formula, with interactive worked examples.</p></div>
+        </a>
+        <a class="support-link" href="contribution-score/details.html">Technical notes &amp; benchmarks <span aria-hidden="true">→</span></a>
+      </article>
+    </div>
+  </section>
+
+  <section id="tools" aria-labelledby="tools-title">
+    <h2 id="tools-title">Browser tools</h2>
+    <div class="project-grid">
+      <article class="project">
+        <a class="project-link" href="counthing.html">
+          <svg class="project-icon counter" viewBox="0 0 40 40" aria-hidden="true"><rect x="5" y="8" width="30" height="25" rx="3" fill="none" stroke="currentColor" stroke-width="3"/><path d="M11 20h8m-4-4v8m10-4h5" fill="none" stroke="currentColor" stroke-width="3"/></svg>
+          <div><h3>Counter <span aria-hidden="true">→</span></h3><p>Count items across custom properties. Saved in your browser.</p></div>
+        </a>
+      </article>
+      <article class="project">
+        <a class="project-link" href="matcher.html">
+          <svg class="project-icon matcher" viewBox="0 0 40 40" aria-hidden="true"><path d="M5 6h10v8H5zM5 26h10v8H5zM27 16h9v8h-9z" fill="currentColor"/><path d="M15 10h6v20h-6m6-10h6" fill="none" stroke="currentColor" stroke-width="3"/></svg>
+          <div><h3>Team Matcher <span aria-hidden="true">→</span></h3><p>Schedule matches around team availability. Export PDF and CSV.</p></div>
+        </a>
+      </article>
+    </div>
+  </section>
+
+  <section id="prototypes" aria-labelledby="prototypes-title">
+    <h2 id="prototypes-title">Prototypes</h2>
+    <div class="prototype-row"><a href="innected.html">Innected <span aria-hidden="true">→</span></a><p>Canvas placeholder; no working features yet.</p></div>
+  </section>
+</main>
+<footer><span>Elsewhere</span><a href="https://graffeproject.com">Graffe Project ↗</a><a href="https://github.com/mattiapearl/mattiapearl.github.io">Site source ↗</a></footer>
+</body>
 </html>
